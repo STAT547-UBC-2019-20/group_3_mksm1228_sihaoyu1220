@@ -1,0 +1,15 @@
+---
+title: "Milestone 1"
+output: github_document
+---
+
+
+```{r}
+data<-read.csv("data.csv")
+```
+
+```{r}
+data$id<-as.factor(data$id)
+nlevels(data$id) #6181 subjects.
+```
+
