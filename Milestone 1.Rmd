@@ -10,6 +10,12 @@ data<-read.csv("data.csv")
 
 ```{r}
 data$id<-as.factor(data$id)
-nlevels(data$id) #6181 subjects.
+nlevels(data$id) #6181 listings.
+data$host_id<-as.factor(data$host_id)
+nlevels(data$host_id) #4261 hosts.
+```
+
+```{r}
+
 ```
 
