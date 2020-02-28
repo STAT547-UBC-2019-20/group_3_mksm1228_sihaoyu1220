@@ -17,7 +17,7 @@ According to Statistics Canada, a recording breaking 22.1 million international 
 [1] https://www150.statcan.gc.ca/n1/daily-quotidien/200221/dq200221b-eng.htm?indid=3635-2&indgeo=0
 
 ```{r, message=FALSE, echo=FALSE, include=FALSE}
-path = here::here("data.csv")
+path = here::here("Data", "vancouver.csv")
 data<-readr::read_csv(path)
 ```
 

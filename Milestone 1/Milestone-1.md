@@ -1,6 +1,25 @@
 Milestone 1
 ================
 
+**Airbnb predictive pricing tool for tourists coming to Canada**
+
+**Introduction**
+
+According to Statistics Canada, a recording breaking 22.1 million
+international tourists from abroad visited Canada \[1\]. Hotels have
+always been the mainstay of accommodations but often the prices are
+unaffordable for short-term visitors. Airbnb has proven to be a
+successful platform to match hosts with unused space and guests looking
+for an affordable place to lodge. Although it is often more affordable
+than hotels, it appears that the market price varies greatly from city
+to city. In this analysis, we want to investigate which factors are most
+likely influencing the price of Airbnb listings for cities in Canada.
+This tool may potentially help visitors understand the reasoning behind
+the cost of the listings.
+
+\[1\]
+<https://www150.statcan.gc.ca/n1/daily-quotidien/200221/dq200221b-eng.htm?indid=3635-2&indgeo=0>
+
 ``` r
 data$id<-as.factor(data$id)
 nlevels(data$id) 
