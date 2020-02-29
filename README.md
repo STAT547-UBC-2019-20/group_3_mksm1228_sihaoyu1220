@@ -8,3 +8,4 @@ We will be utilizing the Vancouver listings dataset which contains summary infor
 
 ## Research Question
 
+Which factors are most likely to influence the price of Airbnb listings in Canadian cities? 
