@@ -3,6 +3,8 @@ Canada
 ================
 
   - [Introduction](#introduction)
+  - [Data Description](#data-description)
+  - [Exploring the Dataset](#exploring-the-dataset)
   - [Research Question](#research-question)
   - [Plan of Action](#plan-of-action)
   - [References](#references)
@@ -23,6 +25,8 @@ likely influencing the price of Airbnb listings for cities in Canada.
 This predicitive tool may potentially help visitors understand the
 reasoning behind the cost of the listings and help them decide which
 listings would best suit their travelling needs.
+
+## Data Description
 
 ``` r
 data$id<-as.factor(data$id)
@@ -49,13 +53,17 @@ data <- data %>%
   select(id, host_id, host_is_superhost, host_listings_count, neighbourhood_cleansed, property_type, room_type, accommodates, bathrooms, bedrooms, beds, price, weekly_price, monthly_price, security_deposit, cleaning_fee, guests_included, extra_people, minimum_nights, maximum_nights, review_scores_rating)
 ```
 
-Some EDA.
+## Exploring the Dataset
+
+**Barplot**
 
 ``` r
 barplot(table(data$room_type), main="Room Type Summary")
 ```
 
 ![](Milestone-1_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+**Scatterplot**
 
 ``` r
 data$price <- as.numeric(gsub('[$,]', '', data$price))
@@ -66,8 +74,9 @@ plot(data$price, data$minimum_nights, main="Minimum Nights vs. Price", xlab="pri
 
 # Research Question
 
-In this analysis, we aim to investigate the influence of different
-factors on the price of Airbnb listings across various Canadian cities.
+In this analysis, we aim to investigate the influence of various factors
+on the price of Airbnb listings across various Canadian cities to see
+which ones are most likely to impact the listed price.
 
 # Plan of Action
 
@@ -77,7 +86,7 @@ data. Next, we will perform a linear regression analysis between the
 price of the Airbnb listing and the various factors provided in the
 datasets. Using these results, we also plan to perform a
 cross-validation analysis to see if we can use this predictive model on
-different cities.
+cities outside of Canada.
 
 # References
 
