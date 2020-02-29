@@ -1,5 +1,4 @@
-Milestone 1: Airbnb predictive pricing tool for tourists coming to
-Canada
+Airbnb predictive pricing tool for tourists coming to Canada
 ================
 
   - [Introduction](#introduction)
@@ -12,19 +11,19 @@ Canada
 ## Introduction
 
 According to Statistics Canada, a recording breaking **22.1 million
-international tourists from abroad visited Canada.** Hotels have always
-been the mainstay of accommodations but often the prices are
-unaffordable for visitors looking to stay long term for tourism or work.
+international tourists from abroad visited Canada in 2019.** Hotels have
+always been the mainstay for accommodations but the prices can be
+unaffordable for visitors looking to stay long-term for tourism or work.
 Airbnb was founded in 2008 and has since been proven to be a successful
-online platform to match hosts with unused space and guests looking for
+online platform to match hosts with unused space with guests looking for
 an affordable place to lodge. Although it is often more affordable than
-hotels, it appears that the market price varies greatly between Canadian
-cities. In this analysis, we want to investigate which factors, ranging
-from the location of the listing to the number of bathrooms, are most
-likely influencing the price of Airbnb listings for cities in Canada.
-This predicitive tool may potentially help visitors understand the
-reasoning behind the cost of the listings and help them decide which
-listings would best suit their travelling needs.
+hotels, Airbnb does not have a direct effect on the prices of lodging
+offered by hosts and leaves the hosts to decide the prices. In this
+analysis, we want to investigate which factors, ranging from the
+location of the listing to the number of bathrooms, are most likely
+influencing the price of Airbnb listings for cities in Canada. This
+predicitive tool may potentially help travellers better understand the
+reasoning behind the listed price of Canadian Airbnb listings.
 
 ## Data Description
 
@@ -84,9 +83,7 @@ We will first establish that the provided datasets by InsideAirbnb can
 be utilized by thoroughly ensuring there is less than 5-10% of missing
 data. Next, we will perform a linear regression analysis between the
 price of the Airbnb listing and the various factors provided in the
-datasets. Using these results, we also plan to perform a
-cross-validation analysis to see if we can use this predictive model on
-cities outside of Canada.
+datasets.
 
 # References
 
