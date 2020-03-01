@@ -30,7 +30,8 @@ compiled by Murray Cox and John Morrix in 2019. Each row represents a
 single listing with it’s detailed information such as location, price,
 and rating score. The cleaned dataset can be assessed
 [here](https://github.com/STAT547-UBC-2019-20/group_3_mksm1228_sihaoyu1220/tree/master/Data/cleaned_data).
-Some useful variables are summarized
+Details for the cleaning process are decribed in the section Plan of
+Action. Some useful variables are summarized
 below:
 
 | Variable             |  Type  | Description                                                                 |
@@ -138,8 +139,13 @@ which ones are most likely to impact the listed price.
 
 We will first establish that the provided datasets by InsideAirbnb can
 be utilized by thoroughly ensuring there is less than 5-10% of missing
-data. Next, we will perform a linear regression analysis between the
-price of the Airbnb listing and the various factors provided in the
+data. Next, we will combine the datasets from 7 cities in Canada
+together and clean it. Since the original dataset has a lot of variables
+(106 variables), we need to select useful variables to make the dataset
+look clean. Then, we will perform some exploratory data analysis based
+on the variable selected. Finally, we will perform a linear regression
+analysis between the price of the Airbnb listing and the various factors
+provided in the
 datasets.
 
 # References
