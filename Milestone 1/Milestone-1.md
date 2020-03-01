@@ -1,6 +1,17 @@
 Airbnb predictive pricing tool for tourists coming to Canada
 ================
 
+  - [Introduction](#introduction)
+  - [Data Description](#data-description)
+  - [Exploring the Dataset](#exploring-the-dataset)
+      - [1. Bar Chart](#bar-chart)
+      - [2. Proportional Bar Chart](#proportional-bar-chart)
+      - [3. Correllogram](#correllogram)
+      - [4. Side-by-side boxplots](#side-by-side-boxplots)
+  - [Research Question](#research-question)
+  - [Plan of Action](#plan-of-action)
+  - [References](#references)
+
 ## Introduction
 
 According to Statistics Canada, a recording breaking **22.1 million
@@ -32,8 +43,7 @@ single listing with detailed information such as location, price, and
 rating score. The cleaned dataset can be accessed
 [here](https://github.com/STAT547-UBC-2019-20/group_3_mksm1228_sihaoyu1220/tree/master/Data/cleaned_data).
 Details for the cleaning process are decribed in the Plan of Action
-section. Some useful variables are summarized
-below:
+section. Some useful variables are summarized below:
 
 | Variable             |  Type  | Description                                                                 |
 | -------------------- | :----: | --------------------------------------------------------------------------- |
@@ -146,8 +156,7 @@ together and clean it. Since the original dataset has a lot of variables
 dataset. Next, we will perform some exploratory data analysis based on
 the variables selected. Finally, we will perform a linear regression
 analysis between the price of the Airbnb listing and the various factors
-provided in the
-datasets.
+provided in the datasets.
 
 ## References
 
