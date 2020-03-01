@@ -42,7 +42,7 @@ compiled by Murray Cox and John Morrix in 2019. Each row represents a
 single listing with detailed information such as location, price, and
 rating score. The cleaned dataset can be accessed
 [here](https://github.com/STAT547-UBC-2019-20/group_3_mksm1228_sihaoyu1220/tree/master/Data/cleaned_data).
-Details for the cleaning process are decribed in the Plan of Action
+Details for the cleaning process are described in the Plan of Action
 section. Some useful variables are summarized below:
 
 | Variable             |  Type  | Description                                                                 |
@@ -86,9 +86,9 @@ data %>%
 
 ### 2\. Proportional Bar Chart
 
-The proportional bar chart below shows the percentage of superhost in
+The proportional bar chart below shows the percentage of superhosts in
 different cities. From the plot, Victoria seems to have the largest
-percentage of suphosts (almost 50%), while Montreal seems to have the
+percentage of superhosts (almost 50%), while Montreal seems to have the
 smallest percentage of superhosts (less than 25%).
 
 ``` r
@@ -132,7 +132,7 @@ The side-by-side boxplots shows the price per night (after log10
 transformation) distribution in different cities. From the plots, we can
 see that there are some extremely high prices in the dataset. Further
 analysis will be required to figure out the reason for the extreme
-prices. Otherwise, we need to delete the extreme points as outliers.
+prices. Otherwise, we may need to consider them as outliers.
 
 ``` r
 ggplot(data)+geom_boxplot(aes(city, log10(price), group = city))
@@ -151,10 +151,10 @@ which ones are most likely to impact the listed price.
 We will first establish that the provided datasets by InsideAirbnb can
 be utilized by thoroughly ensuring there is less than 5-10% of missing
 data. Next, we will combine the datasets from 7 cities in Canada
-together and clean it. Since the original dataset has a lot of variables
-(106 variables), we need to select useful variables to clean the
-dataset. Next, we will perform some exploratory data analysis based on
-the variables selected. Finally, we will perform a linear regression
+together and clean it. Since the original dataset contains many
+variables (106 variables), we need to select useful variables to clean
+the dataset. Next, we will perform some exploratory data analysis based
+on the variables selected. Finally, we will perform a linear regression
 analysis between the price of the Airbnb listing and the various factors
 provided in the datasets.
 
