@@ -115,7 +115,7 @@ From the correllogram below, there is a strong relationship between the number o
 data[7:10] <- sapply(data[7:10] , as.double)
 corr <- cor(na.omit(data[7:10]))
 corrplot(corr, method="color", tl.srt=0,type="lower",
-         title = "Correlation between room facilities")
+         title = "Correlation between room facilities",mar=c(0,0,1,0))
 ```
 
 ### 4. Side-by-side boxplots
@@ -127,14 +127,14 @@ ggplot(data)+geom_boxplot(aes(city, log10(price), group = city))
 ```
 
 
-# Research Question
+## Research Question
 
 In this analysis, we aim to investigate the influence of various factors on the price of Airbnb listings across various Canadian cities to see which ones are most likely to impact the listed price. 
 
-# Plan of Action
+## Plan of Action
 
 We will first establish that the provided datasets by InsideAirbnb can be utilized by thoroughly ensuring there is less than 5-10% of missing data. Next, we will combine the datasets from 7 cities in Canada together and clean it. Since the original dataset has a lot of variables (106 variables), we need to select useful variables to make the dataset look clean. Then, we will perform some exploratory data analysis based on the variable selected. Finally, we will perform a linear regression analysis between the price of the Airbnb listing and the various factors provided in the datasets. 
 
-# References
+## References
 
 https://www150.statcan.gc.ca/n1/daily-quotidien/200221/dq200221b-eng.htm?indid=3635-2&indgeo=0

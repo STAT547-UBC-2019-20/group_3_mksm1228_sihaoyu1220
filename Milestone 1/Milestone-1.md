@@ -110,7 +110,7 @@ predictors in the linear regression model.
 data[7:10] <- sapply(data[7:10] , as.double)
 corr <- cor(na.omit(data[7:10]))
 corrplot(corr, method="color", tl.srt=0,type="lower",
-         title = "Correlation between room facilities")
+         title = "Correlation between room facilities",mar=c(0,0,1,0))
 ```
 
 ![](Milestone-1_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
@@ -129,13 +129,13 @@ ggplot(data)+geom_boxplot(aes(city, log10(price), group = city))
 
 ![](Milestone-1_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
-# Research Question
+## Research Question
 
 In this analysis, we aim to investigate the influence of various factors
 on the price of Airbnb listings across various Canadian cities to see
 which ones are most likely to impact the listed price.
 
-# Plan of Action
+## Plan of Action
 
 We will first establish that the provided datasets by InsideAirbnb can
 be utilized by thoroughly ensuring there is less than 5-10% of missing
@@ -148,6 +148,6 @@ analysis between the price of the Airbnb listing and the various factors
 provided in the
 datasets.
 
-# References
+## References
 
 <https://www150.statcan.gc.ca/n1/daily-quotidien/200221/dq200221b-eng.htm?indid=3635-2&indgeo=0>
