@@ -2,13 +2,6 @@ Milestone 1: Airbnb predictive pricing tool for tourists coming to
 Canada
 ================
 
-  - [Introduction](#introduction)
-  - [Data Description](#data-description)
-  - [Exploring the Dataset](#exploring-the-dataset)
-  - [Research Question](#research-question)
-  - [Plan of Action](#plan-of-action)
-  - [References](#references)
-
 ## Introduction
 
 According to Statistics Canada, a recording breaking **22.1 million
@@ -28,49 +21,113 @@ listings would best suit their travelling needs.
 
 ## Data Description
 
-``` r
-data$id<-as.factor(data$id)
-nlevels(data$id) 
-```
+The
+[Data](https://github.com/STAT547-UBC-2019-20/group_3_mksm1228_sihaoyu1220/tree/master/Data)
+folder contains raw Airbnb listings data for Montreal, New Brunswick,
+Ottawa, Quebec, Toronto, Vancouver, and Victoria. The datasets were
+obtained from the [Inside
+Airbnb](http://insideairbnb.com/new-york-city/) project, conceived and
+compiled by Murray Cox and John Morrix in 2019. Each row represents a
+single listing with it’s detailed information such as location, price,
+and rating score. The cleaned dataset can be assessed
+[here](https://github.com/STAT547-UBC-2019-20/group_3_mksm1228_sihaoyu1220/tree/master/Data/cleaned_data).
+Some useful variables are summarized
+below:
 
-    ## [1] 6181
-
-There are 6181 listings.
-
-``` r
-data$host_id<-as.factor(data$host_id)
-nlevels(data$host_id) #4261 hosts.
-```
-
-    ## [1] 4261
-
-There are 4261 hosts.
-
-Select useful variables.
-
-``` r
-data <- data %>% 
-  select(id, host_id, host_is_superhost, host_listings_count, neighbourhood_cleansed, property_type, room_type, accommodates, bathrooms, bedrooms, beds, price, weekly_price, monthly_price, security_deposit, cleaning_fee, guests_included, extra_people, minimum_nights, maximum_nights, review_scores_rating)
-```
+| Variable             |  Type  | Description                                                                 |
+| -------------------- | :----: | --------------------------------------------------------------------------- |
+| host\_is\_superhost  | String | whether the host is a super host (TRUE or FALSE).                           |
+| city                 | String | City of the listing belongs to. One exception: New Brunswick is a Province. |
+| property\_type       | String | Property type of the listing.                                               |
+| room\_type           | String | Room type: Entire Room, Hotel room, Private room, or Shared room.           |
+| accommodates         |  Int   | The number of people that can be accommodated in the unit.                  |
+| bathrooms            |  Int   | The number of bathroom in the unit.                                         |
+| bedrooms             |  Int   | The number of bedrooms in the unit.                                         |
+| beds                 |  Int   | The number of beds in the unit.                                             |
+| cancellation\_policy | String | Strictness of the cancellation policy.                                      |
+| price                |  Int   | Price per night.                                                            |
 
 ## Exploring the Dataset
 
-**Barplot**
+First we read in the dataset.
 
 ``` r
-barplot(table(data$room_type), main="Room Type Summary")
+data <- readr::read_csv(here("Data", "cleaned_data.csv"))
 ```
 
-![](Milestone-1_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+### 1\. Bar Chart
 
-**Scatterplot**
+The barplot below shows the number of listings in different cities. From
+the plot, we can see that Toronto has the most number of listings
+(23397) and New Brunswick has the least number of listings (2227).
 
 ``` r
-data$price <- as.numeric(gsub('[$,]', '', data$price))
-plot(data$price, data$minimum_nights, main="Minimum Nights vs. Price", xlab="price", ylab="minimum nights")
+data %>% 
+  ggplot(aes(x = city))+
+  geom_bar(stat="count")+
+  labs(x = "City", y = "Count", title = "Number of Listings by City") + 
+  geom_text(stat='count',aes(label=..count..), vjust=-0.3, size=3.5) + 
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
-![](Milestone-1_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](Milestone-1_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+
+### 2\. Proportional Bar Chart
+
+The proportional bar chart below shows the percentage of superhost in
+different cities. From the plot, Victoria seems to have the largest
+percentage of suphosts (almost 50%), while Montreal seems to have the
+smallest percentage of superhosts (less than 25%).
+
+``` r
+host <- distinct(data, host_id, .keep_all = TRUE)
+host %>% 
+  filter(host_is_superhost == TRUE | host_is_superhost == FALSE) %>% 
+  ggplot()+
+  geom_bar(mapping = aes(x=city, fill = host_is_superhost),
+           position = "fill")+
+  ylab("Proportion of superhost")+
+  xlab("City")+
+  ggtitle("Proportion of Superhosts by City")+
+  scale_fill_brewer(name = "Superhost", palette="Paired")+
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+![](Milestone-1_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
+### 3\. Correllogram
+
+From the correllogram below, there is a strong relationship between the
+number of accommodates and the number of beds in the unit. This may
+result a problem when doing linear regression because some predictors
+are collinear. To solve the collinearity problem, we may not use all of
+the variables (accommodates, bathrooms, bedrooms, and beds) as
+predictors in the linear regression model.
+
+``` r
+data[7:10] <- sapply(data[7:10] , as.double)
+corr <- cor(na.omit(data[7:10]))
+corrplot(corr, method="color", tl.srt=0,type="lower",
+         title = "Correlation between room facilities")
+```
+
+![](Milestone-1_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+### 4\. Side-by-side boxplots
+
+The side-by-side boxplots shows the price per night (after log10
+transformation) distribution in different cities. From the plots, we can
+see that there are some extremely high prices in the dataset. In later
+analysis, we need to figure out the reason for the unusual price.
+Otherwise, we need to delete the extreme points as outliers.
+
+``` r
+ggplot(data)+geom_boxplot(aes(city, log10(price), group = city))
+```
+
+![](Milestone-1_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 # Research Question
 
@@ -86,7 +143,8 @@ data. Next, we will perform a linear regression analysis between the
 price of the Airbnb listing and the various factors provided in the
 datasets. Using these results, we also plan to perform a
 cross-validation analysis to see if we can use this predictive model on
-cities outside of Canada.
+cities outside of
+Canada.
 
 # References
 
