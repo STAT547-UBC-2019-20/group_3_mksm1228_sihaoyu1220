@@ -1,26 +1,38 @@
 Airbnb predictive pricing tool for tourists coming to Canada
 ================
 
+  - [Introduction](#introduction)
+  - [Data Description](#data-description)
+  - [Exploring the Dataset](#exploring-the-dataset)
+      - [1. Bar Chart](#bar-chart)
+      - [2. Proportional Bar Chart](#proportional-bar-chart)
+      - [3. Correllogram](#correllogram)
+      - [4. Side-by-side boxplots](#side-by-side-boxplots)
+  - [Research Question](#research-question)
+  - [Plan of Action](#plan-of-action)
+  - [References](#references)
+
 ## Introduction
 
 According to Statistics Canada, a recording breaking **22.1 million
 international tourists from abroad visited Canada in 2019.** Hotels have
-always been the mainstay for accommodations but the prices can be
+always been the mainstay for accommodations but the prices can become
 unaffordable for visitors looking to stay long-term for tourism or work.
 Airbnb was founded in 2008 and has since been proven to be a successful
-online platform to match hosts with unused space with guests looking for
-an affordable place to lodge. Although it is often more affordable than
-hotels, Airbnb does not have a direct effect on the prices of lodging
-offered by hosts and leaves the hosts to decide the prices. In this
-analysis, we want to investigate which factors, ranging from the
-location of the listing to the number of bathrooms, are most likely
-influencing the price of Airbnb listings for cities in Canada. This
-predicitive tool may potentially help travellers better understand the
-reasoning behind the listed price of Canadian Airbnb listings.
+online platform to match hosts with unused space with international or
+local guests looking for an affordable place to lodge. Although it is
+often more affordable than hotels, **Airbnb does not have a direct
+effect on the listing prices and leaves the hosts to decide the listing
+prices**. In this analysis, we want to investigate which factors,
+ranging from the location of the listing to the number of bathrooms, are
+most likely influencing the price of Airbnb listings for cities in
+Canada. This predicitive tool may potentially help travellers better
+understand the reasoning behind the listed price of certain Canadian
+Airbnb listings.
 
 ## Data Description
 
-The
+\<\<\<\<\<\<\< HEAD \<\<\<\<\<\<\< HEAD The
 [Data](https://github.com/STAT547-UBC-2019-20/group_3_mksm1228_sihaoyu1220/tree/master/Data)
 folder contains raw Airbnb listings data for Montreal, New Brunswick,
 Ottawa, Quebec, Toronto, Vancouver, and Victoria. The datasets were
@@ -30,9 +42,44 @@ compiled by Murray Cox and John Morrix in 2019. Each row represents a
 single listing with it’s detailed information such as location, price,
 and rating score. The cleaned dataset can be assessed
 [here](https://github.com/STAT547-UBC-2019-20/group_3_mksm1228_sihaoyu1220/tree/master/Data/cleaned_data).
+Some useful variables are summarized below: ======= The
+[Data](https://github.com/STAT547-UBC-2019-20/group_3_mksm1228_sihaoyu1220/tree/master/Data)
+folder contains raw Airbnb listings data for Montreal, New Brunswick,
+Ottawa, Quebec, Toronto, Vancouver, and Victoria. The datasets were
+obtained from the [Inside
+Airbnb](http://insideairbnb.com/new-york-city/) project, conceived and
+compiled by Murray Cox and John Morrix in 2019. Each row represents a
+single listing with it’s detailed information such as location, price,
+and rating score. The cleaned dataset can be accessed
+[here](https://github.com/STAT547-UBC-2019-20/group_3_mksm1228_sihaoyu1220/tree/master/Data/cleaned_data).
 Details for the cleaning process are decribed in the section Plan of
-Action. Some useful variables are summarized
-below:
+Action. Some useful variables are summarized below: \>\>\>\>\>\>\>
+upstream/master ======= master The
+[Data](https://github.com/STAT547-UBC-2019-20/group_3_mksm1228_sihaoyu1220/tree/master/Data)
+folder contains raw Airbnb listings data for Montreal, New Brunswick,
+Ottawa, Quebec, Toronto, Vancouver, and Victoria. The datasets were
+obtained from the [Inside
+Airbnb](http://insideairbnb.com/new-york-city/) project, conceived and
+compiled by Murray Cox and John Morrix in 2019. Each row represents a
+single listing with it’s detailed information such as location, price,
+and rating score. The cleaned dataset can be accessed
+[here](https://github.com/STAT547-UBC-2019-20/group_3_mksm1228_sihaoyu1220/tree/master/Data/cleaned_data).
+Details for the cleaning process are decribed in the section Plan of
+Action. Some useful variables are summarized below:
+
+The
+[Data](https://github.com/STAT547-UBC-2019-20/group_3_mksm1228_sihaoyu1220/tree/master/Data)
+folder contains raw Airbnb listings data for Montreal, New Brunswick,
+Ottawa, Quebec, Toronto, Vancouver, and Victoria. The datasets were
+obtained from the [Inside
+Airbnb](http://insideairbnb.com/new-york-city/) project, conceived and
+compiled by Murray Cox and John Morrix in 2019. Each row represents a
+single listing with detailed information such as location, price, and
+rating score. The cleaned dataset can be accessed
+[here](https://github.com/STAT547-UBC-2019-20/group_3_mksm1228_sihaoyu1220/tree/master/Data/cleaned_data).
+Details for the cleaning process are decribed in the Plan of Action
+section. Some useful variables are summarized below: master
+\>\>\>\>\>\>\> 5aa6cc1b6685638c0577c1b5f222eb713c070a4f
 
 | Variable             |  Type  | Description                                                                 |
 | -------------------- | :----: | --------------------------------------------------------------------------- |
@@ -49,7 +96,7 @@ below:
 
 ## Exploring the Dataset
 
-First we read in the dataset.
+First, we read in the dataset.
 
 ``` r
 data <- readr::read_csv(here("Data", "cleaned_data.csv"))
@@ -101,10 +148,10 @@ host %>%
 
 From the correllogram below, there is a strong relationship between the
 number of accommodates and the number of beds in the unit. This may
-result a problem when doing linear regression because some predictors
-are collinear. To solve the collinearity problem, we may not use all of
-the variables (accommodates, bathrooms, bedrooms, and beds) as
-predictors in the linear regression model.
+cause a problem when performing linear regression analysis because some
+predictors are collinear. To solve the collinearity problem, we may
+decide to not use all of the variables (accommodates, bathrooms,
+bedrooms, and beds) as predictors in the linear regression model.
 
 ``` r
 data[7:10] <- sapply(data[7:10] , as.double)
@@ -119,9 +166,9 @@ corrplot(corr, method="color", tl.srt=0,type="lower",
 
 The side-by-side boxplots shows the price per night (after log10
 transformation) distribution in different cities. From the plots, we can
-see that there are some extremely high prices in the dataset. In later
-analysis, we need to figure out the reason for the unusual price.
-Otherwise, we need to delete the extreme points as outliers.
+see that there are some extremely high prices in the dataset. Further
+analysis will be required to figure out the reason for the extreme
+prices. Otherwise, we need to delete the extreme points as outliers.
 
 ``` r
 ggplot(data)+geom_boxplot(aes(city, log10(price), group = city))
@@ -137,16 +184,36 @@ which ones are most likely to impact the listed price.
 
 # Plan of Action
 
+\<\<\<\<\<\<\< HEAD \<\<\<\<\<\<\< HEAD We will first establish that the
+provided datasets by InsideAirbnb can be utilized by thoroughly ensuring
+there is less than 5-10% of missing data. Next, we will perform a linear
+regression analysis between the price of the Airbnb listing and the
+various factors provided in the datasets. ======= We will first
+establish that the provided datasets by InsideAirbnb can be utilized by
+thoroughly ensuring there is less than 5-10% of missing data. Next, we
+will combine the datasets from 7 cities in Canada together and clean it.
+Since the original dataset has a lot of variables (106 variables), we
+need to select useful variables to make the dataset look clean. Then, we
+will perform some exploratory data analysis based on the variable
+selected. Finally, we will perform a linear regression analysis between
+the price of the Airbnb listing and the various factors provided in the
+datasets. \>\>\>\>\>\>\> upstream/master ======= master We will first
+establish that the provided datasets by InsideAirbnb can be utilized by
+thoroughly ensuring there is less than 5-10% of missing data. Next, we
+will combine the datasets from 7 cities in Canada together and clean it.
+Since the original dataset has a lot of variables (106 variables), we
+need to select useful variables to make the dataset look clean.
+
 We will first establish that the provided datasets by InsideAirbnb can
 be utilized by thoroughly ensuring there is less than 5-10% of missing
 data. Next, we will combine the datasets from 7 cities in Canada
 together and clean it. Since the original dataset has a lot of variables
-(106 variables), we need to select useful variables to make the dataset
-look clean. Then, we will perform some exploratory data analysis based
-on the variable selected. Finally, we will perform a linear regression
+(106 variables), we need to select useful variables to clean the
+dataset. Next, we will perform some exploratory data analysis based on
+the variables selected. Finally, we will perform a linear regression
 analysis between the price of the Airbnb listing and the various factors
-provided in the
-datasets.
+provided in the datasets. master \>\>\>\>\>\>\>
+5aa6cc1b6685638c0577c1b5f222eb713c070a4f
 
 # References
 
