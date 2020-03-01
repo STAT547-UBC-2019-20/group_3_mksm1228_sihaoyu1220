@@ -42,6 +42,7 @@ compiled by Murray Cox and John Morrix in 2019. Each row represents a
 single listing with it’s detailed information such as location, price,
 and rating score. The cleaned dataset can be assessed
 [here](https://github.com/STAT547-UBC-2019-20/group_3_mksm1228_sihaoyu1220/tree/master/Data/cleaned_data).
+<<<<<<< HEAD
 Some useful variables are summarized below: ======= The
 [Data](https://github.com/STAT547-UBC-2019-20/group_3_mksm1228_sihaoyu1220/tree/master/Data)
 folder contains raw Airbnb listings data for Montreal, New Brunswick,
@@ -80,6 +81,11 @@ rating score. The cleaned dataset can be accessed
 Details for the cleaning process are decribed in the Plan of Action
 section. Some useful variables are summarized below: master
 \>\>\>\>\>\>\> 5aa6cc1b6685638c0577c1b5f222eb713c070a4f
+=======
+Details for the cleaning process are decribed in the section Plan of
+Action. Some useful variables are summarized
+below:
+>>>>>>> upstream/master
 
 | Variable             |  Type  | Description                                                                 |
 | -------------------- | :----: | --------------------------------------------------------------------------- |
@@ -208,12 +214,21 @@ We will first establish that the provided datasets by InsideAirbnb can
 be utilized by thoroughly ensuring there is less than 5-10% of missing
 data. Next, we will combine the datasets from 7 cities in Canada
 together and clean it. Since the original dataset has a lot of variables
+<<<<<<< HEAD
 (106 variables), we need to select useful variables to clean the
 dataset. Next, we will perform some exploratory data analysis based on
 the variables selected. Finally, we will perform a linear regression
 analysis between the price of the Airbnb listing and the various factors
 provided in the datasets. master \>\>\>\>\>\>\>
 5aa6cc1b6685638c0577c1b5f222eb713c070a4f
+=======
+(106 variables), we need to select useful variables to make the dataset
+look clean. Then, we will perform some exploratory data analysis based
+on the variable selected. Finally, we will perform a linear regression
+analysis between the price of the Airbnb listing and the various factors
+provided in the
+datasets.
+>>>>>>> upstream/master
 
 # References
 
