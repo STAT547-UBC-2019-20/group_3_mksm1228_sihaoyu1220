@@ -133,7 +133,9 @@ In this analysis, we aim to investigate the influence of various factors on the 
 
 # Plan of Action
 
-We will first establish that the provided datasets by InsideAirbnb can be utilized by thoroughly ensuring there is less than 5-10% of missing data. Next, we will perform a linear regression analysis between the price of the Airbnb listing and the various factors provided in the datasets. 
+We will first establish that the provided datasets by InsideAirbnb can be utilized by thoroughly ensuring there is less than 5-10% of missing data. Next, we will perform a linear regression analysis between the price of the Airbnb listing and the various factors provided in the datasets.
+
+Martin
 
 # References
 
