@@ -132,7 +132,7 @@ corrplot(corr, method="color", tl.srt=0,type="lower",
 
 ### 4. Side-by-side boxplots
 
-The side-by-side boxplots shows the price per night (after log10 transformation) distribution in different cities. From the plots, we can see that there are some extremely high prices in the dataset. For further analysis we need to figure out the reason for the extreme prices. Otherwise, we need to delete the extreme points as outliers.
+The side-by-side boxplots shows the price per night (after log10 transformation) distribution in different cities. From the plots, we can see that there are some extremely high prices in the dataset. Further analysis will be required to figure out the reason for the extreme prices. Otherwise, we need to delete the extreme points as outliers.
 
 ```{r, warning=FALSE}
 ggplot(data)+geom_boxplot(aes(city, log10(price), group = city))
