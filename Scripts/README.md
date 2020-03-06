@@ -1,30 +1,19 @@
----
-title: "README.md"
-author: "Martin"
-date: "3/6/2020"
-output: html_document
----
+This folder contains the R scripts for this analysis. 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+Each script contains the following structure. 
 
-## R Markdown
+1. documentation for how to use scripts and comments
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+2. Load libraries and packages
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+3. parse/define command line arguments here
 
-```{r cars}
-summary(cars)
-```
+4. define main function
+main <- function(){
+    # code for "guts" of script goes here
+}
 
-## Including Plots
+5. Code for other functions & tests
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+6. call main function
+main()
