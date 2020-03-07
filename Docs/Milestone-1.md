@@ -1,23 +1,6 @@
 Airbnb predictive pricing tool for tourists coming to Canada
 ================
 
-  - [Introduction](#introduction)
-  - [Data Description](#data-description)
-  - [Exploring the Dataset](#exploring-the-dataset)
-      - [1. What is the number of Airbnb listings in different Canadian
-        cities?](#what-is-the-number-of-airbnb-listings-in-different-canadian-cities)
-      - [2. How many Airbnb superhosts are there in different Canadian
-        cities?](#how-many-airbnb-superhosts-are-there-in-different-canadian-cities)
-      - [3. Is there a relationship between the number of accommodates
-        and other features of the
-        listing?](#is-there-a-relationship-between-the-number-of-accommodates-and-other-features-of-the-listing)
-      - [4. What is the distribution of the price per night in different
-        Canadian
-        cities?](#what-is-the-distribution-of-the-price-per-night-in-different-canadian-cities)
-  - [Research Question](#research-question)
-  - [Plan of Action](#plan-of-action)
-  - [References](#references)
-
 ## Introduction
 
 According to Statistics Canada, a recording breaking **22.1 million
@@ -49,7 +32,8 @@ single listing with detailed information such as location, price, and
 rating score. The cleaned dataset can be accessed
 [here](https://github.com/STAT547-UBC-2019-20/group_3_mksm1228_sihaoyu1220/blob/master/Data/cleaned_data.csv).
 Details for the cleaning process are described in the Plan of Action
-section. Some useful variables are summarized below:
+section. Some useful variables are summarized
+below:
 
 | Variable             |  Type  | Description                                                                 |
 | -------------------- | :----: | --------------------------------------------------------------------------- |
@@ -66,7 +50,8 @@ section. Some useful variables are summarized below:
 
 ## Exploring the Dataset
 
-First, we read in the dataset.
+First, we read in the
+dataset.
 
 ``` r
 data <- readr::read_csv(here("Data", "cleaned_data.csv"))
