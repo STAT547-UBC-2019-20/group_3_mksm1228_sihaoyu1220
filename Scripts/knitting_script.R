@@ -2,18 +2,18 @@
 wish to knit into the first argument and the file type 'html' or 'pdf' in the second
 argument.
 
-Usage: knitting_script.R<file, file_type>
+Usage: knitting_script.R<file_type>
 " -> doc 
 
 library(knitr)
 library(docopt)
 library(here)
-library(testthat)
+
 
 opt <- docopt(doc)
 
 main <- function(file_type){
-  file <- here("Docs", "Milestone 1.Rmd")
+  file <- here("Docs", file) # write down file name you want to knit
   if (file_type == "html"){
     rmarkdown::render(file, "html_document", output_dir = "Docs")
   }  
@@ -21,19 +21,6 @@ main <- function(file_type){
     rmarkdown::render(file, "pdf_document", output_dir = "Docs")
   }
   
-  ### Tests
-  
-  test_that("Correct file type written", {
-    if (file_type == "html"){
-      expect_match("html", file_type)
-    }
-    if (file_type == "pdf"){
-      expect_match("pdf", file_type)
-    } 
-    else {
-      print("Please input 'html' or 'pdf.'")
-    } 
-  })
   
   
 }
@@ -41,4 +28,4 @@ main <- function(file_type){
 main(file_type)
 
 
-main(opt$file, opt$file_type)
+main(opt$file_type)
