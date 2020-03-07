@@ -57,8 +57,9 @@ plot3 <- function(data_path, image_path){
   data <- read.csv(here::here(data_path))
   data[7:10] <- sapply(data[7:10] , as.double)
   corr <- cor(na.omit(data[7:10]))
-  p<-corrplot(corr, method="color", tl.srt=0,type="lower",
+  corrplot(corr, method="color", tl.srt=0,type="lower",
            title = "Correlation between room facilities",mar=c(0,0,1,0))
+  dev.off ()
   suppressMessages(ggsave(here::here(image_path,"Correlation_between_room_facilities.png")))
 }
 
