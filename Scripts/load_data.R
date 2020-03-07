@@ -9,56 +9,60 @@ opt <- docopt(doc)
 main <- function(data_url, city) {
   
   if (('Montreal' %in% city)|('Canada' %in% city)){
-  print("Attempting to download Montreal data...")
+  message("Attempting to download Montreal data...")
   data <-  fread(paste0(data_url,"qc/montreal/2020-01-13/data/listings.csv.gz"))
   write.csv(data, here::here("Data", "Montreal.csv"))
-  print("Montreal data has been downloaded successfully!")
+  message("Montreal data has been downloaded successfully!")
   }
   
   if (('New_Brunswick' %in% city)|('Canada' %in% city)){
-  print("Attempting to download New Brunswick data...")
+  message("Attempting to download New Brunswick data...")
   data <-  fread(paste0(data_url,"nb/new-brunswick/2020-01-28/data/listings.csv.gz"))
   write.csv(data, here::here("Data", "New Brunswick.csv"))
-  print("New Brunswick data has been downloaded successfully!")
+  message("New Brunswick data has been downloaded successfully!")
   }
   
   if (('Ottawa' %in% city)|('Canada' %in% city)){
-  print("Attempting to download Ottawa data...")
+  message("Attempting to download Ottawa data...")
   data <-  fread(paste0(data_url,"on/ottawa/2020-01-31/data/listings.csv.gz"))
   write.csv(data, here::here("Data", "Ottawa.csv"))
-  print("Ottawa data has been downloaded successfully!")
+  message("Ottawa data has been downloaded successfully!")
   }
   
   if (('Quebec' %in% city)|('Canada' %in% city)){
-  print("Attempting to download Quebec data...")
+  message("Attempting to download Quebec data...")
   data <-  fread(paste0(data_url,"qc/quebec-city/2020-02-16/data/listings.csv.gz"))
   write.csv(data, here::here("Data", "Quebec.csv"))
-  print("Quebec data has been downloaded successfully!")
+  message("Quebec data has been downloaded successfully!")
   }
   
   if (('Toronto' %in% city) |('Canada' %in% city)){
-  print("Attempting to download Toronto data...")
+  message("Attempting to download Toronto data...")
   data <-  fread(paste0(data_url,"on/toronto/2020-02-14/data/listings.csv.gz"))
   write.csv(data, here::here("Data", "Toronto.csv"))
-  print("Toronto data has been downloaded successfully!")
+  message("Toronto data has been downloaded successfully!")
   }
   
   if (('Vancouver' %in% city)|('Canada' %in% city)){
-  print("Attempting to download Vancouver data...")
+  message("Attempting to download Vancouver data...")
   data <-  fread(paste0(data_url,"bc/vancouver/2020-02-16/data/listings.csv.gz"))
   write.csv(data, here::here("Data", "Vancouver.csv"))
-  print("Vancouver data has been downloaded successfully!")
+  message("Vancouver data has been downloaded successfully!")
   }
   
   if (('Victoria' %in% city)|('Canada' %in% city)){
-  print("Attempting to download Victoria data...")
+  message("Attempting to download Victoria data...")
   data <-  fread(paste0(data_url,"bc/victoria/2020-01-28/data/listings.csv.gz"))
   write.csv(data, here::here("Data", "Victoria.csv"))
-  print("Victoria data has been downloaded successfully!")
+  message("Victoria data has been downloaded successfully!")
   }
   
   if (! city %in% c("Canada","Montreal","New_Brunswick","Ottawa","Quebec","Toronto","Vancouver","Victoria")){
-    print(glue::glue("Error: ",city, " cannot be downloaded."))
+    message(glue::glue("Error: ",city, " cannot be downloaded."))
+  }
+  
+  if (city %in% c("Canada","Montreal","New_Brunswick","Ottawa","Quebec","Toronto","Vancouver","Victoria")){
+    message("All datasets have been saved in Data folder")
   }
 }
 
@@ -68,9 +72,11 @@ main <- function(data_url, city) {
 #' 
 #' @param city is a string. If `city` is `Canada`, download all Airbnb dataset in Canada;
 #' If `city` is one of `Montreal`,`New_Brunswick`,`Ottawa`,`Quebec`,`Toronto`,`Vancouver`,`Victoria`,
-#' download Airbnb dataset for that specific city. If `city` is none of the above, print error message.
+#' download Airbnb dataset for that specific city. If `city` is none of the above, message error message.
 
 main(opt$data_url, opt$city)
+
+#data_url=http://data.insideairbnb.com/canada/
 
 #Montreal: http://data.insideairbnb.com/canada/qc/montreal/2020-01-13/data/listings.csv.gz
 #New Brunswick: http://data.insideairbnb.com/canada/nb/new-brunswick/2020-01-28/data/listings.csv.gz
