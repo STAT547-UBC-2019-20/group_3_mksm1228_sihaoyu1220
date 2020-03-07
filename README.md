@@ -9,15 +9,3 @@ We will be utilizing the Vancouver listings dataset which contains summary infor
 ## Research Question
 
 Which factors are most likely to influence the price of Airbnb listings in Canadian cities? 
-
-## Usage
-
-1. Clone this repository.
-
-2. Ensure the following packages are installed:
-- ggplot2
-- here
-- tidyverse
-- corrplot
-
-3. Run the following scripts (in order) with the appropriate arguments specified

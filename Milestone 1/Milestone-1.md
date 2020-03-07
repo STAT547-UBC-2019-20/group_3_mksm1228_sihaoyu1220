@@ -4,16 +4,10 @@ Airbnb predictive pricing tool for tourists coming to Canada
   - [Introduction](#introduction)
   - [Data Description](#data-description)
   - [Exploring the Dataset](#exploring-the-dataset)
-      - [1. What is the number of Airbnb listings in different Canadian
-        cities?](#what-is-the-number-of-airbnb-listings-in-different-canadian-cities)
-      - [2. How many Airbnb superhosts are there in different Canadian
-        cities?](#how-many-airbnb-superhosts-are-there-in-different-canadian-cities)
-      - [3. Is there a relationship between the number of accommodates
-        and other features of the
-        listing?](#is-there-a-relationship-between-the-number-of-accommodates-and-other-features-of-the-listing)
-      - [4. What is the distribution of the price per night in different
-        Canadian
-        cities?](#what-is-the-distribution-of-the-price-per-night-in-different-canadian-cities)
+      - [1. Bar Chart](#bar-chart)
+      - [2. Proportional Bar Chart](#proportional-bar-chart)
+      - [3. Correllogram](#correllogram)
+      - [4. Side-by-side boxplots](#side-by-side-boxplots)
   - [Research Question](#research-question)
   - [Plan of Action](#plan-of-action)
   - [References](#references)
@@ -47,7 +41,7 @@ Airbnb](http://insideairbnb.com/new-york-city/) project, conceived and
 compiled by Murray Cox and John Morrix in 2019. Each row represents a
 single listing with detailed information such as location, price, and
 rating score. The cleaned dataset can be accessed
-[here](https://github.com/STAT547-UBC-2019-20/group_3_mksm1228_sihaoyu1220/blob/master/Data/cleaned_data.csv).
+[here](https://github.com/STAT547-UBC-2019-20/group_3_mksm1228_sihaoyu1220/tree/master/Data/cleaned_data).
 Details for the cleaning process are described in the Plan of Action
 section. Some useful variables are summarized below:
 
@@ -72,7 +66,7 @@ First, we read in the dataset.
 data <- readr::read_csv(here("Data", "cleaned_data.csv"))
 ```
 
-### 1\. What is the number of Airbnb listings in different Canadian cities?
+### 1\. Bar Chart
 
 The barplot below shows the number of listings in different cities. From
 the plot, we can see that Toronto has the most number of listings
@@ -80,7 +74,7 @@ the plot, we can see that Toronto has the most number of listings
 
 ``` r
 data %>% 
-  ggplot(aes(x = fct_infreq(city)))+
+  ggplot(aes(x = city))+
   geom_bar(stat="count")+
   labs(x = "City", y = "Count", title = "Number of Listings by City") + 
   geom_text(stat='count',aes(label=..count..), vjust=-0.3, size=3.5) + 
@@ -90,7 +84,7 @@ data %>%
 
 ![](Milestone-1_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
-### 2\. How many Airbnb superhosts are there in different Canadian cities?
+### 2\. Proportional Bar Chart
 
 The proportional bar chart below shows the percentage of superhosts in
 different cities. From the plot, Victoria seems to have the largest
@@ -114,7 +108,7 @@ host %>%
 
 ![](Milestone-1_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
-### 3\. Is there a relationship between the number of accommodates and other features of the listing?
+### 3\. Correllogram
 
 From the correllogram below, there is a strong relationship between the
 number of accommodates and the number of beds in the unit. This may
@@ -132,7 +126,7 @@ corrplot(corr, method="color", tl.srt=0,type="lower",
 
 ![](Milestone-1_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
-### 4\. What is the distribution of the price per night in different Canadian cities?
+### 4\. Side-by-side boxplots
 
 The side-by-side boxplots shows the price per night (after log10
 transformation) distribution in different cities. From the plots, we can
@@ -150,9 +144,7 @@ ggplot(data)+geom_boxplot(aes(city, log10(price), group = city))
 
 In this analysis, we aim to investigate the influence of various factors
 on the price of Airbnb listings across various Canadian cities to see
-which ones are most likely to impact the listed price. Which factors
-ranging from number of bathrooms to number of bedrooms are Airbnb hosts
-most likely using to determine the price for their listing(s)?
+which ones are most likely to impact the listed price.
 
 ## Plan of Action
 
@@ -168,6 +160,4 @@ provided in the datasets.
 
 ## References
 
-Statistics Canada. (2020, February 21). Travel between Canada and other
-countries, December 2019. Retrieved from
 <https://www150.statcan.gc.ca/n1/daily-quotidien/200221/dq200221b-eng.htm?indid=3635-2&indgeo=0>
