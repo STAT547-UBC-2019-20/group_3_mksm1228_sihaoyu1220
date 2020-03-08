@@ -9,9 +9,11 @@ Each script contains the following structure.
 3. parse/define command line arguments here
 
 4. define main function
+```r
 main <- function(){
-    # code for "guts" of script goes here
+   # code for script
 }
+```
 
 5. Code for other functions & tests
 
