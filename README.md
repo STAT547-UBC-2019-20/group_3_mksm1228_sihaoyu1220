@@ -26,11 +26,11 @@ Which factors are most likely to influence the price of Airbnb listings in Canad
 
 4. Run the following scripts (in order) **with** the appropriate arguments specified 
 
-```r{}
-# *load all data*
+```r
+# load all data
 Rscript load_data.R --data_url=<data_url> --city=<city>
 
-# *access cleaned data*
+# access cleaned data
 Rscript load_data.R --path=<path> --filename=<filename>
 
 # *explorating data analysis*
