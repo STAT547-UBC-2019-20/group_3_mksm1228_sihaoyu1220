@@ -1,26 +1,26 @@
 "This is a script that will knit the file to either html or pdf. Please enter file type 'html' or 'pdf'
 in the argument.
-  Usage: knitting_script.R<file_type>
-  " -> doc 
+Usage: knitting.R --file_name=<file_name> --file_type=<file_type>
+" -> doc 
 
 library(knitr)
 library(docopt)
-library(here)
+suppressMessages(library(here))
 
 opt <- docopt(doc)
 
-main <- function(file_type){
-  file <- here("Docs", file) # write down file name you want to knit
+main <- function(file_name, file_type){
+  file_name <- here("Docs", file_name) # write down file name you want to knit
   if (file_type == "html"){
-    rmarkdown::render(file, "html_document", output_dir = "Docs")
+    rmarkdown::render(file_name, "html_document", output_dir = "Docs")
+    print("HTML file has been created and stored in Docs.")
   }  
   if (file_type == "pdf"){
-    rmarkdown::render(file, "pdf_document", output_dir = "Docs")
+    rmarkdown::render(file_name, "pdf_document", output_dir = "Docs")
+    print("pdf file has been created and stored in Docs.")
   }
   
   
 }
 
-main(file_type)
-
-main(opt$file_type)
+main(opt$file_name,opt$file_type)
