@@ -19,8 +19,6 @@ main <- function(file_name, file_type){
     rmarkdown::render(file_name, "pdf_document", output_dir = "Docs")
     print("pdf file has been created and stored in Docs.")
   }
-  
-  
 }
 
 main(opt$file_name,opt$file_type)
