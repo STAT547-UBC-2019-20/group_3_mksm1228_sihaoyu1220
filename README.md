@@ -36,6 +36,6 @@ Rscript load_data.R --path=<path> --filename=<filename>
 # explorating data analysis
 Rscript load_data.R --data_path=<data_path> --image_path=<image_path>
 
-# knitting
-Rscript knitting_script.R --file_name=<file_type> --file_type=<file_type>
+# knitting to html or pdf
+Rscript knitting_script.R --file_name=<file_name> --file_type=<file_type>
 ```
