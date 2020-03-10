@@ -28,14 +28,14 @@ Which factors are most likely to influence the price of Airbnb listings in Canad
 
 ```r
 # load all data
-Rscript load_data.R --data_url=<data_url> --city=<city>
+Rscript Scripts/load_data.R --data_url=http://data.insideairbnb.com/canada/ --city=Canada
 
 # access cleaned data
-Rscript load_data.R --path=<path> --filename=<filename>
+Rscript Scripts/clean_data.R --path=Data --filename=cleaned_data
 
 # explorating data analysis
-Rscript load_data.R --data_path=<data_path> --image_path=<image_path>
+Rscript Scripts/EDA.R --data_path=Data/cleaned_data.csv --image_path=Images
 
 # knitting to html or pdf
-Rscript knitting_script.R --file_name=<file_name> --file_type=<file_type>
+Rscript Scripts/knitting_script.R --file_name=<file_name> --file_type=<file_type>
 ```

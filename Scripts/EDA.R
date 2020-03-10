@@ -3,7 +3,7 @@
 2. Proportional bar chart: shows how many Airbnb superhosts are there in different Canadian cities
 3. Correllogram: shows relationship between the number of accommodates and other features of the listing
 4. Side-by-side boxplot: shows the distribution of the price per night in different Canadian cities
-Usage: load_data.R --data_path=<data_path> --image_path=<image_path>
+Usage: EDA.R --data_path=<data_path> --image_path=<image_path>
 " -> doc 
 library(docopt)
 suppressMessages(library(data.table))

@@ -2,7 +2,7 @@
 1. combining seven dataset into one file
 2. selecting useful variables
 3. Convert price from dollar format to numeric format
-Usage: load_data.R --path=<path> --filename=<filename>
+Usage: clean_data.R --path=<path> --filename=<filename>
 " -> doc 
 
 suppressPackageStartupMessages(library(tidyverse))
