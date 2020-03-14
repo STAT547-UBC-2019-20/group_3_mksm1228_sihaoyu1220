@@ -39,7 +39,9 @@ NB_listings <- data %>%
                 filter(city == "New Brunswick") %>%
                 summarize(Brunswisk_listings = nrow(.))
 ```
-The barplot below shows the number of listings in different cities. From the plot, we can see that Toronto has the most number of listings (`r Toronto_listings`) and New Brunswick has the least number of listings (`r NB_listings`). ![](C:/Users/mksm1228/Desktop/group_3_mksm1228_sihaoyu1220-1/Images/Number_of_listings.png)
+The barplot below shows the number of listings in different cities. From the plot, we can see that Toronto has the most number of listings (`r Toronto_listings`) and New Brunswick has the least number of listings (`r NB_listings`). 
+
+![](../Images/Number_of_listings.png)
 
 ### 2. How many Airbnb superhosts are there in different Canadian cities?
 ```{r, echo=FALSE}
@@ -56,20 +58,20 @@ montreal_host <- data %>%
 
 The proportional bar chart below shows the percentage of superhosts in different cities. From the plot, Victoria seems to have the largest percentage of superhosts (`r victoria_host`%), while Montreal seems to have the smallest percentage of superhosts (`r montreal_host`%).
 
-![](C:/Users/mksm1228/Desktop/group_3_mksm1228_sihaoyu1220-1/Images/Proportion_of_superhosts.png)
+![](../Images/Proportion_of_superhosts.png)
 
 
 ### 3. Is there a relationship between the number of accommodates and other features of the listing?
 
 From the correllogram below, there is a strong relationship between the number of accommodates and the number of beds in the unit. This may cause a problem when performing linear regression analysis because some predictors are collinear. To solve the collinearity problem, we may decide to not use all of the variables (accommodates, bathrooms, bedrooms, and beds) as predictors in the linear regression model.
 
-![](C:/Users/mksm1228/Desktop/group_3_mksm1228_sihaoyu1220-1/Images/Correlation_between_room_facilities.png)
+![](../Images/Correlation_between_room_facilities.png)
 
 ### 4. What is the distribution of the price per night in different Canadian cities?
 
 The side-by-side boxplots shows the price per night (after log10 transformation) distribution in different cities. From the plots, we can see that there are some extremely high prices in the dataset. Further analysis will be required to figure out the reason for the extreme prices. Otherwise, we may need to consider them as outliers.
 
-![](C:/Users/mksm1228/Desktop/group_3_mksm1228_sihaoyu1220-1/Images/Boxplot_of_price.png)
+![](../Images/Boxplot_of_price.png)
 
 ## Analysis Methods (Linear Regression)
 
