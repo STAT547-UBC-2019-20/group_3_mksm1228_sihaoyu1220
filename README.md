@@ -37,5 +37,5 @@ Rscript Scripts/clean_data.R --path=Data --filename=cleaned_data
 Rscript Scripts/EDA.R --data_path=Data/cleaned_data.csv --image_path=Images
 
 # knitting to html or pdf
-Rscript Scripts/knitting_script.R --file_name=<file_name> --file_type=<file_type>
+Rscript Scripts/knitting_script.R --file_name=Final_Report.rmd --file_type=pdf/html
 ```
