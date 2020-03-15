@@ -27,7 +27,7 @@ In this analysis, we aim to investigate the influence of various factors on the 
 The [Data](https://github.com/STAT547-UBC-2019-20/group_3_mksm1228_sihaoyu1220/tree/master/Data) folder contains raw Airbnb listings data for Montreal, New Brunswick, Ottawa, Quebec, Toronto, Vancouver, and Victoria. The datasets were obtained from the [Inside Airbnb](http://insideairbnb.com/new-york-city/) project, conceived and compiled by Murray Cox and John Morrix in 2019. Each row represents a single listing with detailed information such as location, price, and rating score. The cleaned dataset can be accessed [here](https://github.com/STAT547-UBC-2019-20/group_3_mksm1228_sihaoyu1220/blob/master/Data/cleaned_data.csv). 
 
 | Variable      | Type          | Description  |
-| ------------- |:-------------:| -----|
+| ------ |:------:| ------------------- |
 | host_is_superhost | String  | whether the host is a super host (TRUE or FALSE). |
 | city | String | City of the listing belongs to. One exception: New Brunswick is a Province. |
 | property_type | String | Property type of the listing. |
