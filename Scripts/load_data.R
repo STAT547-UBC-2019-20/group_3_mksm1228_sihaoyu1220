@@ -3,16 +3,32 @@ Usage: load_data.R --data_url=<data_url> --city=<city>
 " -> doc 
 library(docopt)
 library(data.table)
+<<<<<<< HEAD
 library(testthat)
 library(here)
+=======
+suppressPackageStartupMessages(library(testthat))
+
+>>>>>>> upstream/master
 
 opt <- docopt(doc) 
 
 main <- function(data_url, city) {
+  test_that("data_url and city are strings",{
+    expect_true(is.character(data_url))
+    expect_true(is.character(city))
+  })
   
   if (('Montreal' %in% city)|('Canada' %in% city)){
   message("Attempting to download Montreal data...")
   data <-  fread(paste0(data_url,"qc/montreal/2020-01-13/data/listings.csv.gz"))
+<<<<<<< HEAD
+=======
+  write.csv(data, here::here("Data", "Montreal.csv"))
+  test_that("Montreal.csv exists",{
+    expect_true(file.exists(here::here("Data", "Montreal.csv")))
+  })
+>>>>>>> upstream/master
   message("Montreal data has been downloaded successfully!")
   }
   
@@ -20,6 +36,9 @@ main <- function(data_url, city) {
   message("Attempting to download New Brunswick data...")
   data <-  fread(paste0(data_url,"nb/new-brunswick/2020-01-28/data/listings.csv.gz"))
   write.csv(data, here::here("Data", "New Brunswick.csv"))
+  test_that("New Brunswick.csv exists",{
+    expect_true(file.exists(here::here("Data", "New Brunswick.csv")))
+  })
   message("New Brunswick data has been downloaded successfully!")
   }
   
@@ -27,6 +46,9 @@ main <- function(data_url, city) {
   message("Attempting to download Ottawa data...")
   data <-  fread(paste0(data_url,"on/ottawa/2020-01-31/data/listings.csv.gz"))
   write.csv(data, here::here("Data", "Ottawa.csv"))
+  test_that("Ottawa.csv exists",{
+    expect_true(file.exists(here::here("Data", "Ottawa.csv")))
+  })
   message("Ottawa data has been downloaded successfully!")
   }
   
@@ -34,6 +56,9 @@ main <- function(data_url, city) {
   message("Attempting to download Quebec data...")
   data <-  fread(paste0(data_url,"qc/quebec-city/2020-02-16/data/listings.csv.gz"))
   write.csv(data, here::here("Data", "Quebec.csv"))
+  test_that("Quebec.csv exists",{
+    expect_true(file.exists(here::here("Data", "Quebec.csv")))
+  })
   message("Quebec data has been downloaded successfully!")
   }
   
@@ -41,6 +66,9 @@ main <- function(data_url, city) {
   message("Attempting to download Toronto data...")
   data <-  fread(paste0(data_url,"on/toronto/2020-02-14/data/listings.csv.gz"))
   write.csv(data, here::here("Data", "Toronto.csv"))
+  test_that("Toronto.csv exists",{
+    expect_true(file.exists(here::here("Data", "Toronto.csv")))
+  })
   message("Toronto data has been downloaded successfully!")
   }
   
@@ -48,6 +76,9 @@ main <- function(data_url, city) {
   message("Attempting to download Vancouver data...")
   data <-  fread(paste0(data_url,"bc/vancouver/2020-02-16/data/listings.csv.gz"))
   write.csv(data, here::here("Data", "Vancouver.csv"))
+  test_that("Vancouver.csv exists",{
+    expect_true(file.exists(here::here("Data", "Vancouver.csv")))
+  })
   message("Vancouver data has been downloaded successfully!")
   }
   
@@ -55,6 +86,9 @@ main <- function(data_url, city) {
   message("Attempting to download Victoria data...")
   data <-  fread(paste0(data_url,"bc/victoria/2020-01-28/data/listings.csv.gz"))
   write.csv(data, here::here("Data", "Victoria.csv"))
+  test_that("Victoria.csv exists",{
+    expect_true(file.exists(here::here("Data", "Victoria.csv")))
+  })
   message("Victoria data has been downloaded successfully!")
   }
   
