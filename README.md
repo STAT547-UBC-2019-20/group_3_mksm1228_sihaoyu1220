@@ -25,6 +25,7 @@ Which factors are most likely to influence the price of Airbnb listings in Canad
 - knitr
 - broom
 - testthat
+- docopt
 
 4. Run the following scripts (in order) **with** the appropriate arguments specified.
 
