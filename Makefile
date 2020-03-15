@@ -1,9 +1,6 @@
 all: Docs/Final_Report.html Docs/Final_Report.pdf
 
 # download data
-#Data/Montreal.csv Data/New Brunswick.csv Data/Ottawa.csv Data/Quebec.csv Data/Toronto.csv Data/Vancouver.csv Data/Victoria.csv : Scripts/load_data.R
-#	Rscript Scripts/load_data.R --data_url=http://data.insideairbnb.com/canada/ --city=Canada
-
 Data/Montreal.csv: Scripts/load_data.R
 	@rm -f Data/Montreal.csv
 	@touch Data/Montreal.csv
