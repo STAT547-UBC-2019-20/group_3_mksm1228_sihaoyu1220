@@ -1,9 +1,23 @@
 all: Docs/Final_Report.html Docs/Final_Report.pdf
 
 # download data
-Data/Montreal.csv Data/New Brunswick.csv Data/Ottawa.csv Data/Quebec.csv Data/Toronto.csv Data/Vancouver.csv Data/Victoria.csv : Scripts/load_data.R
-	Rscript Scripts/load_data.R --data_url=http://data.insideairbnb.com/canada/ --city=Canada
+#Data/Montreal.csv Data/New Brunswick.csv Data/Ottawa.csv Data/Quebec.csv Data/Toronto.csv Data/Vancouver.csv Data/Victoria.csv : Scripts/load_data.R
+#	Rscript Scripts/load_data.R --data_url=http://data.insideairbnb.com/canada/ --city=Canada
 
+Data/Montreal.csv: Scripts/load_data.R
+	@rm -f Data/Montreal.csv
+	@touch Data/Montreal.csv
+	Rscript Scripts/load_data.R --data_url=http://data.insideairbnb.com/canada/ --city=Canada
+	@mv -f Data/Montreal.csv $@
+	
+Data/New Brunswick.csv Data/Ottawa.csv Data/Quebec.csv Data/Toronto.csv Data/Vancouver.csv Data/Victoria.csv: Data/Montreal.csv
+## Recover from the removal of $@
+	@if test -f $@; then :; else \
+	rm -f data.stamp; \
+	$(MAKE) $(AM_MAKEFLAGS) Data/Montreal.csv; \
+	fi
+
+        
 # clean data
 Data/cleaned_data.csv : Scripts/clean_data.R Data/Montreal.csv Data/New Brunswick.csv Data/Ottawa.csv Data/Quebec.csv Data/Toronto.csv Data/Vancouver.csv Data/Victoria.csv
 	Rscript Scripts/clean_data.R --path=Data --filename=cleaned_data
@@ -27,7 +41,6 @@ Docs/Final_Report.pdf : Images/Number_of_listings.png Images/Proportion_of_super
 clean :
 	rm -f Data/*.csv
 	rm -f Images/*.png
-	rm -f RDS/*
-	rm -f Docs/*.md
+	rm -f RDS/*.rds
 	rm -f Docs/*.html
 	rm -f Docs/*.pdf
