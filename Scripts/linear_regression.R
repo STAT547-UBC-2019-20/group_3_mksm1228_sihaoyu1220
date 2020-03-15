@@ -5,10 +5,16 @@ Usage: linear_regression.R --datafile=<datafile>
 
 suppressMessages(library(tidyverse))
 library(docopt)
+suppressMessages(library(testthat))
 
 opt <- docopt(doc) 
 
 main <- function(datafile) {
+  
+  test_that("datafile is a string",{
+    expect_true(is.character(datafile))
+  })
+  
   data <- read.csv(here::here("Data",datafile))
   data1 <- data %>% 
     group_by(city) %>% 
@@ -21,10 +27,20 @@ main <- function(datafile) {
   full.lm <- lm(price~host_is_superhost+city+room_type+accommodates+bathrooms+bedrooms+cancellation_policy, data=data1)
   suppressMessages(step.lm <- step(full.lm,trace=0))
   saveRDS(step.lm, here::here("RDS","step_lm.rds"))
+  
+  test_that("model saved",{
+    expect_true(file.exists(here::here("RDS", "step_lm.rds")))
+  })
+  
   png(here::here('Images','Model_Diagnostics.png'))
   par(mfrow = c(2, 2))
   plot(step.lm)
   dev.off()
+  
+  test_that("model diagnostics saved",{
+    expect_true(file.exists(here::here("Images", "Model_Diagnostics.png")))
+  })
+  
   message("Successfully exported the model object to RDS folder and images to Images folder!")
   }
 
