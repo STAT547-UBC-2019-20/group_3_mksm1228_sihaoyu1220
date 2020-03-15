@@ -101,16 +101,6 @@ main <- function(data_url, city) {
 #' If `city` is one of `Montreal`,`New_Brunswick`,`Ottawa`,`Quebec`,`Toronto`,`Vancouver`,`Victoria`,
 #' download Airbnb dataset for that specific city. If `city` is none of the above, message error message.
 
-# test_that("Files exist", {
-#   expect_true(file.exists(here("Data", "Montreal.csv")))
-#   expect_true(file.exists(here("Data", "New Brunswick.csv")))
-#   expect_true(file.exists(here("Data", "Ottawa.csv")))
-#   expect_true(file.exists(here("Data", "Quebec.csv")))
-#   expect_true(file.exists(here("Data", "Toronto.csv")))
-#   expect_true(file.exists(here("Data", "Vancouver.csv")))
-#   expect_true(file.exists(here("Data", "Victoria.csv")))
-# })
-
 main(opt$data_url, opt$city)
 
 #data_url=http://data.insideairbnb.com/canada/
