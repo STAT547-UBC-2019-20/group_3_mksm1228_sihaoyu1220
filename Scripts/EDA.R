@@ -9,10 +9,17 @@ library(docopt)
 suppressMessages(library(data.table))
 suppressMessages(library(corrplot))
 suppressMessages(library(tidyverse))
+suppressMessages(library(testthat))
 
 opt <- docopt(doc) 
 
 main <- function(data_path, image_path) {
+  
+  test_that("data_path and image_path are strings",{
+    expect_true(is.character(data_path))
+    expect_true(is.character(image_path))
+  })
+  
   plot1(data_path, image_path)
   message("Barplot has been produced successfully!")
   plot2(data_path, image_path)
@@ -34,6 +41,10 @@ plot1 <- function(data_path, image_path){
     theme_bw() +
     theme(plot.title = element_text(hjust = 0.5))+
     suppressMessages(ggsave(here::here(image_path,"Number_of_listings.png")))
+  
+  test_that("plot 1 exists",{
+    expect_true(file.exists(here::here("Images", "Number_of_listings.png")))
+  })
 }
 
 plot2 <- function(data_path, image_path){
@@ -51,6 +62,10 @@ plot2 <- function(data_path, image_path){
     theme_bw()+
     theme(plot.title = element_text(hjust = 0.5))+
     suppressMessages(ggsave(here::here(image_path,"Proportion_of_superhosts.png")))
+  
+  test_that("plot 2 exists",{
+    expect_true(file.exists(here::here("Images", "Proportion_of_superhosts.png")))
+  })
 }
 
 plot3 <- function(data_path, image_path){
@@ -61,6 +76,10 @@ plot3 <- function(data_path, image_path){
   corrplot(corr, method="color", tl.srt=0,type="lower",
            title = "Correlation between room facilities",mar=c(0,0,1,0))
   dev.off()
+  
+  test_that("plot 3 exists",{
+    expect_true(file.exists(here::here("Images", "Correlation_between_room_facilities.png")))
+  })
 }
 
 plot4 <- function(data_path, image_path){
@@ -68,6 +87,10 @@ plot4 <- function(data_path, image_path){
   data <- read.csv(here::here(data_path))
   ggplot(data)+geom_boxplot(aes(city, log10(price), group = city))+
                      suppressMessages(ggsave(here::here(image_path,"Boxplot_of_price.png")))
+  
+  test_that("plot 4 exists",{
+    expect_true(file.exists(here::here("Images", "Boxplot_of_price.png")))
+  })
 }
 #' Download and save the Airbnb data in the data directory
 #' @param data_path is the path to load cleaned_data
