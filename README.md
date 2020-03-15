@@ -32,18 +32,20 @@ Which factors are most likely to influence the price of Airbnb listings in Canad
 1. USE GNU MAKE  
 if < > is used , this means that multiple options can be inputted. 
 
-# clean all the scripts
+# clean all the folders
 make clean
 
-# run all the scripts
+# Restore all the files
 make all
 
 2. USE GNU MAKE ON INDIVIDUAL ITEMS
 # download the data
-make Data/<Canadian city.csv> --make Data/Montreal.csv
+make Data/<Canadian city.csv> 
+For example: make Data/Montreal.csv
 
 # run exploratory data analysis
-make Images/<image.png> --make Images/Number_of_listings.png
+make Images/<image.png> 
+For example: make Images/Number_of_listings.png
 
 # linear regression analysis
 make RDS/step_lm.rds
