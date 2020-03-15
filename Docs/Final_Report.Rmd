@@ -10,6 +10,7 @@ library(tidyverse)
 library(here)
 library(corrplot)
 library(forcats)
+library(testthat)
 ```
 
 
@@ -51,6 +52,7 @@ montreal_host <- data %>%
                   filter(city == "Montreal") %>%
                   summarize(true_host = sum(host_is_superhost,
                                             na.rm = TRUE)/nrow(.)*100)
+expect_match("htmlpdf", "d")
 ```
 
 

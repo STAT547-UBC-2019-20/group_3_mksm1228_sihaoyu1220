@@ -3,6 +3,8 @@ Usage: load_data.R --data_url=<data_url> --city=<city>
 " -> doc 
 library(docopt)
 library(data.table)
+library(testthat)
+library(here)
 
 opt <- docopt(doc) 
 
@@ -11,7 +13,6 @@ main <- function(data_url, city) {
   if (('Montreal' %in% city)|('Canada' %in% city)){
   message("Attempting to download Montreal data...")
   data <-  fread(paste0(data_url,"qc/montreal/2020-01-13/data/listings.csv.gz"))
-  write.csv(data, here::here("Data", "Montreal.csv"))
   message("Montreal data has been downloaded successfully!")
   }
   
@@ -73,6 +74,16 @@ main <- function(data_url, city) {
 #' @param city is a string. If `city` is `Canada`, download all Airbnb dataset in Canada;
 #' If `city` is one of `Montreal`,`New_Brunswick`,`Ottawa`,`Quebec`,`Toronto`,`Vancouver`,`Victoria`,
 #' download Airbnb dataset for that specific city. If `city` is none of the above, message error message.
+
+test_that("Files exist", {
+  expect_true(file.exists(here("Data", "Montreal.csv")))
+  expect_true(file.exists(here("Data", "New Brunswick.csv")))
+  expect_true(file.exists(here("Data", "Ottawa.csv")))
+  expect_true(file.exists(here("Data", "Quebec.csv")))
+  expect_true(file.exists(here("Data", "Toronto.csv")))
+  expect_true(file.exists(here("Data", "Vancouver.csv")))
+  expect_true(file.exists(here("Data", "Victoria.csv")))
+})
 
 main(opt$data_url, opt$city)
 
