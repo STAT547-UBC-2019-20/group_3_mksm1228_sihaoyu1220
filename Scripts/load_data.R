@@ -3,7 +3,7 @@ Usage: load_data.R --data_url=<data_url> --city=<city>
 " -> doc 
 library(docopt)
 library(data.table)
-library(testthat)
+suppressPackageStartupMessages(library(testthat))
 
 
 opt <- docopt(doc) 
