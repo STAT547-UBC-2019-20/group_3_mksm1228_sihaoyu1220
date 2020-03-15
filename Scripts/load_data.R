@@ -3,13 +3,9 @@ Usage: load_data.R --data_url=<data_url> --city=<city>
 " -> doc 
 library(docopt)
 library(data.table)
-<<<<<<< HEAD
 library(testthat)
 library(here)
-=======
 suppressPackageStartupMessages(library(testthat))
-
->>>>>>> upstream/master
 
 opt <- docopt(doc) 
 
@@ -22,13 +18,10 @@ main <- function(data_url, city) {
   if (('Montreal' %in% city)|('Canada' %in% city)){
   message("Attempting to download Montreal data...")
   data <-  fread(paste0(data_url,"qc/montreal/2020-01-13/data/listings.csv.gz"))
-<<<<<<< HEAD
-=======
   write.csv(data, here::here("Data", "Montreal.csv"))
   test_that("Montreal.csv exists",{
     expect_true(file.exists(here::here("Data", "Montreal.csv")))
   })
->>>>>>> upstream/master
   message("Montreal data has been downloaded successfully!")
   }
   
