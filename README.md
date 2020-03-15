@@ -23,6 +23,7 @@ Which factors are most likely to influence the price of Airbnb listings in Canad
 - corrplot
 - data.table
 - knitr
+- broom
 
 4. Run the following scripts (in order) **with** the appropriate arguments specified 
 
@@ -36,6 +37,9 @@ Rscript Scripts/clean_data.R --path=Data --filename=cleaned_data
 # explorating data analysis
 Rscript Scripts/EDA.R --data_path=Data/cleaned_data.csv --image_path=Images
 
+# perform linear regression
+Rscript Scripts/linear_regression.R --datafile=cleaned_data.csv
+
 # knitting to html or pdf
-Rscript Scripts/knitting_script.R --file_name=Final_Report.rmd --file_type=pdf/html
+Rscript Scripts/knitting.R --file_name=Final_Report.Rmd --file_type=pdf/html
 ```
