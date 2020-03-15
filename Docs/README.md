@@ -1,0 +1,1 @@
+This folder contains all the documents for this analysis. The final report can be found in three different formats (.Rmd, .html, and .pdf).
