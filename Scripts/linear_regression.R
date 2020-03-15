@@ -18,7 +18,7 @@ main <- function(datafile) {
   levels(data1$cancellation_policy)[4] <- "strict"
   levels(data1$cancellation_policy)[4] <- "super_strict"
   levels(data1$cancellation_policy)[5] <- "super_strict"
-  full.lm <- lm(price~host_is_superhost+city+room_type+accommodates+bathrooms+bedrooms+beds+cancellation_policy, data=data1)
+  full.lm <- lm(price~host_is_superhost+city+room_type+accommodates+bathrooms+bedrooms+cancellation_policy, data=data1)
   suppressMessages(step.lm <- step(full.lm,trace=0))
   saveRDS(step.lm, here::here("RDS","step_lm.rds"))
   png(here::here('Images','Model_Diagnostics.png'))
