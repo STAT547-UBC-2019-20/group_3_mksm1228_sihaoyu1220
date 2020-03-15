@@ -17,11 +17,11 @@ library(broom)
 
 ## Introduction
 
-According to Statistics Canada, a recording breaking **22.1 million international tourists from abroad visited Canada in 2019.** Hotels have always been the mainstay for accommodations but the prices per night can be unaffordable for visitors looking to stay long-term for tourism or work. Airbnb was founded in 2008 and has since been proven to be a successful online platform to match hosts with unused space with international or local guests looking for an affordable place to lodge. Although it is often more affordable than hotels, **Airbnb does not have a direct effect on the listing prices and ultimately leaves the hosts to decide the listing prices**. In this analysis, we want to investigate which factors, ranging from if the host is a superhost or not to the number of bathrooms, are most likely influencing the price of Airbnb listings for cities in Canada. This predicitive tool may potentially help travellers better understand the reasoning behind the listed price of certain Canadian Airbnb listings. 
+According to Statistics Canada, a recording breaking **22.1 million international tourists from abroad visited Canada in 2019.** Hotels have always been the mainstay for accommodations but the inflated prices per night can become unaffordable for visitors looking to stay long-term for tourism or work. Airbnb was founded in 2008 and has since been proven to be a successful online platform to match hosts with unused space together with international or local guests looking for an affordable place to lodge. Although it is often more affordable than hotels, **Airbnb does not have a direct effect on the listing prices and ultimately leaves the hosts to decide the listing prices**. In this analysis, we want to investigate which factors, ranging from if the host is a superhost or to the number of bathrooms, are most likely influencing the price of Airbnb listings in Canadian cities. This predicitive tool may potentially help travellers better understand the reasoning behind the listed price of certain Canadian Airbnb listings and help them decide if a hotel or Airbnb is better suited for their accommodation needs. 
 
 ## Research Question
 
-In this analysis, we aim to investigate the influence of various factors on the price of Airbnb listings across various Canadian cities to see which ones are most likely to impact the listed price. Which factors, ranging from property type to number of bedrooms, are most likely playing a role in determining the price of Canadian Airbnb listings?
+In this analysis, we aim to investigate the influence of various variables on the price of Airbnb listings across various Canadian cities to see which ones are most likely to impact the listed price. Which variables, ranging from property type to number of bedrooms, are most likely playing a role in determining the price of Canadian Airbnb listings?
 
 ## Data Description
 
@@ -42,7 +42,7 @@ The [Data](https://github.com/STAT547-UBC-2019-20/group_3_mksm1228_sihaoyu1220/t
 
 ## Exploratory Data Analysis
 
-In this section, four plots are produced to give an insight into how does the dataset distribute. First, we read in the dataset.
+In this section, four plots are produced to give an insight into the distribution of the dataset. First, we read in the dataset.
 
 ```{r load data, message=FALSE}
 data <- readr::read_csv(here("Data", "cleaned_data.csv"))
@@ -58,7 +58,7 @@ NB_listings <- data %>%
                 filter(city == "New Brunswick") %>%
                 summarize(Brunswisk_listings = nrow(.))
 ```
-The barplot below shows the number of listings in different cities. From the plot, we can see that Toronto has the most number of listings (`r Toronto_listings`) and New Brunswick has the least number of listings (`r NB_listings`). 
+The barplot below shows the number of listings in different Canadian cities. From the plot, we can see that Toronto has the most number of listings (`r Toronto_listings`) and New Brunswick has the least number of listings (`r NB_listings`). 
 
 
 ![](../Images/Number_of_listings.png)
@@ -96,19 +96,22 @@ The side-by-side boxplots shows the price per night (after log10 transformation)
 
 ## Analysis Methods
 
-In this section, we perform some analysis to figure out which factors are most likely influencing the price of Airbnb listings for cities in Canada by following 3 steps. In the first step, we remove all the outliers. In the second step, fit a linear regression model. In the last step, do model diagnostics to check the assumptions and the model performance.
+To identify which variables are most likely influencing the price of Canadian Airbnb listings, we developed an analysis protocol which consists of 3 steps.  
+1) Remove all the outliers 
+2) Fit a linear regression model
+3) Perform model diagnostics to check the assumptions and the model performance
 
 ### Step 1: Remove Outliers
 
-We identify an observation as an outlier if it falls below `Q1-1.5*IQR` or above `Q3+1.5*IQR`, where Q1 and Q3 means the first and third quantile of all the observations in the corresponding city; IQR means interquartile range (`Q3-Q1`). 
+We classified an observation as an outlier if it fell below `Q1-1.5*IQR` or above `Q3+1.5*IQR`, where Q1 and Q3 represents the first and third quantile of all the observations in the corresponding city; IQR means interquartile range (`Q3-Q1`). 
 
 ### Step 2: Fit a linear regression model
 
-Firstly, we build a full model for `price` by including all the potential predictors mentioned in the Data Description section. Then, do variable selection. Since `property type` has too many levels (44 levels), it is not appropriate to include in the linear regression model. Also, `bed` is removed because it is highly correlated with `accommodates`, `bathrooms`, and `bedrooms`.
+We built a full model for `price` by including all the potential predictors mentioned in the Data Description section. Next, we performed variable selection. Since the `property type` variable had too many levels (44 levels), it was not appropriate to include this in the linear regression model. In addition, the `bed` variable was removed because it was highly correlated with `accommodates`, `bathrooms`, and `bedrooms`.
 
 ### Step 3: Model Diagnostics
 
-Four plots are produced for model checking. The first plot is residual vs. fitted values plot. It is uswful for checking the assumption of linearity. The second plot is QQ plot, which is used to check the normality assumption of the residuals. The third plot is scale-location plot, which is useful for checking the assumption of homoscedasticity. The fourth plot is Cook's distance plot, which shows the measure of the influence of each observation on the regression coefficients.
+Four plots were produced for model checking. The first plot is a residual vs. fitted values plot. It is useful for checking the assumption of linearity. The second plot is a QQ plot and this is used to check the normality assumption of the residuals. The third plot is a scale-location plot and this is useful for checking the assumption of homoscedasticity. The fourth plot is a Cook's distance plot and this shows the measure of the influence of each observation on the regression coefficients.
 
 ## Results
 
@@ -119,23 +122,23 @@ lm <- readRDS(here::here("RDS","step_lm.RDS"))
 knitr::kable(tidy(lm))
 ```
 
-- The coefficient of `superhost` is positive means that if the host is a superhost, the Airbnb price is higher.
-- Montreal is baseline `city`. The Airbnb price in Montreal is the lowest compared to other cities, while the Airbnb price in Vancouver is the highest. The price in Vancouver is \$50 higher than Montreal in average by controlling other factors. 
-- For `room type`, apartment is the baseline. If the room type is hotel room, the price is higher; if the room type is private room, the price is lower; if the room type is shared room, the price is even lower for about \$64. 
-- The coefficient of `accommodates` is 7 means that for each extra accommodate, the Airbnb price increases by \$7 in average. 
-- The coefficient of `bathroom` is 10 means that for each extra bathroom, the Airbnb price increases by \$10 in average.
-- The coefficient of `bedroom` is 9 means that for each extra bathroom, the Airbnb price increases by \$9 in average.
-- For `cancellation policy`, flexible cancellation is the baseline. Airbnb with moderate cancellation policy has lower price while the Airbnb with strict or super strict cancellation policy has higher price. 
+- The coefficient of `superhost` is positive and this means that if the host is a superhost, the Airbnb price will be higher than if a host was not a superhost.
+- Montreal is a baseline `city` meaning that the Airbnb price in Montreal is the lowest compared to the other cities. In contrast, the Airbnb price in Vancouver is the highest. On average, the price in Vancouver is \$50 higher than the price in Montreal using our model.  
+- For the `room type` variable, apartment is the baseline. If the room type is a hotel room, the price is higher. However, if the room type is a private room, the price is lower. Finally, if the room type is a shared room, the price is even lower at about \$64. 
+- The coefficient of `accommodates` is 7 which means that for each extra accommodate, the Airbnb price increases by \$7 on average. 
+- The coefficient of `bathroom` is 10 which means that for each extra bathroom, the Airbnb price increases by \$10 on average.
+- The coefficient of `bedroom` is 9 which means that for each extra bathroom, the Airbnb price increases by \$9 on average.
+- For the `cancellation policy` variable, flexible cancellation is the baseline. Airbnb listings with a moderate cancellation policy has a lower price while the Airbnb listings with a strict or super strict cancellation policy has a higher price. 
 
-Then take a look at the model diagnostic:
+Next, let's take a look at the model diagnostics:
 
 ![](../Images/Model_Diagnostics.png)
 
-There is an increasing trend in scale-location plot, so the assumption of homoscedasticity may not hold. From Cook's distance plot, there are several influential points, which need to remove in the future analysis.
+There is an increasing trend in the scale-location plot, so the assumption of homoscedasticity may not hold. From the Cook's distance plot, there are several influential points (far right), which may require us to remove in the future analysis.
 
 ## Conclusions/Discussion
 
-Superhost, city, room type, number of accommodates, number of bathrooms, number of bedrooms, and cancellation policy are all have significance effects on the Airbnb price. However, the model seems not fit very well based on model diagnostics. A possible reason is that there are too many categorical variables included in the linear regression model. For future analysis, we can remove the influential points and perform ANOVA instead of linear regression. 
+In conclusion, there appears to be certain variables that have a significant effect on Canadian Airbnb listings. Variables such as superhost, city, room type, number of accommodates, number of bathrooms, number of bedrooms, and cancellation policy. However, the model does not seem to fit very well based on the model diagnostics. A possible reason is that there are too many categorical variables included in the linear regression model, which is one of the limitations for this study. For future analysis, we will consider removing the influential points and performing ANOVA instead of linear regression. 
 
 ## References
 
