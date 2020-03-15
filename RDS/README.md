@@ -1,1 +1,0 @@
-This folder contains the .rds file for the linear regression analysis.
