@@ -4,9 +4,9 @@ to knit the Final_Report.Rmd into.
 Usage: knitting.R --file_name=Final_Report.Rmd --file_type=html/pdf
 " -> doc 
 
-library(knitr)
-suppressMessages(library(docopt))
-library(testthat)
+suppressMessages(library(knitr))
+library(docopt)
+suppressMessages(library(testthat))
 suppressMessages(library(here))
 
 opt <- docopt(doc)
