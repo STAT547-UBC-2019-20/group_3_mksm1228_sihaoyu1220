@@ -5,6 +5,7 @@ Usage: knitting.R --file_name=<file_name> --file_type=<file_type>
 
 library(knitr)
 library(docopt)
+library(testthat)
 suppressMessages(library(here))
 
 opt <- docopt(doc)
