@@ -8,11 +8,18 @@ Usage: clean_data.R --path=<path> --filename=<filename>
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(here))
 library(docopt)
+suppressPackageStartupMessages(library(testthat))
 
 opt <- docopt(doc) 
 
 
 main <- function(path, filename) {
+  
+  test_that("path and filename are strings",{
+    expect_true(is.character(path))
+    expect_true(is.character(filename))
+  })
+  
   print("Loading the datasets...")
   Vancouver <- suppressWarnings(suppressMessages(readr::read_csv(here::here(path,"Vancouver.csv"))))
   Montreal <- suppressWarnings(suppressMessages(readr::read_csv(here::here(path,"Montreal.csv"))))
@@ -46,6 +53,11 @@ Victoria <- Victoria %>%
 cleaned_data <- rbind(Vancouver, Montreal, New_Brunswick, Ottawa, Quebec, Toronto, Victoria)
 cleaned_data$price <- as.numeric(gsub('\\$|,', '', cleaned_data$price))
 readr::write_csv(cleaned_data, here::here(path, glue::glue(filename,".csv")))
+
+test_that("File exists",{
+  expect_true(file.exists(here::here("Data","cleaned_data.csv")))
+})
+
 message(glue::glue("The datasets have been cleaned successfully! ",filename, ".csv has been saved in ", path, " folder."))
 }
 
