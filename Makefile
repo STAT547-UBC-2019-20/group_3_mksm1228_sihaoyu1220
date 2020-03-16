@@ -1,20 +1,23 @@
 all: Docs/Final_Report.html Docs/Final_Report.pdf
 
 # download data
-Data/Montreal.csv: Scripts/load_data.R
-	@rm -f Data/Montreal.csv
-	@touch Data/Montreal.csv
-	Rscript Scripts/load_data.R --data_url=http://data.insideairbnb.com/canada/ --city=Canada
-	@mv -f Data/Montreal.csv $@
-	
-Data/New Brunswick.csv Data/Ottawa.csv Data/Quebec.csv Data/Toronto.csv Data/Vancouver.csv Data/Victoria.csv: Data/Montreal.csv
-## Recover from the removal of $@
-	@if test -f $@; then :; else \
-	rm -f data.stamp; \
-	$(MAKE) $(AM_MAKEFLAGS) Data/Montreal.csv; \
-	fi
+#Data/Montreal.csv: Scripts/load_data.R
+#	@rm -f Data/Montreal.csv
+#	@touch Data/Montreal.csv
+#	Rscript Scripts/load_data.R --data_url=http://data.insideairbnb.com/canada/ --city=Canada
+#	@mv -f Data/Montreal.csv $@
+#	
+#Data/New Brunswick.csv Data/Ottawa.csv Data/Quebec.csv Data/Toronto.csv Data/Vancouver.csv Data/Victoria.csv: Data/Montreal.csv
+# Recover from the removal of $@
+#	@if test -f $@; then :; else \
+#	rm -f data.stamp; \
+#	$(MAKE) $(AM_MAKEFLAGS) Data/Montreal.csv; \
+#	fi
 
-        
+# download data
+Data/New Brunswick.csv Data/Ottawa.csv Data/Quebec.csv Data/Toronto.csv Data/Vancouver.csv Data/Victoria.csv Data/Montreal.csv : Scripts/load_data.R
+	Rscript Scripts/load_data.R --data_url=http://data.insideairbnb.com/canada/ --city=Canada
+
 # clean data
 Data/cleaned_data.csv : Scripts/clean_data.R Data/Montreal.csv Data/New Brunswick.csv Data/Ottawa.csv Data/Quebec.csv Data/Toronto.csv Data/Vancouver.csv Data/Victoria.csv
 	Rscript Scripts/clean_data.R --path=Data --filename=cleaned_data
