@@ -1,7 +1,7 @@
 ---
 title: "Airbnb predictive pricing tool for tourists coming to Canada"
 output: 
-  github_document:
+  pdf_document:
     toc: true
 ---
 
@@ -17,11 +17,11 @@ library(broom)
 
 ## Introduction
 
-According to Statistics Canada, a recording breaking **22.1 million international tourists from abroad visited Canada in 2019.** Hotels have always been the mainstay for accommodations but the inflated prices per night can become unaffordable for visitors looking to stay long-term for tourism or work. Airbnb was founded in 2008 and has since been proven to be a successful online platform to match hosts with unused space together with international or local guests looking for an affordable place to lodge. Although it is often more affordable than hotels, **Airbnb does not have a direct effect on the listing prices and ultimately leaves the hosts to decide the listing prices**. In this analysis, we want to investigate which factors, ranging from if the host is a superhost or to the number of bathrooms, are most likely influencing the price of Airbnb listings in Canadian cities. This predicitive tool may potentially help travellers better understand the reasoning behind the listed price of certain Canadian Airbnb listings and help them decide if a hotel or Airbnb is better suited for their accommodation needs. 
+According to Statistics Canada, a recording breaking **22.1 million international tourists from abroad visited Canada in 2019.** Hotels have always been the choice for travel accommodations but the inflated prices per night can become unaffordable for visitors looking to stay long-term for tourism or work. Airbnb was founded in 2008 and has since been proven to be a successful online platform to match hosts with unused space together with international or local guests looking for an affordable place to lodge. Although it is often more affordable than hotels, **Airbnb does not have a direct effect on the listing prices and ultimately leaves the hosts to decide the listing prices**. In this analysis, we want to investigate which variables, ranging from if the host is a superhost to the number of bathrooms, are most likely influencing the price of Airbnb listings in Canadian cities. This predicitive tool may potentially help travellers better understand the reasoning behind the listed price of certain Canadian Airbnb listings and help them decide if a hotel or Airbnb is better suited for their accommodation and financial needs. 
 
 ## Research Question
 
-In this analysis, we aim to investigate the influence of various variables on the price of Airbnb listings across various Canadian cities to see which ones are most likely to impact the listed price. Which variables, ranging from property type to number of bedrooms, are most likely playing a role in determining the price of Canadian Airbnb listings?
+In this analysis, we aim to investigate the influence of certain variables on the price of Airbnb listings across different Canadian cities to see which ones are most likely to impact the listed price. Which variables, ranging from the property type to number of bedrooms, are most likely playing a role in determining the price of Canadian Airbnb listings?
 
 ## Data Description
 
@@ -99,7 +99,7 @@ The side-by-side boxplots shows the price per night (after log10 transformation)
 To identify which variables are most likely influencing the price of Canadian Airbnb listings, we developed an analysis protocol which consists of 3 steps.  
 1) Remove all the outliers 
 2) Fit a linear regression model
-3) Perform model diagnostics to check the assumptions and the model performance
+3) Perform model diagnostics to check the assumptions and the model performance.
 
 ### Step 1: Remove Outliers
 
@@ -111,7 +111,7 @@ We built a full model for `price` by including all the potential predictors ment
 
 ### Step 3: Model Diagnostics
 
-Four plots were produced for model checking. The first plot is a residual vs. fitted values plot. It is useful for checking the assumption of linearity. The second plot is a QQ plot and this is used to check the normality assumption of the residuals. The third plot is a scale-location plot and this is useful for checking the assumption of homoscedasticity. The fourth plot is a Cook's distance plot and this shows the measure of the influence of each observation on the regression coefficients.
+Four plots were produced to check our model. The first plot is a residual vs. fitted values plot. It is useful for checking the assumption of linearity. The second plot is a QQ plot and this is used to check the normality assumption of the residuals. The third plot is a scale-location plot and this is useful for checking the assumption of homoscedasticity. The fourth plot is a Cook's distance plot and this shows the measure of the influence of each observation on the regression coefficients.
 
 ## Results
 
@@ -122,8 +122,8 @@ lm <- readRDS(here::here("RDS","step_lm.RDS"))
 knitr::kable(tidy(lm))
 ```
 
-- The coefficient of `superhost` is positive and this means that if the host is a superhost, the Airbnb price will be higher than if a host was not a superhost.
-- Montreal is a baseline `city` meaning that the Airbnb price in Montreal is the lowest compared to the other cities. In contrast, the Airbnb price in Vancouver is the highest. On average, the price in Vancouver is \$50 higher than the price in Montreal using our model.  
+- The coefficient of `superhost` is positive and this means that if the host is a superhost, the Airbnb listing price will be higher than if the host was not a superhost.
+- Montreal is a baseline `city` meaning that the Airbnb listing price in Montreal are lower on average compared to the other Canadian cities. In contrast, the Airbnb listing price in Vancouver are the highest on average. Using our model, the average price in Vancouver is \$50 higher than the price in Montreal.  
 - For the `room type` variable, apartment is the baseline. If the room type is a hotel room, the price is higher. However, if the room type is a private room, the price is lower. Finally, if the room type is a shared room, the price is even lower at about \$64. 
 - The coefficient of `accommodates` is 7 which means that for each extra accommodate, the Airbnb price increases by \$7 on average. 
 - The coefficient of `bathroom` is 10 which means that for each extra bathroom, the Airbnb price increases by \$10 on average.
@@ -134,11 +134,11 @@ Next, let's take a look at the model diagnostics:
 
 ![](../Images/Model_Diagnostics.png)
 
-There is an increasing trend in the scale-location plot, so the assumption of homoscedasticity may not hold. From the Cook's distance plot, there are several influential points (far right), which may require us to remove in the future analysis.
+There is an increasing trend in the scale-location plot, so the assumption of homoscedasticity may not hold. From the Cook's distance plot, there are several influential points (far right), which may removal in future analyses.
 
 ## Conclusions/Discussion
 
-In conclusion, there appears to be certain variables that have a significant effect on Canadian Airbnb listings. Variables such as superhost, city, room type, number of accommodates, number of bathrooms, number of bedrooms, and cancellation policy. However, the model does not seem to fit very well based on the model diagnostics. A possible reason is that there are too many categorical variables included in the linear regression model, which is one of the limitations for this study. For future analysis, we will consider removing the influential points and performing ANOVA instead of linear regression. 
+In conclusion, there appears to be certain variables that have a significant effect on the price of Canadian Airbnb listings. Variables such as superhost, city, room type, number of accommodates, number of bathrooms, number of bedrooms, and cancellation policy. However, the model does not seem to fit very well based on the model diagnostics. A possible reason is that there are too many categorical variables included in the linear regression model. This is unfortunately, one of the limitations for this study. For future analysis, we will consider removing the influential points and performing ANOVA instead of linear regression. 
 
 ## References
 
