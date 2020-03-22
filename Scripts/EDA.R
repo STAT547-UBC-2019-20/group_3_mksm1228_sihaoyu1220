@@ -20,18 +20,18 @@ main <- function(data_path, image_path) {
     expect_true(is.character(image_path))
   })
   
-  plot1(data_path, image_path)
+  barplot(data_path, image_path)
   message("Barplot has been produced successfully!")
-  plot2(data_path, image_path)
+  proportionplot(data_path, image_path)
   message("Proportional bar chart has been produced successfully!")
-  plot3(data_path, image_path)
+  correllogram(data_path, image_path)
   message("Correllogram has been produced successfully!")
-  plot4(data_path, image_path)
+  boxplot(data_path, image_path)
   message("Side-by-side boxplot has been produced successfully!")
   message(glue::glue("All plots have been saved in the path ", image_path))
 }
 
-plot1 <- function(data_path, image_path){
+barplot <- function(data_path, image_path){
   data <- read.csv(here::here(data_path))
   data %>% 
     ggplot(aes(x = fct_infreq(city)))+
@@ -47,7 +47,7 @@ plot1 <- function(data_path, image_path){
   })
 }
 
-plot2 <- function(data_path, image_path){
+proportionplot <- function(data_path, image_path){
   data <- read.csv(here::here(data_path))
   host <- distinct(data, host_id, .keep_all = TRUE)
   plot <- host %>% 
@@ -67,7 +67,7 @@ plot2 <- function(data_path, image_path){
   })
 }
 
-plot3 <- function(data_path, image_path){
+correllogram <- function(data_path, image_path){
   data <- read.csv(here::here(data_path))
   data[7:10] <- sapply(data[7:10] , as.double)
   corr <- cor(na.omit(data[7:10]))
@@ -80,7 +80,7 @@ plot3 <- function(data_path, image_path){
   })
 }
 
-plot4 <- function(data_path, image_path){
+boxplot <- function(data_path, image_path){
   options(warn = -1)
   data <- read.csv(here::here(data_path))
   ggplot(data)+geom_boxplot(aes(city, log10(price), group = city))+
