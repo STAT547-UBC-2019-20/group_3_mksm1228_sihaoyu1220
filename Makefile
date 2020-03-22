@@ -17,7 +17,19 @@ all: Docs/Final_Report.html Docs/Final_Report.pdf
 # download data
 Data/New Brunswick.csv Data/Ottawa.csv Data/Quebec.csv Data/Toronto.csv Data/Vancouver.csv Data/Victoria.csv Data/Montreal.csv : Scripts/load_data.R
 	Rscript Scripts/load_data.R --data_url=http://data.insideairbnb.com/canada/ --city=Canada
+	@mv -t Data/Montreal.csv $@
+	
+Data/New Brunswick.csv Data/Ottawa.csv Data/Quebec.csv Data/Toronto.csv Data/Vancouver.csv Data/Victoria.csv: Data/Montreal.csv
+## Recover from the removal of $@
+	@if test -f $@; then :; else \
+	rm -f data.stamp; \
+	$(MAKE) $(AM_MAKEFLAGS) Data/Montreal.csv; \
+	fi
 
+# download data
+Data/New Brunswick.csv Data/Ottawa.csv Data/Quebec.csv Data/Toronto.csv Data/Vancouver.csv Data/Victoria.csv Data/Montreal.csv : Scripts/load_data.R
+	Rscript Scripts/load_data.R --data_url=http://data.insideairbnb.com/canada/ --city=Canada
+      
 # clean data
 Data/cleaned_data.csv : Scripts/clean_data.R Data/Montreal.csv Data/New Brunswick.csv Data/Ottawa.csv Data/Quebec.csv Data/Toronto.csv Data/Vancouver.csv Data/Victoria.csv
 	Rscript Scripts/clean_data.R --path=Data --filename=cleaned_data
@@ -33,10 +45,10 @@ RDS/step_lm.rds Images/Model_Diagnostics.png : Data/cleaned_data.csv Scripts/lin
 
 # Knit report
 Docs/Final_Report.html : Images/Number_of_listings.png Images/Proportion_of_superhosts.png Images/Correlation_between_room_facilities.png Images/Boxplot_of_price.png RDS/step_lm.rds Images/Model_Diagnostics.png Docs/Final_Report.Rmd Data/cleaned_data.csv Scripts/knitting.R
-	Rscript Scripts/knitting.R --file_name=Final_Report.Rmd --file_type=html
+	Rscript Scripts/knitting.R --rmd_file=Final_Report.Rmd 
 
 Docs/Final_Report.pdf : Images/Number_of_listings.png Images/Proportion_of_superhosts.png Images/Correlation_between_room_facilities.png Images/Boxplot_of_price.png Docs/Final_Report.Rmd RDS/step_lm.rds Images/Model_Diagnostics.png Data/cleaned_data.csv Scripts/knitting.R
-	Rscript Scripts/knitting.R --file_name=Final_Report.Rmd --file_type=pdf
+	Rscript Scripts/knitting.R --rmd_file=Final_Report.Rmd
 
 clean :
 	rm -f Data/*.csv

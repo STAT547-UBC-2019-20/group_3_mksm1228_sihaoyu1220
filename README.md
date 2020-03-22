@@ -72,5 +72,5 @@ Rscript Scripts/EDA.R --data_path=Data/cleaned_data.csv --image_path=Images
 Rscript Scripts/linear_regression.R --datafile=cleaned_data.csv
 
 # knitting to html or pdf
-Rscript Scripts/knitting.R --file_name=Final_Report.Rmd --file_type=pdf/html
+Rscript Scripts/knitting.R --rmd_file=Final_Report.rmd
 ```
