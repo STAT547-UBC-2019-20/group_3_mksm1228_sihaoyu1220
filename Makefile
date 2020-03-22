@@ -1,37 +1,23 @@
 all: Docs/Final_Report.html Docs/Final_Report.pdf
 
-# download data
-#Data/Montreal.csv: Scripts/load_data.R
-#	@rm -f Data/Montreal.csv
-#	@touch Data/Montreal.csv
-#	Rscript Scripts/load_data.R --data_url=http://data.insideairbnb.com/canada/ --city=Canada
-#	@mv -f Data/Montreal.csv $@
+## download data
+#Data/new-brunswick_raw.csv Data/ottawa_raw.csv Data/quebec-city_raw.csv Data/toronto_raw.csv Data/vancouver_raw.csv Data/victoria_raw.csv Data/montreal_raw.csv : Scripts/load_data.R
+#	Rscript Scripts/load_data.R --data_url=http://data.insideairbnb.com/canada/
+#	@mv -t Data/montreal_raw.csv $@
 #	
-#Data/New Brunswick.csv Data/Ottawa.csv Data/Quebec.csv Data/Toronto.csv Data/Vancouver.csv Data/Victoria.csv: Data/Montreal.csv
-# Recover from the removal of $@
+#Data/new-brunswick_raw.csv Data/ottawa_raw.csv Data/quebec-city_raw.csv Data/toronto_raw.csv Data/vancouver_raw.csv Data/victoria_raw.csv Data/montreal_raw.csv
+## Recover from the removal of $@
 #	@if test -f $@; then :; else \
 #	rm -f data.stamp; \
-#	$(MAKE) $(AM_MAKEFLAGS) Data/Montreal.csv; \
+#	$(MAKE) $(AM_MAKEFLAGS) Data/montreal_raw.csv; \
 #	fi
 
 # download data
-Data/New Brunswick.csv Data/Ottawa.csv Data/Quebec.csv Data/Toronto.csv Data/Vancouver.csv Data/Victoria.csv Data/Montreal.csv : Scripts/load_data.R
-	Rscript Scripts/load_data.R --data_url=http://data.insideairbnb.com/canada/ --city=Canada
-	@mv -t Data/Montreal.csv $@
-	
-Data/New Brunswick.csv Data/Ottawa.csv Data/Quebec.csv Data/Toronto.csv Data/Vancouver.csv Data/Victoria.csv: Data/Montreal.csv
-## Recover from the removal of $@
-	@if test -f $@; then :; else \
-	rm -f data.stamp; \
-	$(MAKE) $(AM_MAKEFLAGS) Data/Montreal.csv; \
-	fi
-
-# download data
-Data/New Brunswick.csv Data/Ottawa.csv Data/Quebec.csv Data/Toronto.csv Data/Vancouver.csv Data/Victoria.csv Data/Montreal.csv : Scripts/load_data.R
-	Rscript Scripts/load_data.R --data_url=http://data.insideairbnb.com/canada/ --city=Canada
+Data/montreal_raw.csv Data/new-brunswick_raw.csv Data/ottawa_raw.csv Data/quebec-city_raw.csv Data/toronto_raw.csv Data/vancouver_raw.csv Data/victoria_raw.csv : Scripts/load_data.R
+	Rscript Scripts/load_data.R --data_url=http://data.insideairbnb.com/canada/
       
 # clean data
-Data/cleaned_data.csv : Scripts/clean_data.R Data/Montreal.csv Data/New Brunswick.csv Data/Ottawa.csv Data/Quebec.csv Data/Toronto.csv Data/Vancouver.csv Data/Victoria.csv
+Data/cleaned_data.csv : Scripts/clean_data.R Data/montreal_raw.csv Data/new-brunswick_raw.csv Data/ottawa_raw.csv Data/quebec-city_raw.csv Data/toronto_raw.csv Data/vancouver_raw.csv Data/victoria_raw.csv
 	Rscript Scripts/clean_data.R --path=Data --filename=cleaned_data
 
 # EDA
@@ -44,11 +30,8 @@ RDS/step_lm.rds Images/Model_Diagnostics.png : Data/cleaned_data.csv Scripts/lin
 	Rscript Scripts/linear_regression.R --datafile=cleaned_data.csv
 
 # Knit report
-Docs/Final_Report.html : Images/Number_of_listings.png Images/Proportion_of_superhosts.png Images/Correlation_between_room_facilities.png Images/Boxplot_of_price.png RDS/step_lm.rds Images/Model_Diagnostics.png Docs/Final_Report.Rmd Data/cleaned_data.csv Scripts/knitting.R
+Docs/Final_Report.html Docs/Final_Report.pdf : Images/Number_of_listings.png Images/Proportion_of_superhosts.png Images/Correlation_between_room_facilities.png Images/Boxplot_of_price.png RDS/step_lm.rds Images/Model_Diagnostics.png Docs/Final_Report.Rmd Data/cleaned_data.csv Scripts/knitting.R
 	Rscript Scripts/knitting.R --rmd_file=Final_Report.Rmd 
-
-Docs/Final_Report.pdf : Images/Number_of_listings.png Images/Proportion_of_superhosts.png Images/Correlation_between_room_facilities.png Images/Boxplot_of_price.png Docs/Final_Report.Rmd RDS/step_lm.rds Images/Model_Diagnostics.png Data/cleaned_data.csv Scripts/knitting.R
-	Rscript Scripts/knitting.R --rmd_file=Final_Report.Rmd
 
 clean :
 	rm -f Data/*.csv
