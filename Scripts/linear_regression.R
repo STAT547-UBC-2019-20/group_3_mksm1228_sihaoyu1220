@@ -18,6 +18,7 @@ main <- function(datafile) {
   data <- read.csv(here::here("Data",datafile))
   data1 <- data %>% 
     group_by(city) %>% 
+    filter(!is.na(price)) %>% 
     mutate(limitmin = quantile(price,c(0.25)) - 1.5 * (quantile(price,c(0.75))-quantile(price,c(0.25)))) %>% 
     mutate(limitmax = quantile(price,c(0.75)) + 1.5 * (quantile(price,c(0.75))-quantile(price,c(0.25)))) %>% 
     filter(price >= limitmin & price <= limitmax)
@@ -27,7 +28,7 @@ main <- function(datafile) {
   full.lm <- lm(price~host_is_superhost+city+room_type+accommodates+bathrooms+bedrooms+cancellation_policy, data=data1)
   suppressMessages(step.lm <- step(full.lm,trace=0))
   saveRDS(step.lm, here::here("RDS","step_lm.rds"))
-  
+  summary(full.lm)
   test_that("model saved",{
     expect_true(file.exists(here::here("RDS", "step_lm.rds")))
   })

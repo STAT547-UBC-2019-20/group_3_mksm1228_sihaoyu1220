@@ -31,6 +31,7 @@ main <- function(data_path, image_path) {
   message(glue::glue("All plots have been saved in the path ", image_path))
 }
 
+
 Number_of_listings_plot <- function(data_path, image_path){
                               data <- read.csv(here::here(data_path))
                               data %>% 
@@ -42,11 +43,12 @@ Number_of_listings_plot <- function(data_path, image_path){
                                 theme_bw() +
                                 theme(plot.title = element_text(hjust = 0.5))+
                                 suppressMessages(ggsave(here::here(image_path,"Number_of_listings.png")))
-  
+
                                 test_that("Number_of_listings_plot exists",{
                                   expect_true(file.exists(here::here("Images", "Number_of_listings.png")))
   })
 }
+
 
 Superhost_plot <- function(data_path, image_path){
                       data <- read.csv(here::here(data_path))

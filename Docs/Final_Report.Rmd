@@ -145,11 +145,7 @@ Next, let's take a look at the model diagnostics:
 knitr::include_graphics(here::here("Images","Model_Diagnostics.png"))
 ```
 
-<<<<<<< HEAD
-There is an increasing trend in the scale-location plot, so the assumption of homoscedasticity may not hold. From the Cook's distance plot, there are several influential points (far right), which may removal in future analyses.
-=======
 From Figure 5, there is an increasing trend in the scale-location plot, so the assumption of homoscedasticity may not hold. From the Cook's distance plot, there are several influential points (far right), which may removal in future analyses.
->>>>>>> upstream/master
 
 ## Conclusions/Discussion
 
