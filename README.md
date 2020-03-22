@@ -60,7 +60,7 @@ make Docs/Final_Report.pdf
 
 3. RUN EACH RSCRIPT INDIVIDUALLY
 # load all data
-Rscript Scripts/load_data.R --data_url=http://data.insideairbnb.com/canada/ --city=Canada
+Rscript Scripts/load_data.R --data_url=http://data.insideairbnb.com/canada/
 
 # access cleaned data
 Rscript Scripts/clean_data.R --path=Data --filename=cleaned_data
