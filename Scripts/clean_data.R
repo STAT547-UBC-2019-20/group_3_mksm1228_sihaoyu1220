@@ -29,6 +29,15 @@ main <- function(path, filename) {
   Toronto <- suppressWarnings(suppressMessages(readr::read_csv(here::here(path,"Toronto.csv"))))
   Victoria <- suppressWarnings(suppressMessages(readr::read_csv(here::here(path,"Victoria.csv"))))
   print("Cleaning the datasets...")
+
+
+list_of_data <- list(Quebec, Toronto)
+names(list_of_data) <- c("Quebec","Toronto")
+output <- list_of_data %>% 
+  map(function(x) x %>% select(id, host_id, host_is_superhost, city, property_type, room_type, accommodates, bathrooms, bedrooms, beds, cancellation_policy, price)) %>% 
+  map(function(x) x %>% mutate(city = as.character(names(which.max(table(x$city))))))
+
+    
 Vancouver <- Vancouver %>% 
   select(id, host_id, host_is_superhost, city, property_type, room_type, accommodates, bathrooms, bedrooms, beds, cancellation_policy, price) %>% 
   mutate(city = "Vancouver")
