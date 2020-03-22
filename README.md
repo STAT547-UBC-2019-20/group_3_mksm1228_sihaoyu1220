@@ -75,16 +75,17 @@ Rscript Scripts/linear_regression.R --datafile=cleaned_data.csv
 Rscript Scripts/knitting.R --rmd_file=Final_Report.rmd
 ```
 
-## Dashboard Proposal
+## **Dashboard Proposal**
 
 ### Dashboard Description
 
-This app has two features. One is to show the pricing density and the other is to show listings distribution on a map. The features can be switched by a button. From a dropdown list, users will be able to filter out their interested variables, such as whether they want a superhost or not, their destination, room type, number of accommodates, number of bathrooms, number of bedrooms, and how strict they want the cancellation policy to be.  Users can compare different pricing density plots and listings disribution maps by selecting different dropdown options. 
+This app has two features. One is to show the pricing density of variables of interest and the other is to show a map of the listings distribution for each city. The user will be able to choose between seeing the analysis or the map. Using a drop-down list, users will be able to select the Canadian city they are interested in and also be able to filter the variables of interest using sliders. For example, whether they want a superhost or not, room type (entire room, shared room, etc.), number of accommodates, number of bathrooms, number of bedrooms, and how strict they want the cancellation policy (flexible, super strict, etc.). Users can also see how the variables of interest influence the pricing density plots and the listings distribution map. 
 
 ### Usage Senarios
 
-Jason is a travel enthusiast and Canada is his next destination. He plans to go to several cities in Canada, such as Vancouver, Montreal, and Toronto. He wants to be able to explore how much does the Airbnb cost in those cities and  budgeted for his trip. When Jason logs on to the "Preditive Pricing Tool for Canadian Airbnb Listings", he can filter his interested variables. He filters room type to be apartment first, but the price is a little high for him. So he filters room type to be shared room, when he does so, he may notice that the price is much lower. He can also press the button to switch to map, and use map to visualize where those shared room Airbnb listings locate and make decision in advance. By filtering the variables, Jason hypothesizes that the average price in Vancouver is the highest among other cities. Also, the more accommodates, bedrooms, and bathrooms causes a higher Airbnb price. 
+Jason is a travel enthusiast from Europe and Canada is his next destination along with a group of friends. They plan to visit several Canadian cities. While browsing on Airbnb.com, he notices several listings that are similar in price but with different characteristics. He wants to filter this down to a couple choices to get the most value for his money, essentially figure out which characteristics he is paying more or less for. If Jason visits our "Predictive Pricing Tool for Canadian Airbnb Listings" dashboard, he can filter through a list of variables that we have determined to have an effect of some sort on the listing price. He selects the variables for two listings in Toronto that are similar in price. The first listing is a private room with one bathroom whereas the other listing is a shared room with two bathrooms. He plays around with the filters and notices that as he increases the number of bathrooms, the more expensive it becomes compared to if he were to filter between the room types. To supplement this information, he can select to see the map to get an idea of the location of the listings. Jason is now looking at Vancouver, one of the destinations on his itinerary. He adjusts the variables for their accommodation needs but notices that despite having the same variables selected for other cities, Jason realizes that Vancouver Airbnb listings are the most expensive compared the other Canadian cities. He arrives to the conclusion that Vancouver is unfortunately one of the most expensive cities to travel to. Thus, this tool helps him better understand the reasoning for Airbnb listing prices and helps him decide which characteristics in Airbnb listings to look for.
 
 ### Dashboard Sketch
-
+![Map_Proposal](Images/Map_Proposal.png)
+![Plots_Proposal](Images/Plots_Proposal.png)
 
