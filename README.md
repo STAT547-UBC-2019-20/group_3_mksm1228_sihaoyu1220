@@ -79,7 +79,7 @@ Rscript Scripts/knitting.R --rmd_file=Final_Report.rmd
 
 ### Dashboard Description
 
-This app has two features. One is to show the pricing density of variables of interest and the other is to show a map of the listings distribution for each city. The user will be able to choose between seeing the analysis or the map. Using a drop-down list, users will be able to select the Canadian city they are interested in and also be able to filter the variables of interest using sliders. For example, whether they want a superhost or not, room type (entire room, shared room, etc.), number of accommodates, number of bathrooms, number of bedrooms, and how strict they want the cancellation policy (flexible, super strict, etc.). Users can also see how the variables of interest influence the pricing density plots and the listings distribution map. 
+This app has three features which are termed "Map", "Analysis", and "Play". "Map" allows the user to see a map marking the location of the listings as they filter the variables of interest. "Analysis" shows the user the pricing density of the variables of interest. Finally, "Play" allows the user to see how filtering the variables affects the pricing density in real-time. To start, users will select the Canadian city they are interested in and also filter the variables of interest using sliders. For example, whether they want a superhost or not, room type (entire room, shared room, etc.), number of accommodates, number of bathrooms, number of bedrooms, and how strict they want the cancellation policy (flexible, super strict, etc.) and how this transforms the visualizations in the three features.
 
 ### Usage Senarios
 
@@ -88,4 +88,5 @@ Jason is a travel enthusiast from Europe and Canada is his next destination alon
 ### Dashboard Sketch
 ![Map_Proposal](Images/Map_Proposal.png)
 ![Plots_Proposal](Images/Plots_Proposal.png)
+![Play_Proposal](Images/Play_Proposal.png)
 
