@@ -5,6 +5,7 @@
 Usage: clean_data.R --path=<path> --filename=<filename>
 " -> doc 
 
+library(data.table)
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(here))
 library(docopt)
@@ -21,53 +22,26 @@ main <- function(path, filename) {
   })
   
   print("Loading the datasets...")
-  Vancouver <- suppressWarnings(suppressMessages(readr::read_csv(here::here(path,"Vancouver.csv"))))
-  Montreal <- suppressWarnings(suppressMessages(readr::read_csv(here::here(path,"Montreal.csv"))))
-  New_Brunswick <- suppressWarnings(suppressMessages(readr::read_csv(here::here(path,"New Brunswick.csv"))))
-  Ottawa <- suppressWarnings(suppressMessages(readr::read_csv(here::here(path,"Ottawa.csv"))))
-  Quebec <- suppressWarnings(suppressMessages(readr::read_csv(here::here(path,"Quebec.csv"))))
-  Toronto <- suppressWarnings(suppressMessages(readr::read_csv(here::here(path,"Toronto.csv"))))
-  Victoria <- suppressWarnings(suppressMessages(readr::read_csv(here::here(path,"Victoria.csv"))))
+  files<-list.files(path = here::here("Data"),pattern = "*raw.csv")  
+  list_of_data<-suppressWarnings(suppressMessages(sapply(here::here("Data",files), read_csv, simplify = FALSE)))
   print("Cleaning the datasets...")
+  
+  names(list_of_data) <- sub("_raw.csv", "", files)
 
+  output <- list_of_data %>% 
+    map(function(x) x %>% select(id, host_id, host_is_superhost, city, property_type, room_type, accommodates, bathrooms, bedrooms, beds, cancellation_policy, price)) %>% 
+    map(function(x) x %>% mutate(city = as.character(names(which.max(table(x$city))))))
+  output$`New Brunswick`$city <- "New Brunswick"
 
-list_of_data <- list(Quebec, Toronto)
-names(list_of_data) <- c("Quebec","Toronto")
-output <- list_of_data %>% 
-  map(function(x) x %>% select(id, host_id, host_is_superhost, city, property_type, room_type, accommodates, bathrooms, bedrooms, beds, cancellation_policy, price)) %>% 
-  map(function(x) x %>% mutate(city = as.character(names(which.max(table(x$city))))))
+  cleaned_data <- bind_rows(output)
+  cleaned_data$price <- as.numeric(gsub('\\$|,', '', cleaned_data$price))
+  readr::write_csv(cleaned_data, here::here(path, glue::glue(filename,".csv")))
 
-    
-Vancouver <- Vancouver %>% 
-  select(id, host_id, host_is_superhost, city, property_type, room_type, accommodates, bathrooms, bedrooms, beds, cancellation_policy, price) %>% 
-  mutate(city = "Vancouver")
-Montreal <- Montreal %>% 
-  select(id, host_id, host_is_superhost, city, property_type, room_type, accommodates, bathrooms, bedrooms, beds, cancellation_policy, price) %>% 
-  mutate(city = "Montreal")
-New_Brunswick <- New_Brunswick %>% 
-  select(id, host_id, host_is_superhost, city, property_type, room_type, accommodates, bathrooms, bedrooms, beds, cancellation_policy, price) %>% 
-  mutate(city = "New Brunswick")
-Ottawa <- Ottawa %>% 
-  select(id, host_id, host_is_superhost, city, property_type, room_type, accommodates, bathrooms, bedrooms, beds, cancellation_policy, price) %>% 
-  mutate(city = "Ottawa")
-Quebec <- Quebec %>% 
-  select(id, host_id, host_is_superhost, city, property_type, room_type, accommodates, bathrooms, bedrooms, beds, cancellation_policy, price) %>% 
-  mutate(city = "Quebec")
-Toronto <- Toronto %>% 
-  select(id, host_id, host_is_superhost, city, property_type, room_type, accommodates, bathrooms, bedrooms, beds, cancellation_policy, price) %>% 
-  mutate(city = "Toronto")
-Victoria <- Victoria %>% 
-  select(id, host_id, host_is_superhost, city, property_type, room_type, accommodates, bathrooms, bedrooms, beds, cancellation_policy, price) %>% 
-  mutate(city = "victoria")
-cleaned_data <- rbind(Vancouver, Montreal, New_Brunswick, Ottawa, Quebec, Toronto, Victoria)
-cleaned_data$price <- as.numeric(gsub('\\$|,', '', cleaned_data$price))
-readr::write_csv(cleaned_data, here::here(path, glue::glue(filename,".csv")))
+  test_that("File exists",{
+    expect_true(file.exists(here::here("Data","cleaned_data.csv")))
+  })
 
-test_that("File exists",{
-  expect_true(file.exists(here::here("Data","cleaned_data.csv")))
-})
-
-message(glue::glue("The datasets have been cleaned successfully! ",filename, ".csv has been saved in ", path, " folder."))
+  message(glue::glue("The datasets have been cleaned successfully! ",filename, ".csv has been saved in ", path, " folder."))
 }
 
 #' Clean the Airbnb raw data and save the cleaned data in the data directory
