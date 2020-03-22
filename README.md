@@ -1,4 +1,4 @@
-# Predictive Model for the Price of Canadian Airbnb Listings
+# **Predictive Model for the Price of Canadian Airbnb Listings**
 
 This is a group project by Team Project 3 members, @mksm1228 and @sihaoyu1220, for the 2019-2020 STAT547M session. 
 
@@ -79,20 +79,15 @@ Rscript Scripts/knitting.R --rmd_file=Final_Report.rmd
 
 ### Dashboard Description
 
-This app has three features which are termed "Map", "Analysis", and "Play". "Map" allows the user to see a map marking the location of the listings as they filter the variables of interest. "Analysis" shows the user the pricing density of the variables of interest. Finally, "Play" allows the user to see how filtering the variables affects the pricing density in real-time. To start, users will select the Canadian city they are interested in and also filter the variables of interest using sliders. For example, whether they want a superhost or not, room type (entire room, shared room, etc.), number of accommodates, number of bathrooms, number of bedrooms, and how strict they want the cancellation policy (flexible, super strict, etc.) and how this transforms the visualizations in the three features.
+This app has three features which are termed "Map", "Analysis", and "Play". "Map" allows the user to see a map marking the location of the listings as they filter the variables of interest. "Analysis" shows the user the pricing density of the variables of interest. Finally, "Play" allows the user to see how filtering the variables affects the pricing density in real-time. To start, users will select the Canadian city they are interested in and also filter the variables of interest using sliders. For example, whether they want a superhost or not, room type (entire room, shared room, etc.), number of accommodates, number of bathrooms, number of bedrooms, and how strict they want the cancellation policy (flexible, super strict, etc.). As they adjust the variables, they will be able to see how their changes transforms the visualizations in the three features.
 
 ### Usage Senarios
 
 Jason is a travel enthusiast from Europe and Canada is his next destination along with a group of friends. They plan to visit several Canadian cities. While browsing on Airbnb.com, he notices several listings that are similar in price but with different characteristics. He wants to filter this down to a couple choices to get the most value for his money, essentially figure out which characteristics he is paying more or less for. If Jason visits our "Predictive Pricing Tool for Canadian Airbnb Listings" dashboard, he can filter through a list of variables that we have determined to have an effect of some sort on the listing price. He selects the variables for two listings in Toronto that are similar in price. The first listing is a private room with one bathroom whereas the other listing is a shared room with two bathrooms. He plays around with the filters and notices that as he increases the number of bathrooms, the more expensive it becomes compared to if he were to filter between the room types. To supplement this information, he can select to see the map to get an idea of the location of the listings. Jason is now looking at Vancouver, one of the destinations on his itinerary. He adjusts the variables for their accommodation needs but notices that despite having the same variables selected for other cities, Jason realizes that Vancouver Airbnb listings are the most expensive compared the other Canadian cities. He arrives to the conclusion that Vancouver is unfortunately one of the most expensive cities to travel to. Thus, this tool helps him better understand the reasoning for Airbnb listing prices and helps him decide which characteristics in Airbnb listings to look for.
 
 ### Dashboard Sketch
-<<<<<<< HEAD
-![Map_Proposal](Images/Map_Proposal.png)
-![Plots_Proposal](Images/Plots_Proposal.png)
-![Play_Proposal](Images/Play_Proposal.png)
-=======
 ![Map_Proposal](Images/app_sketch/Map_Proposal.png)
 ![Plots_Proposal](Images/app_sketch/Plots_Proposal.png)
 ![Density_Proposal](Images/app_sketch/Density_Proposal.png)
->>>>>>> upstream/master
+
 
