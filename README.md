@@ -79,10 +79,11 @@ Rscript Scripts/knitting.R --rmd_file=Final_Report.rmd
 
 ### Dashboard Description
 
-This app has two features. One is to show the pricing density and the other is to show listings distribution on a map. The features can be switched by a button. From a dropdown list, users will be able to filter out their interested variables, such as 
+This app has two features. One is to show the pricing density and the other is to show listings distribution on a map. The features can be switched by a button. From a dropdown list, users will be able to filter out their interested variables, such as whether they want a superhost or not, their destination, room type, number of accommodates, number of bathrooms, number of bedrooms, and how strict they want the cancellation policy to be.  Users can compare different pricing density plots and listings disribution maps by selecting different dropdown options. 
 
 ### Usage Senarios
 
+Jason is a travel enthusiast and Canada is his next destination. He plans to go to several cities in Canada, such as Vancouver, Montreal, and Toronto. He wants to be able to explore how much does the Airbnb cost in those cities and  budgeted for his trip. When Jason logs on to the "Preditive Pricing Tool for Canadian Airbnb Listings", he can filter his interested variables. He filters room type to be apartment first, but the price is a little high for him. So he filters room type to be shared room, when he does so, he may notice that the price is much lower. He can also press the button to switch to map, and use map to visualize where those shared room Airbnb listings locate and make decision in advance. By filtering the variables, Jason hypothesizes that the average price in Vancouver is the highest among other cities. Also, the more accommodates, bedrooms, and bathrooms causes a higher Airbnb price. 
 
 ### Dashboard Sketch
 
