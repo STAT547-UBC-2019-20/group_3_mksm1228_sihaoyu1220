@@ -79,6 +79,7 @@ Rscript Scripts/knitting.R --rmd_file=Final_Report.rmd
 
 ### Dashboard Description
 
+This app has two features. One is to show the pricing density and the other is to show listings distribution on a map. The features can be switched by a button. From a dropdown list, users will be able to filter out their interested variables, such as 
 
 ### Usage Senarios
 
