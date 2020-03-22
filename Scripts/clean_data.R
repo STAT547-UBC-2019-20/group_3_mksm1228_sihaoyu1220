@@ -10,6 +10,7 @@ suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(here))
 library(docopt)
 suppressPackageStartupMessages(library(testthat))
+suppressPackageStartupMessages(library(purrr))
 
 opt <- docopt(doc) 
 
