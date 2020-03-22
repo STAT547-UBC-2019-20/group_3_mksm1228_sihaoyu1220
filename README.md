@@ -42,7 +42,7 @@ make all
 2. USE GNU MAKE ON INDIVIDUAL ITEMS
 # download the data
 make Data/<Canadian city.csv> 
-For example: make Data/Montreal.csv
+For example: make Data/montreal_raw.csv
 
 # run exploratory data analysis
 make Images/<image.png> 
@@ -74,3 +74,15 @@ Rscript Scripts/linear_regression.R --datafile=cleaned_data.csv
 # knitting to html or pdf
 Rscript Scripts/knitting.R --rmd_file=Final_Report.rmd
 ```
+
+## Dashboard Proposal
+
+### Dashboard Description
+
+
+### Usage Senarios
+
+
+### Dashboard Sketch
+
+
