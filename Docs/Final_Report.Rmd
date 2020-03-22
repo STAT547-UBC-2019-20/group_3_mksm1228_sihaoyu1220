@@ -3,6 +3,7 @@ title: "Airbnb predictive pricing tool for tourists coming to Canada"
 output: 
   pdf_document:
     toc: true
+fontsize: 12pt 
 ---
 
 ```{r package, message=FALSE, include=FALSE}
@@ -58,10 +59,11 @@ NB_listings <- data %>%
                 filter(city == "New Brunswick") %>%
                 summarize(Brunswisk_listings = nrow(.))
 ```
-The barplot below shows the number of listings in different Canadian cities. From the plot, we can see that Toronto has the most number of listings (`r Toronto_listings`) and New Brunswick has the least number of listings (`r NB_listings`). 
+The barplot (\textbf{Figure 1}) below shows the number of listings in different Canadian cities. From the plot, we can see that Toronto has the most number of listings (`r Toronto_listings`) and New Brunswick has the least number of listings (`r NB_listings`). 
 
-
-![](../Images/Number_of_listings.png)
+```{r, out.width="60%",fig.cap='Number of Listings by City', fig.align='center', echo=FALSE}
+knitr::include_graphics(here::here("Images","Number_of_listings.png"))
+```
 
 ### 2. How many Airbnb superhosts are there in different Canadian cities?
 ```{r, echo=FALSE}
@@ -77,23 +79,30 @@ expect_match("htmlpdf", "d")
 ```
 
 
-The proportional bar chart below shows the percentage of superhosts in different cities. From the plot, Victoria seems to have the largest percentage of superhosts (`r victoria_host`%), while Montreal seems to have the smallest percentage of superhosts (`r montreal_host`%).
+The proportional bar chart (\textbf{Figure 2}) below shows the percentage of superhosts in different cities. From the plot, Victoria seems to have the largest percentage of superhosts (`r victoria_host`%), while Montreal seems to have the smallest percentage of superhosts (`r montreal_host`%).
 
-![](../Images/Proportion_of_superhosts.png)
+```{r, out.width="60%",fig.cap='Proportion of Superhosts by City', fig.align='center', echo=FALSE}
+knitr::include_graphics(here::here("Images","Proportion_of_superhosts.png"))
+```
 
 
 ### 3. Is there a relationship between the number of accommodates and other features of the listing?
 
-From the correllogram below, there is a strong relationship between the number of accommodates and the number of beds in the unit. This may cause a problem when performing linear regression analysis because some predictors are collinear. To solve the collinearity problem, we may decide to not use all of the variables (accommodates, bathrooms, bedrooms, and beds) as predictors in the linear regression model.
+From the correllogram (\textbf{Figure 3}) below, there is a strong relationship between the number of accommodates and the number of beds in the unit. This may cause a problem when performing linear regression analysis because some predictors are collinear. To solve the collinearity problem, we may decide to not use all of the variables (accommodates, bathrooms, bedrooms, and beds) as predictors in the linear regression model.
 
-![](../Images/Correlation_between_room_facilities.png)
+```{r, out.width="70%",fig.cap='Correlation between room facilities',  fig.align='center', echo=FALSE}
+knitr::include_graphics(here::here("Images","Correlation_between_room_facilities.png"))
+```
 
 ### 4. What is the distribution of the price per night in different Canadian cities?
 
-The side-by-side boxplots shows the price per night (after log10 transformation) distribution in different cities. From the plots, we can see that there are some extremely high prices in the dataset. Further analysis will be required to figure out the reason for the extreme prices. Otherwise, we may need to consider them as outliers.
+The side-by-side boxplots (\textbf{Figure 4}) shows the price per night (after log10 transformation) distribution in different cities. From the plots, we can see that there are some extremely high prices in the dataset. Further analysis will be required to figure out the reason for the extreme prices. Otherwise, we may need to consider them as outliers.
 
-![](../Images/Boxplot_of_price.png)
+```{r, out.width="55%",,fig.cap='Side-by-side boxplot for price', fig.align='center', echo=FALSE}
+knitr::include_graphics(here::here("Images","Boxplot_of_price.png"))
+```
 
+\newpage
 ## Analysis Methods
 
 To identify which variables are most likely influencing the price of Canadian Airbnb listings, we developed an analysis protocol which consists of 3 steps.  
@@ -132,9 +141,15 @@ knitr::kable(tidy(lm))
 
 Next, let's take a look at the model diagnostics:
 
-![](../Images/Model_Diagnostics.png)
+```{r, out.width="70%",fig.cap='Model Diagnostics',  fig.align='center', echo=FALSE}
+knitr::include_graphics(here::here("Images","Model_Diagnostics.png"))
+```
 
+<<<<<<< HEAD
 There is an increasing trend in the scale-location plot, so the assumption of homoscedasticity may not hold. From the Cook's distance plot, there are several influential points (far right), which may removal in future analyses.
+=======
+From Figure 5, there is an increasing trend in the scale-location plot, so the assumption of homoscedasticity may not hold. From the Cook's distance plot, there are several influential points (far right), which may removal in future analyses.
+>>>>>>> upstream/master
 
 ## Conclusions/Discussion
 

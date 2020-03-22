@@ -36,7 +36,7 @@ plot1 <- function(data_path, image_path){
   data %>% 
     ggplot(aes(x = fct_infreq(city)))+
     geom_bar(stat="count")+
-    labs(x = "City", y = "Count", title = "Number of Listings by City") + 
+    labs(x = "City", y = "Count") + 
     geom_text(stat='count',aes(label=..count..), vjust=-0.3, size=3.5) + 
     theme_bw() +
     theme(plot.title = element_text(hjust = 0.5))+
@@ -57,7 +57,6 @@ plot2 <- function(data_path, image_path){
              position = "fill")+
     ylab("Proportion of superhost")+
     xlab("City")+
-    ggtitle("Proportion of Superhosts by City")+
     scale_fill_brewer(name = "Superhost", palette="Paired")+
     theme_bw()+
     theme(plot.title = element_text(hjust = 0.5))+
@@ -72,9 +71,8 @@ plot3 <- function(data_path, image_path){
   data <- read.csv(here::here(data_path))
   data[7:10] <- sapply(data[7:10] , as.double)
   corr <- cor(na.omit(data[7:10]))
-  png(glue::glue(image_path,'/Correlation_between_room_facilities.png'))
-  corrplot(corr, method="color", tl.srt=0,type="lower",
-           title = "Correlation between room facilities",mar=c(0,0,1,0))
+  png(glue::glue(image_path,'/Correlation_between_room_facilities.png'), height = 800, width = 800)
+  corrplot(corr, method="color", tl.srt=0,type="lower",mar=c(0,0,0,0))
   dev.off()
   
   test_that("plot 3 exists",{
