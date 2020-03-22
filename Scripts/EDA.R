@@ -20,74 +20,75 @@ main <- function(data_path, image_path) {
     expect_true(is.character(image_path))
   })
   
-  plot1(data_path, image_path)
+  Number_of_listings_plot(data_path, image_path)
   message("Barplot has been produced successfully!")
-  plot2(data_path, image_path)
+  Superhost_plot(data_path, image_path)
   message("Proportional bar chart has been produced successfully!")
-  plot3(data_path, image_path)
+  correlation_plot(data_path, image_path)
   message("Correllogram has been produced successfully!")
-  plot4(data_path, image_path)
+  box_plot (data_path, image_path)
   message("Side-by-side boxplot has been produced successfully!")
   message(glue::glue("All plots have been saved in the path ", image_path))
 }
 
-plot1 <- function(data_path, image_path){
-  data <- read.csv(here::here(data_path))
-  data %>% 
-    ggplot(aes(x = fct_infreq(city)))+
-    geom_bar(stat="count")+
-    labs(x = "City", y = "Count") + 
-    geom_text(stat='count',aes(label=..count..), vjust=-0.3, size=3.5) + 
-    theme_bw() +
-    theme(plot.title = element_text(hjust = 0.5))+
-    suppressMessages(ggsave(here::here(image_path,"Number_of_listings.png")))
+Number_of_listings_plot <- function(data_path, image_path){
+                              data <- read.csv(here::here(data_path))
+                              data %>% 
+                                ggplot(aes(x = fct_infreq(city)))+
+                                geom_bar(stat="count")+
+                                labs(x = "City", y = "Count") + 
+                                geom_text(stat='count',aes(label=..count..), 
+                                          vjust=-0.3, size=3.5) + 
+                                theme_bw() +
+                                theme(plot.title = element_text(hjust = 0.5))+
+                                suppressMessages(ggsave(here::here(image_path,"Number_of_listings.png")))
   
-  test_that("plot 1 exists",{
-    expect_true(file.exists(here::here("Images", "Number_of_listings.png")))
+                                test_that("Number_of_listings_plot exists",{
+                                  expect_true(file.exists(here::here("Images", "Number_of_listings.png")))
   })
 }
 
-plot2 <- function(data_path, image_path){
-  data <- read.csv(here::here(data_path))
-  host <- distinct(data, host_id, .keep_all = TRUE)
-  plot <- host %>% 
-    filter(host_is_superhost == TRUE | host_is_superhost == FALSE) %>% 
-    ggplot()+
-    geom_bar(mapping = aes(x=city, fill = host_is_superhost),
-             position = "fill")+
-    ylab("Proportion of superhost")+
-    xlab("City")+
-    scale_fill_brewer(name = "Superhost", palette="Paired")+
-    theme_bw()+
-    theme(plot.title = element_text(hjust = 0.5))+
-    suppressMessages(ggsave(here::here(image_path,"Proportion_of_superhosts.png")))
+Superhost_plot <- function(data_path, image_path){
+                      data <- read.csv(here::here(data_path))
+                      host <- distinct(data, host_id, .keep_all = TRUE)
+                      plot <- host %>% 
+                                filter(host_is_superhost == TRUE | host_is_superhost == FALSE) %>% 
+                                ggplot()+
+                                geom_bar(mapping = aes(x=city, fill = host_is_superhost),
+                                position = "fill")+
+                                ylab("Proportion of superhost")+
+                                xlab("City")+
+                                scale_fill_brewer(name = "Superhost", palette="Paired")+
+                                theme_bw()+
+                                theme(plot.title = element_text(hjust = 0.5))+
+                                suppressMessages(ggsave(here::here(image_path,"Proportion_of_superhosts.png")))
   
-  test_that("plot 2 exists",{
-    expect_true(file.exists(here::here("Images", "Proportion_of_superhosts.png")))
+                                test_that("Superhost_plot exists",{
+                                  expect_true(file.exists(here::here("Images", "Proportion_of_superhosts.png")))
   })
 }
 
-plot3 <- function(data_path, image_path){
-  data <- read.csv(here::here(data_path))
-  data[7:10] <- sapply(data[7:10] , as.double)
-  corr <- cor(na.omit(data[7:10]))
-  png(glue::glue(image_path,'/Correlation_between_room_facilities.png'), height = 800, width = 800)
-  corrplot(corr, method="color", tl.srt=0,type="lower",mar=c(0,0,0,0))
-  dev.off()
+correlation_plot <- function(data_path, image_path){
+                             data <- read.csv(here::here(data_path))
+                             data[7:10] <- sapply(data[7:10] , as.double)
+                             corr <- cor(na.omit(data[7:10]))
+                             png(glue::glue(image_path, '/Correlation_between_room_facilities.png'), height = 800, width = 800)
+                             corrplot(corr, method="color", tl.srt=0,type="lower",mar=c(0,0,0,0))
+                             dev.off()
   
-  test_that("plot 3 exists",{
-    expect_true(file.exists(here::here("Images", "Correlation_between_room_facilities.png")))
+                             test_that("correlation_plot exists",{
+                                expect_true(file.exists(here::here("Images", "Correlation_between_room_facilities.png")))
   })
 }
 
-plot4 <- function(data_path, image_path){
-  options(warn = -1)
-  data <- read.csv(here::here(data_path))
-  ggplot(data)+geom_boxplot(aes(city, log10(price), group = city))+
+box_plot <- function(data_path, image_path){
+                     options(warn = -1)
+                     data <- read.csv(here::here(data_path))
+                     ggplot(data)+geom_boxplot(aes(city, log10(price), group = city))+
                      suppressMessages(ggsave(here::here(image_path,"Boxplot_of_price.png")))
   
-  test_that("plot 4 exists",{
-    expect_true(file.exists(here::here("Images", "Boxplot_of_price.png")))
+                     test_that("box_plot exists",{
+                        expect_true(file.exists(here::here("Images", "Boxplot_of_price.png")))
   })
 }
 #' Download and save the Airbnb data in the data directory
