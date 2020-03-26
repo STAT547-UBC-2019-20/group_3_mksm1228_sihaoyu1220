@@ -1,4 +1,4 @@
-# Predictive Model for the Price of Canadian Airbnb Listings
+# **Predictive Model for the Price of Canadian Airbnb Listings**
 
 This is a group project by Team Project 3 members, @mksm1228 and @sihaoyu1220, for the 2019-2020 STAT547M session. 
 
@@ -79,7 +79,7 @@ Rscript Scripts/knitting.R --rmd_file=Final_Report.rmd
 
 ### Dashboard Description
 
-This app has two features. One is to show the pricing density of variables of interest and the other is to show a map of the listings distribution for each city. The user will be able to choose between seeing the analysis or the map. Using a drop-down list, users will be able to select the Canadian city they are interested in and also be able to filter the variables of interest using sliders. For example, whether they want a superhost or not, room type (entire room, shared room, etc.), number of accommodates, number of bathrooms, number of bedrooms, and how strict they want the cancellation policy (flexible, super strict, etc.). Users can also see how the variables of interest influence the pricing density plots and the listings distribution map. 
+This app has three features which are termed "Map", "Analysis", and "Play". "Map" allows the user to see a map marking the location of the listings as they filter the variables of interest. "Analysis" shows the user the pricing density of the variables of interest. Finally, "Play" allows the user to see how filtering the variables affects the pricing density in real-time. To start, users will select the Canadian city they are interested in and also filter the variables of interest using sliders. For example, whether they want a superhost or not, room type (entire room, shared room, etc.), number of accommodates, number of bathrooms, number of bedrooms, and how strict they want the cancellation policy (flexible, super strict, etc.). As they adjust the variables, they will be able to see how their changes transforms the visualizations in the three features. Depending if there is time, the "Map" feature may or may not be included.
 
 ### Usage Senarios
 
@@ -89,4 +89,5 @@ Jason is a travel enthusiast from Europe and Canada is his next destination alon
 ![Map_Proposal](Images/app_sketch/Map_Proposal.png)
 ![Plots_Proposal](Images/app_sketch/Plots_Proposal.png)
 ![Density_Proposal](Images/app_sketch/Density_Proposal.png)
+
 
