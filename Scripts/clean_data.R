@@ -32,7 +32,7 @@ main <- function(path, filename) {
   output <- list_of_data %>% 
     map(function(x) x %>% select(id, host_id, host_is_superhost, city, property_type, room_type, accommodates, bathrooms, bedrooms, beds, cancellation_policy, price)) %>% 
     map(function(x) x %>% mutate(city = as.character(names(which.max(table(x$city))))))
-  output$`New Brunswick`$city <- "New Brunswick"
+  output$`new-brunswick`$city <- "New Brunswick"
 
   cleaned_data <- bind_rows(output)
   cleaned_data$price <- as.numeric(gsub('\\$|,', '', cleaned_data$price))
