@@ -48,7 +48,7 @@ cityDropdown <- dccDropdown(
     1:nrow(cityKey), function(i){
       list(label=cityKey$label[i], value=cityKey$value[i])
     }),
-  value="Montréal"
+  value="Montreal"
 )
 
 #Create the superhost dropdowns
@@ -124,7 +124,7 @@ bathroomDropdown <- dccDropdown(
 )
 
 
-make_plot <- function(cityname="Montréal", superhost = "TRUE", roomtype = "Entire home/apt", 
+make_plot <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entire home/apt", 
                       policy = "flexible", acc = 1, bedroom = 1, bathroom = 1){
 
   # gets the label matching the column value
@@ -219,11 +219,13 @@ cancellation_plot <- function(df){
                                            labels = c("Flexible", "Moderate",
                                                       "Strict", "Super Strict"))
   
-                      ggplotly(plot)
+             gp <- ggplotly(plot, width = 800, height = 500, tooltip =FALSE) 
+             return(gp)
 }
 
 city_plot <- function(df){
-      plot <- ggplot(aes(x=price, color=city)) +
+      plot <- metadata %>%
+        ggplot(aes(x=price, color=city)) +
               geom_density(alpha=.2,adjust = 3) +
               theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
               xlab("Price(CAD)")+
@@ -234,7 +236,8 @@ city_plot <- function(df){
 }
 
 room_plot <- function(df){
-      plot <- ggplot(aes(x=price, color=room_type)) +
+      plot <- metadata %>%
+        ggplot(aes(x=price, color=room_type)) +
                 geom_density(alpha=.2,adjust = 3) +
                 theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
                 xlab("Price(CAD)")+
@@ -268,6 +271,7 @@ bathroom_plot <- function(df){
                    xlab("Price(CAD)")+
                    ylab("Density")+
                    scale_color_discrete(name = "Number of Bathrooms")
+         ggplotly(plot)
 }
   
 bedroom_plot <- function(df){
@@ -281,57 +285,100 @@ bedroom_plot <- function(df){
                   xlab("Price(CAD)")+
                   ylab("Density")+
                   scale_color_discrete(name = "Number of Bedrooms")
+        ggplotly(plot)
 }
 
 
-tabs <- (htmlDiv(list(
-  dccTabs(id="tabs", value='tab-1', children=list(
+tabs <- dccTabs(id="tabs", value='tab-1', children=list(
     dccTab(label='Analysis', value='tab-1'),
     dccTab(label='Play', value='tab-2')
-  )),
+    ))
+
+graph1 <- dccGraph(
+  id = 'superhost-graph',
+  figure = superhost_plot()
+)
+
+graph2 <- dccGraph(
+  id = 'cancellation-graph',
+  figure = cancellation_plot()
+)
+
+graph3 <- dccGraph(
+  id = 'city-graph',
+  figure = city_plot()
+)
+
+graph4 <- dccGraph(
+  id = 'room-graph',
+  figure = room_plot()
+)
+
+graph5 <- dccGraph(
+  id = 'accommodate-graph',
+  figure = room_plot()
+)
+
+graph6 <- dccGraph(
+  id = 'bedroom-graph',
+  figure = bedroom_plot()
+)
+
+graph7 <- dccGraph(
+  id = 'bathroom-graph',
+  figure = bathroom_plot()
+)
+
+content1 <- htmlDiv(list(
+    graph1,
+    graph2,
+    graph3,
+    graph4,
+    graph5,
+    graph6,
+    graph7
+  ))
+
+content2 <-  htmlDiv(
+  list(
+    div_sidebar,
+    graph
+  ), style = list('display' = 'flex',
+                  'justify-content'='center')
+)
+
+app$layout(htmlDiv(list(
+  div_header,
+  tabs,
   htmlDiv(id='tabs-content')
 )))
-
-app$layout(
-  div_header,
-  tabs
-  )
 
 app$callback(output('tabs-content', 'children'),
              params = list(input('tabs', 'value')),
              function(tab){
                if(tab == 'tab-1'){
-                 return(htmlDiv(
-                   list(
-                   htmlH3('Analysis'),
-                   dccGraph(
-                     id = 'superhost-plot',
-                     figure = superhost_plot()
-                   ),
-                   htmlDiv(
-                     dccGraph(
-                       id = 'cancellation-plot',
-                       figure = cancellation_plot()
-                     )),
-                   htmlDiv(
-                     dccGraph(
-                       id = 'room-plot',
-                       figure = room_plot()
-                     ))
-                   ), style = list('flex-basis' = '20%')
-                   ))
+                 return(content1)
                    }
                else if(tab == 'tab-2'){
-                 return(htmlDiv(list(
-                   div_sidebar,
-                   htmlH3('Play'),
-                   dccGraph(
-                     id = 'play-plot',
-                     figure = make_plot()
-                   )
-                 ), style = list('display' = 'flex',
-                                 'justify-content'='center')))}
+                 return(content2)
+                 }
              }
 )
+
+app$callback(
+  #update figure of gap-graph-bar
+  output=list(id = 'graph', property='figure'),
+  #based on values of year, continent, y-axis components
+  params=list(input(id = 'city', property='value'),
+              input(id = 'superhost', property = 'value'),
+              input(id = 'room_type', property = 'value'),
+              input(id = 'cancellation_policy', property = 'value'),
+              input(id = 'accommodates', property = 'value'),
+              input(id = 'bedroom', property = 'value'),
+              input(id = 'bathroom', property = 'value')),
+  #this translates your list of params into function arguments
+  function(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom) {
+    make_plot(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom)
+  })
 
 app$run_server(debug=TRUE)
