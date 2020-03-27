@@ -22,7 +22,7 @@ app <- Dash$new()
 # Load the data here
 data <- read.csv(here("Data","cleaned_data.csv"),header=TRUE)
 #remove outliers
-data1 <- data %>% 
+metadata <- data %>% 
   filter(!is.na(price)) %>% 
   group_by(city) %>% 
   mutate(limitmin = quantile(price,c(0.25)) - 1.5 * (quantile(price,c(0.75))-quantile(price,c(0.25)))) %>% 
@@ -32,13 +32,16 @@ data1 <- data %>%
   mutate(new_bed = round(ifelse(bedrooms>=3, 3, bedrooms))) %>% 
   mutate(new_bath = round(ifelse(bathrooms>=3, 3, bathrooms)))
 
-levels(data1$cancellation_policy)[4] <- "strict"
-levels(data1$cancellation_policy)[4] <- "super_strict"
-levels(data1$cancellation_policy)[5] <- "super_strict"
+levels(metadata$cancellation_policy)[4] <- "strict"
+levels(metadata$cancellation_policy)[4] <- "super_strict"
+levels(metadata$cancellation_policy)[5] <- "super_strict"
+
+#fixing city names
+levels(metadata$city) <- c("Montreal", "New Brunswick", "Ottawa", "Quebec", "Toronto", "Vancouver", "Victoria")
 
 #Create the city dropdowns
-cityKey <- tibble(label = as.vector(unique(data1$city)),
-                   value = as.vector(unique(data1$city)))
+cityKey <- tibble(label = as.vector(unique(metadata$city)),
+                   value = as.vector(unique(metadata$city)))
 cityDropdown <- dccDropdown(
   id = "city",
   options = map(
@@ -133,7 +136,7 @@ make_plot <- function(cityname="Montréal", superhost = "TRUE", roomtype = "Enti
   bedroom_label <- bedroomKey$label[bedroomKey$value==bedroom]
   bathroom_label <- bedroomKey$label[bathroomKey$value==bathroom]
   # make plot
-    p <- data1 %>%
+    p <- metadata %>%
       filter(!is.na(price)) %>% 
       filter(city==cityname, host_is_superhost==superhost, room_type == roomtype,
              cancellation_policy==policy, new_acc == acc, new_bed == bedroom,
@@ -189,31 +192,146 @@ div_sidebar <- htmlDiv(
                'flex-basis' = '20%')
 )
 
+# density plot for superhost
+superhost_plot <- function(df){
+          plot <- metadata %>%
+                    filter(host_is_superhost==TRUE | host_is_superhost==FALSE) %>% 
+                    ggplot(aes(x=price, color=host_is_superhost)) +
+                    geom_density(adjust = 3)+
+                    theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
+                    xlab("Price(CAD)")+
+                    ylab("Density")+
+                    ggtitle("Distribution of Price Based on Status of Host")+
+                    scale_color_discrete(name = "Host is a Superhost", 
+                                         labels = c("No", "Yes"))
+                    ggplotly(plot)
+}
+
+# density plot for cancellation policy
+cancellation_plot <- function(df){
+             plot <- metadata %>%
+                      ggplot(aes(x=price, color=cancellation_policy)) +
+                      geom_density(alpha=.2,adjust = 3) +
+                      theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
+                      xlab("Price(CAD)")+
+                      ylab("Density")+
+                      scale_color_discrete(name = "Cancellation Policy",
+                                           labels = c("Flexible", "Moderate",
+                                                      "Strict", "Super Strict"))
+  
+                      ggplotly(plot)
+}
+
+city_plot <- function(df){
+      plot <- ggplot(aes(x=price, color=city)) +
+              geom_density(alpha=.2,adjust = 3) +
+              theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
+              xlab("Price(CAD)")+
+              ylab("Density")+
+              scale_color_discrete(name = "City")
+              
+    ggplotly(plot)
+}
+
+room_plot <- function(df){
+      plot <- ggplot(aes(x=price, color=room_type)) +
+                geom_density(alpha=.2,adjust = 3) +
+                theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
+                xlab("Price(CAD)")+
+                ylab("Density")+
+                scale_color_discrete(name = "Room Type")
+      ggplotly(plot) 
+}
+
+
+accommodate_plot <- function(df){
+            plot <- metadata %>% 
+                      filter(!is.na(accommodates)) %>% 
+                      mutate(new_acc = ifelse(accommodates>=6, 6, accommodates)) %>% 
+                      ggplot(aes(x=price, color=as.factor(new_acc))) +
+                      geom_density(alpha=.2,adjust = 3) +
+                      theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
+                      xlab("Price(CAD)")+
+                      ylab("Density")+
+                      scale_color_discrete(name = "Number of Accommodates")
+            ggplotly(plotly)
+}
+
+bathroom_plot <- function(df){
+         plot <- metadata %>% 
+                   filter(!is.na(bathrooms)) %>% 
+                   mutate(new_bath = round(ifelse(bathrooms>=3, 3, bathrooms))) %>% 
+                   filter(new_bath != 0) %>%
+                   ggplot(aes(x=price, color=as.factor(new_bath))) +
+                   geom_density(alpha=.2,adjust = 3) +
+                   theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
+                   xlab("Price(CAD)")+
+                   ylab("Density")+
+                   scale_color_discrete(name = "Number of Bathrooms")
+}
+  
+bedroom_plot <- function(df){
+        plot <- metadata %>% 
+                  filter(!is.na(bedrooms)) %>% 
+                  mutate(new_bed = round(ifelse(bedrooms>=3, 3, bedrooms))) %>% 
+                  filter(new_bed != 0) %>%
+                  ggplot(aes(x=price, color=as.factor(new_bed))) +
+                  geom_density(alpha=.2,adjust = 3) +
+                  theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
+                  xlab("Price(CAD)")+
+                  ylab("Density")+
+                  scale_color_discrete(name = "Number of Bedrooms")
+}
+
+
+tabs <- (htmlDiv(list(
+  dccTabs(id="tabs", value='tab-1', children=list(
+    dccTab(label='Analysis', value='tab-1'),
+    dccTab(label='Play', value='tab-2')
+  )),
+  htmlDiv(id='tabs-content')
+)))
+
 app$layout(
   div_header,
-  htmlDiv(
-    list(
-      div_sidebar,
-      graph
-    ), style = list('display' = 'flex',
-                    'justify-content'='center')
+  tabs
   )
-)
 
-app$callback(
-  #update figure of gap-graph-bar
-  output=list(id = 'graph', property='figure'),
-  #based on values of year, continent, y-axis components
-  params=list(input(id = 'city', property='value'),
-              input(id = 'superhost', property = 'value'),
-              input(id = 'room_type', property = 'value'),
-              input(id = 'cancellation_policy', property = 'value'),
-              input(id = 'accommodates', property = 'value'),
-              input(id = 'bedroom', property = 'value'),
-              input(id = 'bathroom', property = 'value')),
-  #this translates your list of params into function arguments
-  function(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom) {
-    make_plot(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom)
-  })
+app$callback(output('tabs-content', 'children'),
+             params = list(input('tabs', 'value')),
+             function(tab){
+               if(tab == 'tab-1'){
+                 return(htmlDiv(
+                   list(
+                   htmlH3('Analysis'),
+                   dccGraph(
+                     id = 'superhost-plot',
+                     figure = superhost_plot()
+                   ),
+                   htmlDiv(
+                     dccGraph(
+                       id = 'cancellation-plot',
+                       figure = cancellation_plot()
+                     )),
+                   htmlDiv(
+                     dccGraph(
+                       id = 'room-plot',
+                       figure = room_plot()
+                     ))
+                   ), style = list('flex-basis' = '20%')
+                   ))
+                   }
+               else if(tab == 'tab-2'){
+                 return(htmlDiv(list(
+                   div_sidebar,
+                   htmlH3('Play'),
+                   dccGraph(
+                     id = 'play-plot',
+                     figure = make_plot()
+                   )
+                 ), style = list('display' = 'flex',
+                                 'justify-content'='center')))}
+             }
+)
 
 app$run_server(debug=TRUE)
