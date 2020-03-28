@@ -16,6 +16,7 @@ suppressPackageStartupMessages(library(ggplot2))
 suppressPackageStartupMessages(library(plotly))
 suppressPackageStartupMessages(library(here))
 suppressPackageStartupMessages(library(tidyverse))
+library(shiny)
 
 app <- Dash$new()
 
@@ -146,7 +147,7 @@ make_plot <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entir
       theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
       xlim(20, 250)
   
-  ggplotly(p)
+  ggplotly(p,  width = 1000, height = 700, tooltip =FALSE)
 }
 
 graph <- dccGraph(
@@ -193,8 +194,7 @@ div_sidebar <- htmlDiv(
 )
 
 # density plot for superhost
-superhost_plot <- function(df){
-          plot <- metadata %>%
+superhost_plot <- metadata %>%
                     filter(host_is_superhost==TRUE | host_is_superhost==FALSE) %>% 
                     ggplot(aes(x=price, color=host_is_superhost)) +
                     geom_density(adjust = 3)+
@@ -204,14 +204,13 @@ superhost_plot <- function(df){
                     ggtitle("Distribution of Price Based on Status of Host")+
                     scale_color_discrete(name = "Host is a Superhost", 
                                          labels = c("No", "Yes"))
-                    ggplotly(plot)
-}
+superhost_plot <-ggplotly(superhost_plot)
+
 
 # density plot for cancellation policy
-cancellation_plot <- function(df){
-             plot <- metadata %>%
+cancellation_plot <- metadata %>%
                       ggplot(aes(x=price, color=cancellation_policy)) +
-                      geom_density(alpha=.2,adjust = 3) +
+                      geom_density(adjust = 3) +
                       theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
                       xlab("Price(CAD)")+
                       ylab("Density")+
@@ -219,74 +218,63 @@ cancellation_plot <- function(df){
                                            labels = c("Flexible", "Moderate",
                                                       "Strict", "Super Strict"))
   
-             gp <- ggplotly(plot, width = 800, height = 500, tooltip =FALSE) 
-             return(gp)
-}
+cancellation_plot <- ggplotly(cancellation_plot)
 
-city_plot <- function(df){
-      plot <- metadata %>%
+
+city_plot <- metadata %>%
         ggplot(aes(x=price, color=city)) +
-              geom_density(alpha=.2,adjust = 3) +
+              geom_density(adjust = 3) +
               theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
               xlab("Price(CAD)")+
               ylab("Density")+
               scale_color_discrete(name = "City")
               
-    ggplotly(plot)
-}
+city_plot <-    ggplotly(city_plot)
 
-room_plot <- function(df){
-      plot <- metadata %>%
+room_plot <- metadata %>%
         ggplot(aes(x=price, color=room_type)) +
-                geom_density(alpha=.2,adjust = 3) +
+                geom_density(adjust = 3) +
                 theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
                 xlab("Price(CAD)")+
                 ylab("Density")+
                 scale_color_discrete(name = "Room Type")
-      ggplotly(plot) 
-}
+room_plot <-  ggplotly(room_plot) 
 
 
-accommodate_plot <- function(df){
-            plot <- metadata %>% 
+accommodate_plot <-  metadata %>% 
                       filter(!is.na(accommodates)) %>% 
                       mutate(new_acc = ifelse(accommodates>=6, 6, accommodates)) %>% 
                       ggplot(aes(x=price, color=as.factor(new_acc))) +
-                      geom_density(alpha=.2,adjust = 3) +
+                      geom_density(adjust = 3) +
                       theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
                       xlab("Price(CAD)")+
                       ylab("Density")+
                       scale_color_discrete(name = "Number of Accommodates")
-            ggplotly(plotly)
-}
+accommodate_plot <- ggplotly(accommodate_plot)
 
-bathroom_plot <- function(df){
-         plot <- metadata %>% 
+bathroom_plot <- metadata %>% 
                    filter(!is.na(bathrooms)) %>% 
                    mutate(new_bath = round(ifelse(bathrooms>=3, 3, bathrooms))) %>% 
                    filter(new_bath != 0) %>%
                    ggplot(aes(x=price, color=as.factor(new_bath))) +
-                   geom_density(alpha=.2,adjust = 3) +
+                   geom_density(adjust = 3) +
                    theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
                    xlab("Price(CAD)")+
                    ylab("Density")+
                    scale_color_discrete(name = "Number of Bathrooms")
-         ggplotly(plot)
-}
+bathroom_plot <- ggplotly(bathroom_plot)
   
-bedroom_plot <- function(df){
-        plot <- metadata %>% 
+bedroom_plot <- metadata %>% 
                   filter(!is.na(bedrooms)) %>% 
                   mutate(new_bed = round(ifelse(bedrooms>=3, 3, bedrooms))) %>% 
                   filter(new_bed != 0) %>%
                   ggplot(aes(x=price, color=as.factor(new_bed))) +
-                  geom_density(alpha=.2,adjust = 3) +
+                  geom_density(adjust = 3) +
                   theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
                   xlab("Price(CAD)")+
                   ylab("Density")+
                   scale_color_discrete(name = "Number of Bedrooms")
-        ggplotly(plot)
-}
+bedroom_plot <- ggplotly(bedroom_plot) 
 
 
 tabs <- dccTabs(id="tabs", value='tab-1', children=list(
@@ -294,50 +282,57 @@ tabs <- dccTabs(id="tabs", value='tab-1', children=list(
     dccTab(label='Play', value='tab-2')
     ))
 
+
 graph1 <- dccGraph(
   id = 'superhost-graph',
-  figure = superhost_plot()
+  figure = superhost_plot
 )
 
 graph2 <- dccGraph(
   id = 'cancellation-graph',
-  figure = cancellation_plot()
+  figure = cancellation_plot
 )
 
 graph3 <- dccGraph(
   id = 'city-graph',
-  figure = city_plot()
+  figure = city_plot
 )
 
 graph4 <- dccGraph(
   id = 'room-graph',
-  figure = room_plot()
+  figure = room_plot
 )
 
 graph5 <- dccGraph(
   id = 'accommodate-graph',
-  figure = room_plot()
+  figure = room_plot
 )
 
 graph6 <- dccGraph(
   id = 'bedroom-graph',
-  figure = bedroom_plot()
+  figure = bedroom_plot
 )
 
 graph7 <- dccGraph(
   id = 'bathroom-graph',
-  figure = bathroom_plot()
+  figure = bathroom_plot
 )
 
-content1 <- htmlDiv(list(
-    graph1,
-    graph2,
-    graph3,
-    graph4,
-    graph5,
-    graph6,
-    graph7
-  ))
+
+
+
+content1 <- htmlDiv(
+  list(
+  htmlDiv(graph1, style = list('width'= '50%','justify-content'='center')),
+  htmlDiv(graph2, style = list('width'= '50%','justify-content'='center')),
+  htmlDiv(graph3, style = list('width'= '50%','justify-content'='center')),
+  htmlDiv(graph4, style = list('width'= '50%','justify-content'='center')),
+  htmlDiv(graph5, style = list('width'= '50%','justify-content'='center')),
+  htmlDiv(graph6, style = list('width'= '50%','justify-content'='center')),
+  htmlDiv(graph7, style = list('width'= '50%', 'justify-content'='left'))
+  ), style = list('display'='flex','flex-wrap'= 'wrap')
+)
+
 
 content2 <-  htmlDiv(
   list(
