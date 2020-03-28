@@ -97,7 +97,7 @@ accDropdown <- dccDropdown(
     1:nrow(accKey), function(i){
       list(label=accKey$label[i], value=accKey$value[i])
     }),
-  value = 1
+  value = 2
 )
 
 #Create the bedrooms dropdowns
@@ -113,8 +113,8 @@ bedroomDropdown <- dccDropdown(
 )
 
 #Create the bedrooms dropdowns
-bathroomKey <- tibble(label = c("1","2","More than 2"),
-                     value =c(1,2,3))
+bathroomKey <- tibble(label = c("0","1","2","More than 2"),
+                     value =c(0,1,2,3))
 bathroomDropdown <- dccDropdown(
   id = "bathroom",
   options = map(
@@ -263,14 +263,14 @@ room_plot <- room_plot %>%
 
 accommodate_plot <-  metadata %>% 
                       filter(!is.na(accommodates)) %>% 
-                      mutate(new_acc = ifelse(accommodates>=6, 6, accommodates)) %>% 
+                      mutate(new_acc = ifelse(accommodates>=6, "more than 5", accommodates)) %>% 
                       ggplot(aes(x=price, color=as.factor(new_acc))) +
                       geom_density(adjust = 3) +
                       theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
                       xlab("Price(CAD)")+
                       ylab("Density")+
                       ggtitle("Accommodates")+
-                      scale_color_discrete(name = "Accommodates", labels=c("1","2","3","4","5","more than 5"))
+                      scale_color_discrete(name = "Accommodates")
 accommodate_plot <- ggplotly(accommodate_plot)
 accommodate_plot <- accommodate_plot %>%
                     layout(legend = list(
@@ -280,8 +280,8 @@ accommodate_plot <- accommodate_plot %>%
 
 bathroom_plot <- metadata %>% 
                    filter(!is.na(bathrooms)) %>% 
-                   mutate(new_bath = round(ifelse(bathrooms>=3, 3, bathrooms))) %>% 
-                   filter(new_bath != 0) %>%
+                   filter(bathrooms != 0) %>%
+                   mutate(new_bath = ifelse(bathrooms>2, "more than 2", round(bathrooms))) %>% 
                    ggplot(aes(x=price, color=as.factor(new_bath))) +
                    geom_density(adjust = 3) +
                    theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
@@ -300,8 +300,8 @@ bathroom_plot <- bathroom_plot %>%
   
 bedroom_plot <- metadata %>% 
                   filter(!is.na(bedrooms)) %>% 
-                  mutate(new_bed = round(ifelse(bedrooms>=3, 3, bedrooms))) %>% 
-                  filter(new_bed != 0) %>%
+                  filter(bedrooms != 0) %>%
+                  mutate(new_bed = ifelse(bedrooms>2, "more than 2", round(bedrooms))) %>% 
                   ggplot(aes(x=price, color=as.factor(new_bed))) +
                   geom_density(adjust = 3) +
                   theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
