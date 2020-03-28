@@ -159,7 +159,7 @@ div_header <- htmlDiv(list(
   htmlH1('Predictive Pricing Tool for Canadian Airbnb Listings')
   ),
   style = list(
-    backgroundColor = '#0DC810', ## COLOUR OF YOUR CHOICE
+    backgroundColor = '#2855f7', ## COLOUR OF YOUR CHOICE
     textAlign = 'center',
     color = 'white',
     margin = 5,
@@ -224,7 +224,7 @@ cancellation_plot <- metadata %>%
                       geom_density(adjust = 3) +
                       theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
                       xlab("Price(CAD)")+
-                      ylab("Density")+
+                      ylab(" ")+
                       ggtitle("**Cancellation Policy**")
   
 cancellation_plot <- ggplotly(cancellation_plot)
@@ -250,7 +250,7 @@ room_plot <- metadata %>%
                 geom_density(adjust = 3) +
                 theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
                 xlab("Price(CAD)")+
-                ylab("Density")+
+                ylab(" ")+
                 ggtitle("Room Type")+
                 scale_color_discrete("Room Type")
 room_plot <-  ggplotly(room_plot) 
@@ -285,14 +285,15 @@ bathroom_plot <- metadata %>%
                    geom_density(adjust = 3) +
                    theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
                    xlab("Price(CAD)")+
-                   ylab("Density")+
+                   ylab(" ")+
                    ggtitle("Bathrooms")+
                    scale_color_discrete("Bathrooms")
 bathroom_plot <- ggplotly(bathroom_plot)
 bathroom_plot <- bathroom_plot %>%
                  layout(legend = list(
                     x = .6, y = .9),
-                    title = "Bathrooms")
+                    title = "Bathrooms"
+                    )
 
                   
   
@@ -304,7 +305,7 @@ bedroom_plot <- metadata %>%
                   geom_density(adjust = 3) +
                   theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
                   xlab("Price(CAD)")+
-                  ylab("Density")+
+                  ylab(" ")+
                   
                   ggtitle("Bedrooms")
 bedroom_plot <- ggplotly(bedroom_plot) 
@@ -313,11 +314,28 @@ bedroom_plot <- bedroom_plot %>%
                   x = .6, y = .9),
                   title = "Bedrooms")
 
+tabs_styles = list(
+  'height'= '44px'
+)
+tab_style = list(
+  'borderBottom'= '1px solid #d6d6d6',
+  'padding'= '6px',
+  'fontWeight'= 'bold'
+)
+
+tab_selected_style = list(
+  'borderTop'= '1px solid #d6d6d6',
+  'borderBottom'= '1px solid #d6d6d6',
+  'backgroundColor'= '#2855f7',
+  'color'= 'white',
+  'padding'= '6px'
+)
+
 
 tabs <- dccTabs(id="tabs", value='tab-1', children=list(
-    dccTab(label='Analysis', value='tab-1'),
-    dccTab(label='Play', value='tab-2')
-    ))
+    dccTab(label='Analysis', value='tab-1', style = tab_style, selected_style = tab_selected_style),
+    dccTab(label='Play', value='tab-2', style = tab_style, selected_style = tab_selected_style)
+    ), style = tab_style)
 
 
 superhost_graph <- dccGraph(
@@ -360,12 +378,13 @@ bathroom_graph <- dccGraph(
 
 content1 <- htmlDiv(
   list(
-  htmlDiv(superhost_graph, style = list('width'= '33%','justify-content'='left')),
-  htmlDiv(cancellation_graph, style = list('width'= '33%','justify-content'='center')),
-  htmlDiv(room_graph, style = list('width'= '33%','justify-content'='right')), 
-  htmlDiv(accommodate_graph, style = list('width'= '33%','justify-content'='left')),
-  htmlDiv(bedroom_graph, style = list('width'= '33%','justify-content'='center')),
-  htmlDiv(bathroom_graph, style = list('width'= '33%','justify-content'='right'))),
+  htmlDiv(superhost_graph, style = list('width'= '33%','justify-content'='space-between')),
+  htmlDiv(cancellation_graph, style = list('width'= '33%','justify-content'='space-between')),
+  htmlDiv(room_graph, style = list('width'= '33%','justify-content'='space-between')), 
+  htmlDiv(accommodate_graph, style = list('width'= '33%','justify-content'='space-between')),
+  htmlDiv(bedroom_graph, style = list('width'= '33%','justify-content'='space-between')),
+  htmlDiv(bathroom_graph, style = list('width'= '33%','justify-content'='space-between')),
+  htmlDiv(city_graph, style = list('width' = '100%', 'justify-content' = 'space-between'))),
   style = list('display'='flex','flex-wrap'= 'wrap'))
 
 
