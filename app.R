@@ -180,6 +180,7 @@ div_header <- htmlDiv(list(
   htmlH1('Predictive Pricing Tool for Canadian Airbnb Listings')
   ),
   style = list(
+    fontFamily = "Arial",
     backgroundColor = '#2855f7', ## COLOUR OF YOUR CHOICE
     textAlign = 'center',
     color = 'white',
@@ -237,8 +238,8 @@ superhost_plot <- metadata %>%
 superhost_plot <-ggplotly(superhost_plot)
 superhost_plot <-superhost_plot %>%
                   layout(legend = list(x = .6, y = .9),
-                         title = "Superhost")
-
+                         title = "Superhost"
+                         )
 
 
 # density plot for cancellation policy
@@ -339,12 +340,13 @@ bedroom_plot <- bedroom_plot %>%
                   title = "Bedrooms")
 
 tabs_styles = list(
-  'height'= '44px'
+  'height'= '66px'
 )
 tab_style = list(
   'borderBottom'= '1px solid #d6d6d6',
-  'padding'= '6px',
-  'fontWeight'= 'bold'
+  'padding'= '10px',
+  'fontWeight'= 'bold',
+  'fontFamily' = 'Arial'
 )
 
 tab_selected_style = list(
@@ -423,11 +425,18 @@ content2 <-  htmlDiv(
                   'justify-content'='center')
 )
 
-description <- htmlH3("The data was sourced from publicly available information from the official Airbnb site. It has been analyzed, cleaned and aggregated by Inside Airbnb. This app currently has two features which are termed 
-                      Analysis and Play. In the Analysis tab, you will find density plots showing the distribution
-                      of prices of Canadian Airbnb listings based on various factors. In the Play tab, you will 
-                      be able to play with the various factors by adjusting them using a side bar and see how this
-                      influences the price.")
+description <- htmlDiv(
+                  list(dccMarkdown("The data was sourced from publicly available information from the official Airbnb site. It has been analyzed, cleaned and aggregated by [Inside Airbnb](http://insideairbnb.com/get-the-data.html). This app currently has two features which are termed 
+                      Analysis and Play. The purpose of this dashboard is to help you understand
+                      the influence of various factors, ranging from number of bedrooms to if the host is a superhost or not,
+                      on the price of Canadian Airbnb listings.  
+                      In the Analysis tab, you will find density plots showing the distribution
+                      of prices of Canadian Airbnb listings based on various factors. Density curves
+                      that lean more to the right indicate a higher price. 
+                      In the Play tab, you will be able to play with the various factors by adjusting them using the side bar and 
+                      be able to see how this influences the price.")), style = list(fontFamily = "Arial"))
+
+#######################app layout##########################################
 app$layout(htmlDiv(list(
   div_header,
   description,
@@ -446,7 +455,7 @@ app$callback(output('tabs-content', 'children'),
                  }
              }
 )
-
+###############################app callback#############################
 app$callback(
   output=list(id='my-div', property='children'),
   params=list(input(id = 'city', property='value'),
