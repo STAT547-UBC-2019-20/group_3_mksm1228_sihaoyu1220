@@ -237,7 +237,8 @@ cancellation_plot <- cancellation_plot %>%
 city_plot <- metadata %>%
         ggplot(aes(x=price, color=city)) +
               geom_density(adjust = 3) +
-              theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
+              theme(panel.background = element_rect(fill = "white", colour = "grey50"),
+                    plot.title = element_text(hjust = 0.5))+
               xlab("Price(CAD)")+
               ylab("Density")+
               ggtitle("City")+
@@ -269,7 +270,7 @@ accommodate_plot <-  metadata %>%
                       xlab("Price(CAD)")+
                       ylab("Density")+
                       ggtitle("Accommodates")+
-                      scale_color_discrete("Accommodates")
+                      scale_color_discrete(name = "Accommodates", labels=c("1","2","3","4","5","more than 5"))
 accommodate_plot <- ggplotly(accommodate_plot)
 accommodate_plot <- accommodate_plot %>%
                     layout(legend = list(
@@ -378,12 +379,15 @@ bathroom_graph <- dccGraph(
 
 content1 <- htmlDiv(
   list(
+  htmlIframe(height=30, width='100%', style=list(borderWidth = 0)), #space
   htmlDiv(superhost_graph, style = list('width'= '33%','justify-content'='space-between')),
   htmlDiv(cancellation_graph, style = list('width'= '33%','justify-content'='space-between')),
   htmlDiv(room_graph, style = list('width'= '33%','justify-content'='space-between')), 
+  htmlIframe(height=50, width='100%', style=list(borderWidth = 0)), #space
   htmlDiv(accommodate_graph, style = list('width'= '33%','justify-content'='space-between')),
   htmlDiv(bedroom_graph, style = list('width'= '33%','justify-content'='space-between')),
   htmlDiv(bathroom_graph, style = list('width'= '33%','justify-content'='space-between')),
+  htmlIframe(height=50, width='100%', style=list(borderWidth = 0)), #space
   htmlDiv(city_graph, style = list('width' = '100%', 'justify-content' = 'space-between'))),
   style = list('display'='flex','flex-wrap'= 'wrap'))
 
