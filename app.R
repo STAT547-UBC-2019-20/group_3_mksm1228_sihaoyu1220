@@ -34,8 +34,8 @@ metadata <- data %>%
   mutate(new_bath = round(ifelse(bathrooms>=3, 3, bathrooms)))
 
 levels(metadata$cancellation_policy)[4] <- "strict"
-levels(metadata$cancellation_policy)[4] <- "super_strict"
-levels(metadata$cancellation_policy)[5] <- "super_strict"
+levels(metadata$cancellation_policy)[4] <- "super strict"
+levels(metadata$cancellation_policy)[5] <- "super strict"
 
 #fixing city names
 levels(metadata$city) <- c("Montreal", "New Brunswick", "Ottawa", "Quebec", "Toronto", "Vancouver", "Victoria")
@@ -159,7 +159,7 @@ div_header <- htmlDiv(list(
   htmlH1('Predictive Pricing Tool for Canadian Airbnb Listings')
   ),
   style = list(
-    backgroundColor = '#0DC810', ## COLOUR OF YOUR CHOICE
+    backgroundColor = '#2855f7', ## COLOUR OF YOUR CHOICE
     textAlign = 'center',
     color = 'white',
     margin = 5,
@@ -201,10 +201,21 @@ superhost_plot <- metadata %>%
                     theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
                     xlab("Price(CAD)")+
                     ylab("Density")+
-                    ggtitle("Distribution of Price Based on Status of Host")+
+                    ggtitle("Status of Host")+
                     scale_color_discrete(name = "Host is a Superhost", 
-                                         labels = c("No", "Yes"))
+                                         labels = c("No", "Yes"))+
+                    theme(legend.position = c(.95, .95),
+                          legend.justification = c("right", "top"),
+                          legend.box.just = "right",
+                          legend.margin = margin(6, 6, 6, 6))
+                      
+                    
+
 superhost_plot <-ggplotly(superhost_plot)
+superhost_plot <-superhost_plot %>%
+                  layout(legend = list(x = .6, y = .9),
+                         title = "Superhost")
+
 
 
 # density plot for cancellation policy
@@ -213,12 +224,14 @@ cancellation_plot <- metadata %>%
                       geom_density(adjust = 3) +
                       theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
                       xlab("Price(CAD)")+
-                      ylab("Density")+
-                      scale_color_discrete(name = "Cancellation Policy",
-                                           labels = c("Flexible", "Moderate",
-                                                      "Strict", "Super Strict"))
+                      ylab(" ")+
+                      ggtitle("**Cancellation Policy**")
   
 cancellation_plot <- ggplotly(cancellation_plot)
+cancellation_plot <- cancellation_plot %>%
+                        layout(legend = list(
+                               x = .6, y = .9),
+                               title = "Cancellation Policy")
 
 
 city_plot <- metadata %>%
@@ -227,6 +240,7 @@ city_plot <- metadata %>%
               theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
               xlab("Price(CAD)")+
               ylab("Density")+
+              ggtitle("City")+
               scale_color_discrete(name = "City")
               
 city_plot <-    ggplotly(city_plot)
@@ -236,9 +250,14 @@ room_plot <- metadata %>%
                 geom_density(adjust = 3) +
                 theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
                 xlab("Price(CAD)")+
-                ylab("Density")+
-                scale_color_discrete(name = "Room Type")
+                ylab(" ")+
+                ggtitle("Room Type")+
+                scale_color_discrete("Room Type")
 room_plot <-  ggplotly(room_plot) 
+room_plot <- room_plot %>%
+              layout(legend = list(
+              x = .5, y = .9),
+              title = "Room Type")
 
 
 accommodate_plot <-  metadata %>% 
@@ -249,8 +268,14 @@ accommodate_plot <-  metadata %>%
                       theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
                       xlab("Price(CAD)")+
                       ylab("Density")+
-                      scale_color_discrete(name = "Number of Accommodates")
+                      ggtitle("Accommodates")+
+                      scale_color_discrete("Accommodates")
 accommodate_plot <- ggplotly(accommodate_plot)
+accommodate_plot <- accommodate_plot %>%
+                    layout(legend = list(
+                      x = .6, y = .9),
+                      title = "Accommodates")
+
 
 bathroom_plot <- metadata %>% 
                    filter(!is.na(bathrooms)) %>% 
@@ -260,9 +285,17 @@ bathroom_plot <- metadata %>%
                    geom_density(adjust = 3) +
                    theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
                    xlab("Price(CAD)")+
-                   ylab("Density")+
-                   scale_color_discrete(name = "Number of Bathrooms")
+                   ylab(" ")+
+                   ggtitle("Bathrooms")+
+                   scale_color_discrete("Bathrooms")
 bathroom_plot <- ggplotly(bathroom_plot)
+bathroom_plot <- bathroom_plot %>%
+                 layout(legend = list(
+                    x = .6, y = .9),
+                    title = "Bathrooms"
+                    )
+
+                  
   
 bedroom_plot <- metadata %>% 
                   filter(!is.na(bedrooms)) %>% 
@@ -272,48 +305,70 @@ bedroom_plot <- metadata %>%
                   geom_density(adjust = 3) +
                   theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
                   xlab("Price(CAD)")+
-                  ylab("Density")+
-                  scale_color_discrete(name = "Number of Bedrooms")
+                  ylab(" ")+
+                  
+                  ggtitle("Bedrooms")
 bedroom_plot <- ggplotly(bedroom_plot) 
+bedroom_plot <- bedroom_plot %>%
+                layout(legend = list(
+                  x = .6, y = .9),
+                  title = "Bedrooms")
+
+tabs_styles = list(
+  'height'= '44px'
+)
+tab_style = list(
+  'borderBottom'= '1px solid #d6d6d6',
+  'padding'= '6px',
+  'fontWeight'= 'bold'
+)
+
+tab_selected_style = list(
+  'borderTop'= '1px solid #d6d6d6',
+  'borderBottom'= '1px solid #d6d6d6',
+  'backgroundColor'= '#2855f7',
+  'color'= 'white',
+  'padding'= '6px'
+)
 
 
 tabs <- dccTabs(id="tabs", value='tab-1', children=list(
-    dccTab(label='Analysis', value='tab-1'),
-    dccTab(label='Play', value='tab-2')
-    ))
+    dccTab(label='Analysis', value='tab-1', style = tab_style, selected_style = tab_selected_style),
+    dccTab(label='Play', value='tab-2', style = tab_style, selected_style = tab_selected_style)
+    ), style = tab_style)
 
 
-graph1 <- dccGraph(
+superhost_graph <- dccGraph(
   id = 'superhost-graph',
   figure = superhost_plot
 )
 
-graph2 <- dccGraph(
+cancellation_graph <- dccGraph(
   id = 'cancellation-graph',
   figure = cancellation_plot
 )
 
-graph3 <- dccGraph(
+city_graph <- dccGraph(
   id = 'city-graph',
   figure = city_plot
 )
 
-graph4 <- dccGraph(
+room_graph <- dccGraph(
   id = 'room-graph',
   figure = room_plot
 )
 
-graph5 <- dccGraph(
+accommodate_graph <- dccGraph(
   id = 'accommodate-graph',
-  figure = room_plot
+  figure = accommodate_plot
 )
 
-graph6 <- dccGraph(
+bedroom_graph <- dccGraph(
   id = 'bedroom-graph',
   figure = bedroom_plot
 )
 
-graph7 <- dccGraph(
+bathroom_graph <- dccGraph(
   id = 'bathroom-graph',
   figure = bathroom_plot
 )
@@ -323,15 +378,14 @@ graph7 <- dccGraph(
 
 content1 <- htmlDiv(
   list(
-  htmlDiv(graph1, style = list('width'= '50%','justify-content'='center')),
-  htmlDiv(graph2, style = list('width'= '50%','justify-content'='center')),
-  htmlDiv(graph3, style = list('width'= '50%','justify-content'='center')),
-  htmlDiv(graph4, style = list('width'= '50%','justify-content'='center')),
-  htmlDiv(graph5, style = list('width'= '50%','justify-content'='center')),
-  htmlDiv(graph6, style = list('width'= '50%','justify-content'='center')),
-  htmlDiv(graph7, style = list('width'= '50%', 'justify-content'='left'))
-  ), style = list('display'='flex','flex-wrap'= 'wrap')
-)
+  htmlDiv(superhost_graph, style = list('width'= '33%','justify-content'='space-between')),
+  htmlDiv(cancellation_graph, style = list('width'= '33%','justify-content'='space-between')),
+  htmlDiv(room_graph, style = list('width'= '33%','justify-content'='space-between')), 
+  htmlDiv(accommodate_graph, style = list('width'= '33%','justify-content'='space-between')),
+  htmlDiv(bedroom_graph, style = list('width'= '33%','justify-content'='space-between')),
+  htmlDiv(bathroom_graph, style = list('width'= '33%','justify-content'='space-between')),
+  htmlDiv(city_graph, style = list('width' = '100%', 'justify-content' = 'space-between'))),
+  style = list('display'='flex','flex-wrap'= 'wrap'))
 
 
 content2 <-  htmlDiv(
@@ -342,8 +396,14 @@ content2 <-  htmlDiv(
                   'justify-content'='center')
 )
 
+description <- htmlH3("The data was sourced from publicly available information from the official Airbnb site. It has been analyzed, cleaned and aggregated by Inside Airbnb. This app currently has two features which are termed 
+                      Analysis and Play. In the Analysis tab, you will find density plots showing the distribution
+                      of prices of Canadian Airbnb listings based on various factors. In the Play tab, you will 
+                      be able to play with the various factors by adjusting them using a side bar and see how this
+                      influences the price.")
 app$layout(htmlDiv(list(
   div_header,
+  description,
   tabs,
   htmlDiv(id='tabs-content')
 )))
