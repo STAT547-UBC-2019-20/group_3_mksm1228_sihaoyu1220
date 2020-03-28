@@ -150,6 +150,27 @@ make_plot <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entir
   ggplotly(p,  width = 1000, height = 700, tooltip =FALSE)
 }
 
+get_value <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entire home/apt", 
+                      policy = "flexible", acc = 1, bedroom = 1, bathroom = 1){
+  
+  # gets the label matching the column value
+  city_label <- cityKey$label[cityKey$value==cityname]
+  superhost_label <- superhostKey$label[superhostKey$value==superhost]
+  room_label <- roomKey$label[roomKey$value==roomtype]
+  policy_label <- policyKey$label[policyKey$value==policy]
+  acc_label <- accKey$label[accKey$value==acc]
+  bedroom_label <- bedroomKey$label[bedroomKey$value==bedroom]
+  bathroom_label <- bedroomKey$label[bathroomKey$value==bathroom]
+  # make plot
+  dat <- metadata %>%
+    filter(!is.na(price)) %>% 
+    filter(city==cityname, host_is_superhost==superhost, room_type == roomtype,
+           cancellation_policy==policy, new_acc == acc, new_bed == bedroom,
+           new_bath==bathroom)
+  value<-mean(dat$price)
+  return(value)
+}
+
 graph <- dccGraph(
   id = 'graph',
   figure=make_plot() # gets initial data using argument defaults
@@ -186,7 +207,9 @@ div_sidebar <- htmlDiv(
        bedroomDropdown,
        htmlLabel('Select number of bathrooms : '),
        htmlBr(),
-       bathroomDropdown
+       bathroomDropdown,
+       htmlBr(),
+       htmlDiv(id='my-div')
   ),
   style = list('background-color' = '#BBCFF1',
                'padding' = 10,
@@ -423,6 +446,19 @@ app$callback(output('tabs-content', 'children'),
                  }
              }
 )
+
+app$callback(
+  output=list(id='my-div', property='children'),
+  params=list(input(id = 'city', property='value'),
+              input(id = 'superhost', property = 'value'),
+              input(id = 'room_type', property = 'value'),
+              input(id = 'cancellation_policy', property = 'value'),
+              input(id = 'accommodates', property = 'value'),
+              input(id = 'bedroom', property = 'value'),
+              input(id = 'bathroom', property = 'value')),
+  function(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom) {
+    sprintf("The approximate price is: $ %s", round(get_value(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom),2))
+  })
 
 app$callback(
   #update figure of gap-graph-bar
