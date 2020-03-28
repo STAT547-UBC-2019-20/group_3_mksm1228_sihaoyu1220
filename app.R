@@ -214,8 +214,8 @@ superhost_plot <- metadata %>%
 superhost_plot <-ggplotly(superhost_plot)
 superhost_plot <-superhost_plot %>%
                   layout(legend = list(x = .6, y = .9),
-                         title = "Superhost")
-
+                         title = "Superhost"
+                         )
 
 
 # density plot for cancellation policy
