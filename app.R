@@ -180,8 +180,8 @@ div_header <- htmlDiv(list(
   htmlH1('Predictive Pricing Tool for Canadian Airbnb Listings')
   ),
   style = list(
-    fontFamily = "Arial",
-    backgroundColor = '#2855f7', ## COLOUR OF YOUR CHOICE
+    fontFamily = "Tahoma",
+    backgroundColor = '#2C3E50', ## COLOUR OF YOUR CHOICE
     textAlign = 'center',
     color = 'white',
     margin = 5,
@@ -217,13 +217,18 @@ div_sidebar <- htmlDiv(
                'flex-basis' = '20%')
 )
 
+###############################Analysis Tab####################################################
+
 # density plot for superhost
-superhost_plot <- metadata %>%
-                    filter(host_is_superhost==TRUE | host_is_superhost==FALSE) %>% 
+
+superhost_plot <- function(cityname = "Vancouver"){
+            p <- metadata %>%
+                    filter(city == cityname) %>%
+                    filter(host_is_superhost == TRUE | host_is_superhost == FALSE) %>%
                     ggplot(aes(x=price, color=host_is_superhost)) +
                     geom_density(adjust = 3)+
                     theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
-                    xlab("Price(CAD)")+
+                    xlab("Price (CAD) per Day")+
                     ylab("Density")+
                     ggtitle("Status of Host")+
                     scale_color_discrete(name = "Host is a Superhost", 
@@ -232,22 +237,22 @@ superhost_plot <- metadata %>%
                           legend.justification = c("right", "top"),
                           legend.box.just = "right",
                           legend.margin = margin(6, 6, 6, 6))
-                      
-                    
 
-superhost_plot <-ggplotly(superhost_plot)
-superhost_plot <-superhost_plot %>%
+              p  <- ggplotly(p)
+                  
+
+              p <- p %>%
                   layout(legend = list(x = .6, y = .9),
                          title = "Superhost"
                          )
-
+}
 
 # density plot for cancellation policy
 cancellation_plot <- metadata %>%
                       ggplot(aes(x=price, color=cancellation_policy)) +
                       geom_density(adjust = 3) +
                       theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
-                      xlab("Price(CAD)")+
+                      xlab("Price (CAD) per Day")+
                       ylab(" ")+
                       ggtitle("**Cancellation Policy**")
   
@@ -257,24 +262,11 @@ cancellation_plot <- cancellation_plot %>%
                                x = .6, y = .9),
                                title = "Cancellation Policy")
 
-
-city_plot <- metadata %>%
-        ggplot(aes(x=price, color=city)) +
-              geom_density(adjust = 3) +
-              theme(panel.background = element_rect(fill = "white", colour = "grey50"),
-                    plot.title = element_text(hjust = 0.5))+
-              xlab("Price(CAD)")+
-              ylab("Density")+
-              ggtitle("City")+
-              scale_color_discrete(name = "City")
-              
-city_plot <-    ggplotly(city_plot)
-
 room_plot <- metadata %>%
         ggplot(aes(x=price, color=room_type)) +
                 geom_density(adjust = 3) +
                 theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
-                xlab("Price(CAD)")+
+                xlab("Price (CAD) per Day")+
                 ylab(" ")+
                 ggtitle("Room Type")+
                 scale_color_discrete("Room Type")
@@ -291,7 +283,7 @@ accommodate_plot <-  metadata %>%
                       ggplot(aes(x=price, color=as.factor(new_acc))) +
                       geom_density(adjust = 3) +
                       theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
-                      xlab("Price(CAD)")+
+                      xlab("Price (CAD) per Day")+
                       ylab("Density")+
                       ggtitle("Accommodates")+
                       scale_color_discrete(name = "Accommodates")
@@ -309,7 +301,7 @@ bathroom_plot <- metadata %>%
                    ggplot(aes(x=price, color=as.factor(new_bath))) +
                    geom_density(adjust = 3) +
                    theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
-                   xlab("Price(CAD)")+
+                   xlab("Price (CAD) per Day")+
                    ylab(" ")+
                    ggtitle("Bathrooms")+
                    scale_color_discrete("Bathrooms")
@@ -329,7 +321,7 @@ bedroom_plot <- metadata %>%
                   ggplot(aes(x=price, color=as.factor(new_bed))) +
                   geom_density(adjust = 3) +
                   theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
-                  xlab("Price(CAD)")+
+                  xlab("Price (CAD) per Day")+
                   ylab(" ")+
                   
                   ggtitle("Bedrooms")
@@ -346,13 +338,13 @@ tab_style = list(
   'borderBottom'= '1px solid #d6d6d6',
   'padding'= '10px',
   'fontWeight'= 'bold',
-  'fontFamily' = 'Arial'
+  'fontFamily' = 'Tahoma'
 )
 
 tab_selected_style = list(
   'borderTop'= '1px solid #d6d6d6',
   'borderBottom'= '1px solid #d6d6d6',
-  'backgroundColor'= '#2855f7',
+  'backgroundColor'= '#2C3E50',
   'color'= 'white',
   'padding'= '6px'
 )
@@ -366,7 +358,7 @@ tabs <- dccTabs(id="tabs", value='tab-1', children=list(
 
 superhost_graph <- dccGraph(
   id = 'superhost-graph',
-  figure = superhost_plot
+  figure = superhost_plot()
 )
 
 cancellation_graph <- dccGraph(
@@ -374,10 +366,6 @@ cancellation_graph <- dccGraph(
   figure = cancellation_plot
 )
 
-city_graph <- dccGraph(
-  id = 'city-graph',
-  figure = city_plot
-)
 
 room_graph <- dccGraph(
   id = 'room-graph',
@@ -400,21 +388,73 @@ bathroom_graph <- dccGraph(
 )
 
 
+city_dropdown <- dccDropdown(
+  id = 'city-dropdown',
+  options = list(
+    list(label = "Vancouver", value = "Vancouver"),
+    list(label = "Montreal", value = "Montreal"),
+    list(label = "Ottawa", value = "Ottawa"),
+    list(label = "Quebec", value = "Quebec"),
+    list(label = "Toronto", value = "Toronto"),
+    list(label = "Victoria", value = "Victoria"),
+    list(label = "New Brunswick", value = "New Brunswick")
+  )
+)
 
 
 content1 <- htmlDiv(
-  list(
-  htmlIframe(height=30, width='100%', style=list(borderWidth = 0)), #space
-  htmlDiv(superhost_graph, style = list('width'= '33%','justify-content'='space-between')),
-  htmlDiv(cancellation_graph, style = list('width'= '33%','justify-content'='space-between')),
-  htmlDiv(room_graph, style = list('width'= '33%','justify-content'='space-between')), 
-  htmlIframe(height=50, width='100%', style=list(borderWidth = 0)), #space
-  htmlDiv(accommodate_graph, style = list('width'= '33%','justify-content'='space-between')),
-  htmlDiv(bedroom_graph, style = list('width'= '33%','justify-content'='space-between')),
-  htmlDiv(bathroom_graph, style = list('width'= '33%','justify-content'='space-between')),
-  htmlIframe(height=50, width='100%', style=list(borderWidth = 0)), #space
-  htmlDiv(city_graph, style = list('width' = '100%', 'justify-content' = 'space-between'))),
-  style = list('display'='flex','flex-wrap'= 'wrap'))
+  htmlDiv(
+    list(
+      # list(
+      htmlDiv(
+        list(
+          city_dropdown
+        ), style=list('fontFamily' = 'Arial',
+                      'padding' = 10,
+                      'background-color' = '#2C3E50')
+      ),
+      htmlDiv(
+        list(
+      htmlDiv(
+        list(
+            htmlBr(),
+            superhost_graph
+        ), style=list('width'='33%')
+      ),
+      htmlDiv(
+        list(
+            htmlBr(),
+            cancellation_graph
+            ), style=list('width'='33%')
+          ),
+      htmlDiv(
+        list(
+          htmlBr(),
+          room_graph
+        ), style = list('width' = '33%')
+      )), style = list('display' = 'flex', 'justify-content' = 'center', 'background-color' = '#2C3E50')),
+      htmlDiv(
+        list(
+      htmlDiv(
+        list(
+          htmlBr(),
+          accommodate_graph
+        ), style = list('width' = '33%')),
+      htmlDiv(
+        list(
+          htmlBr(),
+          bathroom_graph
+        ), style = list('width' = '33%')),
+      htmlDiv(
+        list(
+          htmlBr(),
+          bedroom_graph
+        ), style = list('width' = '33%')
+      )), style = list('display' = 'flex', 'justify-content' = 'center', 'background-color' = '#2C3E50'))
+  )) 
+)
+
+
 
 
 content2 <-  htmlDiv(
@@ -484,5 +524,13 @@ app$callback(
   function(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom) {
     make_plot(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom)
   })
+
+app$callback(
+  output=list(id = 'superhost-graph', propert = 'figure'),
+  params = list(input(id = 'city-dropdown', property = 'value')),
+  function(pricedensity_city){
+    make_plot(pricedensity_city)
+  }
+)
 
 app$run_server(debug=TRUE)
