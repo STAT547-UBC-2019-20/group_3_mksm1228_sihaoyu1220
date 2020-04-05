@@ -367,6 +367,7 @@ bathroom_plot <- function(cityname = "Vancouver"){
             p <- metadata %>% 
                    filter(!is.na(bathrooms)) %>% 
                    filter(bathrooms != 0) %>%
+                   filter(city == cityname) %>%
                    mutate(new_bath = ifelse(bathrooms>2, "more than 2", round(bathrooms))) %>% 
                    ggplot(aes(x=price, color=as.factor(new_bath))) +
                    geom_density(adjust = 3) +
@@ -374,7 +375,8 @@ bathroom_plot <- function(cityname = "Vancouver"){
                    xlab("Price (CAD) per Day")+
                    ylab(" ")+
                    ggtitle("Bathrooms")+
-                   scale_color_discrete("Bathrooms")
+                   scale_color_discrete("Bathrooms")+
+                   theme(legend.title = element_blank())
           p <- ggplotly(p)
           p <- p %>%
                  layout(legend = list(
@@ -480,12 +482,14 @@ city_dropdown <- dccDropdown(
 content1 <- htmlDiv(
   htmlDiv(
     list(
+      htmlP("Please select a city from the dropdown below. The plots will update based on the city chosen."),
       htmlDiv(
         list(
           city_dropdown
         ), style=list('fontFamily' = 'Arial',
                       'padding' = 10,
-                      'background-color' = '#2C3E50')
+                      'background-color' = '#2C3E50'
+                      )
       ),
       htmlDiv(
         list(
@@ -525,7 +529,7 @@ content1 <- htmlDiv(
                     bedroom_graph
                    ), style = list('width' = '33%')
             )), style = list('display' = 'flex', 'justify-content' = 'center', 'background-color' = '#2C3E50'))
-  )) 
+  ), style = list('fontFamily' = 'Arial')) 
 )
 
 
