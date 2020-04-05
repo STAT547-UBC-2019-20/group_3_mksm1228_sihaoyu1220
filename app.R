@@ -124,10 +124,8 @@ bathroomDropdown <- dccDropdown(
   value = 1
 )
 
-
 make_plot <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entire home/apt", 
                       policy = "flexible", acc = 1, bedroom = 1, bathroom = 1){
-
   # gets the label matching the column value
   city_label <- cityKey$label[cityKey$value==cityname]
   superhost_label <- superhostKey$label[superhostKey$value==superhost]
@@ -137,22 +135,36 @@ make_plot <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entir
   bedroom_label <- bedroomKey$label[bedroomKey$value==bedroom]
   bathroom_label <- bedroomKey$label[bathroomKey$value==bathroom]
   # make plot
-    p <- metadata %>%
+   data <- metadata %>%
       filter(!is.na(price)) %>% 
       filter(city==cityname, host_is_superhost==superhost, room_type == roomtype,
              cancellation_policy==policy, new_acc == acc, new_bed == bedroom,
-             new_bath==bathroom) %>% 
-      ggplot(aes(x=price)) +
+             new_bath==bathroom) 
+   if (nrow(data)>=1){
+   p  <- data %>% 
+     ggplot(aes(x=price)) +
       geom_histogram()+
       theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
       xlim(20, 250)
-  
-  ggplotly(p,  width = 1000, height = 700, tooltip =FALSE)
+   }else{
+     text = paste("No such listing :(")
+     p<-ggplot() + 
+       annotate("text", x = 4, y = 25, size=8, label = text) + 
+       theme_bw() +
+       theme(panel.grid.major=element_blank(),
+             panel.grid.minor=element_blank(),axis.title.x=element_blank(),
+             axis.text.x=element_blank(),
+             axis.ticks.x=element_blank(),axis.title.y=element_blank(),
+             axis.text.y =element_blank(),
+             axis.ticks.y=element_blank(),panel.grid=element_blank(), 
+             panel.background=element_rect(fill = "transparent",colour = NA),
+             panel.border=element_blank())
+   }
+   ggplotly(p,  width = 1000, height = 700, tooltip =FALSE)
 }
 
 get_value <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entire home/apt", 
                       policy = "flexible", acc = 1, bedroom = 1, bathroom = 1){
-  
   # gets the label matching the column value
   city_label <- cityKey$label[cityKey$value==cityname]
   superhost_label <- superhostKey$label[superhostKey$value==superhost]
@@ -167,7 +179,49 @@ get_value <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entir
     filter(city==cityname, host_is_superhost==superhost, room_type == roomtype,
            cancellation_policy==policy, new_acc == acc, new_bed == bedroom,
            new_bath==bathroom)
-  value<-mean(dat$price)
+  value <- mean(dat$price)
+  if (is.na(value)){
+  # cityprice <- -14.695
+  # if (cityname == "New Brunswick"){
+  #   cityprice <- 0
+  # } else if (cityname == "Quebec"){
+  #   cityprice <- -3.655
+  # } else if (cityname == "Ottawa"){
+  #   cityprice <- -6.31
+  # } else if (cityname == "Toronto"){
+  #   cityprice <- 18.179
+  # } else if (cityname == "Vancouver"){
+  #   cityprice <- 35.634
+  # } else if (cityname == "Victoria"){
+  #   cityprice <- 19.07
+  # }
+  # 
+  # superhostprice <- 2.604
+  # if (superhost == "FALSE"){
+  #   superhostprice <- 0
+  # }
+  # 
+  # roomtypeprice <- 0
+  # if (roomtype == "Hotel room"){
+  #   roomtypeprice <- 8.142
+  # } else if (roomtype == "Private room"){
+  #   roomtypeprice <- -45.299
+  # }else if (roomtype == "Shared room"){
+  #   roomtypeprice <- -64.408
+  # }
+  # 
+  # policyprice <- 0
+  # if (policy == "moderate"){
+  #   policytypeprice <- -2.398
+  # } else if (policy == "strict"){
+  #   policytypeprice <- 4.076
+  # } else if (policy == "super strict"){
+  #   policytypeprice <- 33.611
+  # }
+  # 
+  # value<-round(cityprice+superhostprice+roomtypeprice+policyprice+acc*6.997+bathroom*10.316+bedroom*8.956,2)
+    value <- 0
+  }
   return(value)
 }
 
@@ -210,11 +264,13 @@ div_sidebar <- htmlDiv(
        htmlBr(),
        bathroomDropdown,
        htmlBr(),
-       htmlDiv(id='my-div')
+       htmlDiv(id='my-div'),
+       htmlBr(),
+       htmlButton('Reset Button', id='button')
   ),
   style = list('background-color' = '#BBCFF1',
                'padding' = 10,
-               'flex-basis' = '20%')
+               'flex-basis' = '25%')
 )
 
 ###############################Analysis Tab####################################################
@@ -416,7 +472,8 @@ city_dropdown <- dccDropdown(
     list(label = "Toronto", value = "Toronto"),
     list(label = "Victoria", value = "Victoria"),
     list(label = "New Brunswick", value = "New Brunswick")
-  )
+  ),
+  value = "Vancouver"
 )
 
 
@@ -523,7 +580,12 @@ app$callback(
               input(id = 'bedroom', property = 'value'),
               input(id = 'bathroom', property = 'value')),
   function(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom) {
-    sprintf("The approximate price is: $ %s", round(get_value(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom),2))
+    price <- round(get_value(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom),2)
+    if (price > 0){
+    sprintf("The approximate price is: $ %s", price)
+    } else {
+    glue::glue("Sorry, there is no such listing exists in ", cityname)
+    }
   })
 
 app$callback(
@@ -536,9 +598,10 @@ app$callback(
               input(id = 'cancellation_policy', property = 'value'),
               input(id = 'accommodates', property = 'value'),
               input(id = 'bedroom', property = 'value'),
-              input(id = 'bathroom', property = 'value')),
+              input(id = 'bathroom', property = 'value'),
+              input(id = "button", property = "n_clicks")),
   #this translates your list of params into function arguments
-  function(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom) {
+  function(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom,button) {
     make_plot(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom)
   })
 
@@ -595,5 +658,70 @@ app$callback(
     bathroom_plot(pricedensity_city)
   }
 )
+
+app$callback(
+  #update bathroom graph
+  output=list(id = 'bedroom', property = 'value'),
+  params = list(input(id = 'button', property  = 'n_clicks')),
+  function(button){
+    value = 1
+  }
+)
+
+app$callback(
+  #update bathroom graph
+  output=list(id = 'accommodates', property = 'value'),
+  params = list(input(id = 'button', property  = 'n_clicks')),
+  function(button){
+    value = 2
+  }
+)
+
+app$callback(
+  #update bathroom graph
+  output=list(id = 'bathroom', property = 'value'),
+  params = list(input(id = 'button', property  = 'n_clicks')),
+  function(button){
+    value = 1
+  }
+)
+
+app$callback(
+  #update bathroom graph
+  output=list(id = 'city', property = 'value'),
+  params = list(input(id = 'button', property  = 'n_clicks')),
+  function(button){
+    value = "Montreal"
+  }
+)
+
+app$callback(
+  #update bathroom graph
+  output=list(id = 'superhost', property = 'value'),
+  params = list(input(id = 'button', property  = 'n_clicks')),
+  function(button){
+    value = "TRUE"
+  }
+)
+
+app$callback(
+  #update bathroom graph
+  output=list(id = 'room_type', property = 'value'),
+  params = list(input(id = 'button', property  = 'n_clicks')),
+  function(button){
+    value = "Entire home/apt"
+  }
+)
+
+app$callback(
+  #update bathroom graph
+  output=list(id = 'cancellation_policy', property = 'value'),
+  params = list(input(id = 'button', property  = 'n_clicks')),
+  function(button){
+    value = "flexible"
+  }
+)
+
+
 
 app$run_server()
