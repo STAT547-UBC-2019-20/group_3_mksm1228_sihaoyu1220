@@ -236,7 +236,8 @@ superhost_plot <- function(cityname = "Vancouver"){
                     theme(legend.position = c(.95, .95),
                           legend.justification = c("right", "top"),
                           legend.box.just = "right",
-                          legend.margin = margin(6, 6, 6, 6))
+                          legend.margin = margin(6, 6, 6, 6),
+                          legend.title = element_blank())
 
               p  <- ggplotly(p)
                   
@@ -248,37 +249,48 @@ superhost_plot <- function(cityname = "Vancouver"){
 }
 
 # density plot for cancellation policy
-cancellation_plot <- metadata %>%
+cancellation_plot <- function(cityname = "Vancouver"){
+                p <- metadata %>%
+                      filter(city == cityname) %>%
                       ggplot(aes(x=price, color=cancellation_policy)) +
                       geom_density(adjust = 3) +
                       theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
                       xlab("Price (CAD) per Day")+
                       ylab(" ")+
-                      ggtitle("**Cancellation Policy**")
+                      ggtitle("Cancellation Policy")+
+                      theme(legend.title = element_blank())
   
-cancellation_plot <- ggplotly(cancellation_plot)
-cancellation_plot <- cancellation_plot %>%
+                p <- ggplotly(p)
+                p <- p %>%
                         layout(legend = list(
-                               x = .6, y = .9),
+                               x = .9, y = .9),
                                title = "Cancellation Policy")
 
-room_plot <- metadata %>%
-        ggplot(aes(x=price, color=room_type)) +
+}
+room_plot <- function(cityname = "Vancouver"){
+      p <- metadata %>%
+           filter(city == cityname) %>%
+           ggplot(aes(x=price, color=room_type)) +
                 geom_density(adjust = 3) +
                 theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
                 xlab("Price (CAD) per Day")+
                 ylab(" ")+
                 ggtitle("Room Type")+
-                scale_color_discrete("Room Type")
-room_plot <-  ggplotly(room_plot) 
-room_plot <- room_plot %>%
+                scale_color_discrete("Room Type")+
+                theme(legend.title = element_blank())
+      p <- ggplotly(p) 
+      p <- p %>%
               layout(legend = list(
               x = .5, y = .9),
               title = "Room Type")
 
+}
 
-accommodate_plot <-  metadata %>% 
+
+accommodate_plot <- function(cityname = "Vancouver"){
+              p <- metadata %>% 
                       filter(!is.na(accommodates)) %>% 
+                      filter(city == cityname) %>%
                       mutate(new_acc = ifelse(accommodates>=6, "more than 5", accommodates)) %>% 
                       ggplot(aes(x=price, color=as.factor(new_acc))) +
                       geom_density(adjust = 3) +
@@ -286,15 +298,17 @@ accommodate_plot <-  metadata %>%
                       xlab("Price (CAD) per Day")+
                       ylab("Density")+
                       ggtitle("Accommodates")+
-                      scale_color_discrete(name = "Accommodates")
-accommodate_plot <- ggplotly(accommodate_plot)
-accommodate_plot <- accommodate_plot %>%
+                      scale_color_discrete(name = "Accommodates")+
+                      theme(legend.title = element_blank())
+              p <- ggplotly(p)
+              p <- p %>%
                     layout(legend = list(
                       x = .6, y = .9),
                       title = "Accommodates")
+}
 
-
-bathroom_plot <- metadata %>% 
+bathroom_plot <- function(cityname = "Vancouver"){
+            p <- metadata %>% 
                    filter(!is.na(bathrooms)) %>% 
                    filter(bathrooms != 0) %>%
                    mutate(new_bath = ifelse(bathrooms>2, "more than 2", round(bathrooms))) %>% 
@@ -305,17 +319,19 @@ bathroom_plot <- metadata %>%
                    ylab(" ")+
                    ggtitle("Bathrooms")+
                    scale_color_discrete("Bathrooms")
-bathroom_plot <- ggplotly(bathroom_plot)
-bathroom_plot <- bathroom_plot %>%
+          p <- ggplotly(p)
+          p <- p %>%
                  layout(legend = list(
                     x = .6, y = .9),
                     title = "Bathrooms"
                     )
-
+}
                   
   
-bedroom_plot <- metadata %>% 
+bedroom_plot <- function(cityname = "Vancouver"){
+           p <- metadata %>% 
                   filter(!is.na(bedrooms)) %>% 
+                  filter(city == cityname) %>%
                   filter(bedrooms != 0) %>%
                   mutate(new_bed = ifelse(bedrooms>2, "more than 2", round(bedrooms))) %>% 
                   ggplot(aes(x=price, color=as.factor(new_bed))) +
@@ -323,13 +339,15 @@ bedroom_plot <- metadata %>%
                   theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
                   xlab("Price (CAD) per Day")+
                   ylab(" ")+
+                  ggtitle("Bedrooms")+
+                  theme(legend.title = element_blank())
                   
-                  ggtitle("Bedrooms")
-bedroom_plot <- ggplotly(bedroom_plot) 
-bedroom_plot <- bedroom_plot %>%
+          p <- ggplotly(p) 
+          p <- p %>%
                 layout(legend = list(
                   x = .6, y = .9),
                   title = "Bedrooms")
+}
 
 tabs_styles = list(
   'height'= '66px'
@@ -363,28 +381,28 @@ superhost_graph <- dccGraph(
 
 cancellation_graph <- dccGraph(
   id = 'cancellation-graph',
-  figure = cancellation_plot
+  figure = cancellation_plot()
 )
 
 
 room_graph <- dccGraph(
   id = 'room-graph',
-  figure = room_plot
+  figure = room_plot()
 )
 
 accommodate_graph <- dccGraph(
   id = 'accommodate-graph',
-  figure = accommodate_plot
+  figure = accommodate_plot()
 )
 
 bedroom_graph <- dccGraph(
   id = 'bedroom-graph',
-  figure = bedroom_plot
+  figure = bedroom_plot()
 )
 
 bathroom_graph <- dccGraph(
   id = 'bathroom-graph',
-  figure = bathroom_plot
+  figure = bathroom_plot()
 )
 
 
@@ -405,7 +423,6 @@ city_dropdown <- dccDropdown(
 content1 <- htmlDiv(
   htmlDiv(
     list(
-      # list(
       htmlDiv(
         list(
           city_dropdown
@@ -415,42 +432,42 @@ content1 <- htmlDiv(
       ),
       htmlDiv(
         list(
-      htmlDiv(
-        list(
-            htmlBr(),
-            superhost_graph
+          htmlDiv(
+            list(
+                 htmlBr(),
+                 superhost_graph
         ), style=list('width'='33%')
       ),
       htmlDiv(
         list(
-            htmlBr(),
-            cancellation_graph
+             htmlBr(),
+             cancellation_graph
             ), style=list('width'='33%')
           ),
       htmlDiv(
         list(
-          htmlBr(),
-          room_graph
+             htmlBr(),
+             room_graph
         ), style = list('width' = '33%')
       )), style = list('display' = 'flex', 'justify-content' = 'center', 'background-color' = '#2C3E50')),
       htmlDiv(
         list(
-      htmlDiv(
-        list(
-          htmlBr(),
-          accommodate_graph
-        ), style = list('width' = '33%')),
-      htmlDiv(
-        list(
-          htmlBr(),
-          bathroom_graph
-        ), style = list('width' = '33%')),
-      htmlDiv(
-        list(
-          htmlBr(),
-          bedroom_graph
-        ), style = list('width' = '33%')
-      )), style = list('display' = 'flex', 'justify-content' = 'center', 'background-color' = '#2C3E50'))
+            htmlDiv(
+              list(
+                   htmlBr(),
+                   accommodate_graph
+                  ), style = list('width' = '33%')),
+            htmlDiv(
+               list(
+                    htmlBr(),
+                    bathroom_graph
+                   ), style = list('width' = '33%')),
+            htmlDiv(
+               list(
+                    htmlBr(),
+                    bedroom_graph
+                   ), style = list('width' = '33%')
+            )), style = list('display' = 'flex', 'justify-content' = 'center', 'background-color' = '#2C3E50'))
   )) 
 )
 
@@ -526,11 +543,57 @@ app$callback(
   })
 
 app$callback(
+  #update superhost graph
   output=list(id = 'superhost-graph', propert = 'figure'),
   params = list(input(id = 'city-dropdown', property = 'value')),
   function(pricedensity_city){
-    make_plot(pricedensity_city)
+    superhost_plot(pricedensity_city)
   }
 )
 
-app$run_server(debug=TRUE)
+app$callback(
+  #update cancellation graph
+  output=list(id = 'cancellation-graph', propert = 'figure'),
+  params = list(input(id = 'city-dropdown', property = 'value')),
+  function(pricedensity_city){
+    cancellation_plot(pricedensity_city)
+  }
+)
+
+app$callback(
+  #update room graph
+  output=list(id = 'room-graph', propert = 'figure'),
+  params = list(input(id = 'city-dropdown', property = 'value')),
+  function(pricedensity_city){
+    room_plot(pricedensity_city)
+  }
+)
+
+app$callback(
+  #update accommodates graph
+  output=list(id = 'accommodate-graph', propert = 'figure'),
+  params = list(input(id = 'city-dropdown', property = 'value')),
+  function(pricedensity_city){
+    accommodate_plot(pricedensity_city)
+  }
+)
+
+app$callback(
+  #update bedroom graph
+  output=list(id = 'bedroom-graph', propert = 'figure'),
+  params = list(input(id = 'city-dropdown', property = 'value')),
+  function(pricedensity_city){
+    bedroom_plot(pricedensity_city)
+  }
+)
+
+app$callback(
+  #update bathroom graph
+  output=list(id = 'bathroom-graph', propert = 'figure'),
+  params = list(input(id = 'city-dropdown', property = 'value')),
+  function(pricedensity_city){
+    bathroom_plot(pricedensity_city)
+  }
+)
+
+app$run_server()
