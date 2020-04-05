@@ -407,31 +407,9 @@ bedroom_plot <- function(cityname = "Vancouver"){
                   title = "Bedrooms")
 }
 
-tabs_styles = list(
-  'height'= '66px'
-)
-tab_style = list(
-  'borderBottom'= '1px solid #d6d6d6',
-  'padding'= '10px',
-  'fontWeight'= 'bold',
-  'fontFamily' = 'Tahoma'
-)
-
-tab_selected_style = list(
-  'borderTop'= '1px solid #d6d6d6',
-  'borderBottom'= '1px solid #d6d6d6',
-  'backgroundColor'= '#2C3E50',
-  'color'= 'white',
-  'padding'= '6px'
-)
 
 
-tabs <- dccTabs(id="tabs", value='tab-1', children=list(
-    dccTab(label='Analysis', value='tab-1', style = tab_style, selected_style = tab_selected_style),
-    dccTab(label='Play', value='tab-2', style = tab_style, selected_style = tab_selected_style)
-    ), style = tab_style)
-
-
+######################################Analysis graphs#######################################
 superhost_graph <- dccGraph(
   id = 'superhost-graph',
   figure = superhost_plot()
@@ -478,6 +456,68 @@ city_dropdown <- dccDropdown(
   value = "Vancouver"
 )
 
+##############################Map#############################################
+
+map_tab <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entire home/apt", 
+                    policy = "flexible", acc = 1, bedroom = 1, bathroom = 1){
+  
+  city_label <- cityKey$label[cityKey$value==cityname]
+  
+  metadata <- metadata %>%
+    filter(city==cityname, host_is_superhost==superhost, room_type == roomtype,
+           cancellation_policy==policy, new_acc == acc, new_bed == bedroom,
+           new_bath==bathroom)
+  
+  
+  map_data <- metadata %>%
+    plot_ly(
+      lat = ~latitude,
+      lon = ~longitude,
+      color = ~price,
+      type = 'scattermapbox',
+      size = 10
+    )
+  
+  
+  map_data <- map_data %>%
+    layout(title = paste0(city_label, ' Airbnb Listings'),
+           mapbox = list(
+             style = 'open-street-map',
+             zoom = 10.5,
+             center = list(lon = ~median(longitude), lat = ~median(latitude))))
+  map_data
+}
+
+map_plot = dccGraph(id = 'map', figure = map_tab())
+################################Tabs################################################
+
+tabs_styles = list(
+  'height'= '66px'
+)
+tab_style = list(
+  'borderBottom'= '1px solid #d6d6d6',
+  'padding'= '10px',
+  'fontWeight'= 'bold',
+  'fontFamily' = 'Tahoma'
+)
+
+tab_selected_style = list(
+  'borderTop'= '1px solid #d6d6d6',
+  'borderBottom'= '1px solid #d6d6d6',
+  'backgroundColor'= '#2C3E50',
+  'color'= 'white',
+  'padding'= '6px'
+)
+
+
+tabs <- dccTabs(id="tabs", value='tab-1', children=list(
+  dccTab(label='Analysis', value='tab-1', style = tab_style, selected_style = tab_selected_style),
+  dccTab(label='Play', value='tab-2', style = tab_style, selected_style = tab_selected_style),
+  dccTab(label='Map', value='tab-3', style = tab_style, selected_style = tab_selected_style)
+), style = tab_style)
+
+
+################################Contents in each tab###################################
 
 content1 <- htmlDiv(
   htmlDiv(
@@ -543,6 +583,15 @@ content2 <-  htmlDiv(
                   'justify-content'='center')
 )
 
+
+content3 <- htmlDiv(
+  list(
+    div_sidebar,
+    htmlBr(),
+    map_plot
+  ), style = list('display' = 'flex',
+                  'justify-content'='center')
+)
 description <- htmlDiv(
                   list(dccMarkdown("The data was sourced from publicly available information from the official Airbnb site. It has been analyzed, cleaned and aggregated by [Inside Airbnb](http://insideairbnb.com/get-the-data.html). This app currently has two features which are termed 
                       Analysis and Play. The purpose of this dashboard is to help you understand
@@ -570,7 +619,10 @@ app$callback(output('tabs-content', 'children'),
                    }
                else if(tab == 'tab-2'){
                  return(content2)
-                 }
+               }
+               else if(tab == 'tab-3'){
+                 return(content3)
+               }
              }
 )
 ###############################app callback#############################
@@ -725,6 +777,21 @@ app$callback(
     value = "flexible"
   }
 )
+
+app$callback(
+  #update map
+  output=list(id = 'map', property = 'figure'),
+  params=list(input(id = 'city', property='value'),
+              input(id = 'superhost', property = 'value'),
+              input(id = 'room_type', property = 'value'),
+              input(id = 'cancellation_policy', property = 'value'),
+              input(id = 'accommodates', property = 'value'),
+              input(id = 'bedroom', property = 'value'),
+              input(id = 'bathroom', property = 'value')),
+  #this translates your list of params into function arguments
+  function(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom) {
+    map_tab(cityname, superhost, roomtype, cancellation_policy,acc, bedroom, bathroom)
+  })
 
 
 
