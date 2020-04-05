@@ -250,11 +250,12 @@ div_sidebar <- htmlDiv(
        htmlBr(),
        bathroomDropdown,
        htmlBr(),
-       htmlDiv(id='my-div')
+       htmlDiv(id='my-div'),
+       htmlButton('Reset Button', id='button')
   ),
   style = list('background-color' = '#BBCFF1',
                'padding' = 10,
-               'flex-basis' = '20%')
+               'flex-basis' = '25%')
 )
 
 ###############################Analysis Tab####################################################
@@ -456,7 +457,8 @@ city_dropdown <- dccDropdown(
     list(label = "Toronto", value = "Toronto"),
     list(label = "Victoria", value = "Victoria"),
     list(label = "New Brunswick", value = "New Brunswick")
-  )
+  ),
+  value = "Vancouver"
 )
 
 
@@ -515,9 +517,8 @@ content1 <- htmlDiv(
 
 
 content2 <-  htmlDiv(
-  list( htmlDiv(list(
-    htmlButton('Reset Button', id='button'),
-    div_sidebar)),
+  list(
+    div_sidebar,
     graph
   ), style = list('display' = 'flex',
                   'justify-content'='center')
@@ -564,7 +565,12 @@ app$callback(
               input(id = 'bedroom', property = 'value'),
               input(id = 'bathroom', property = 'value')),
   function(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom) {
-    sprintf("The approximate price is: $ %s", round(get_value(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom),2))
+    price <- round(get_value(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom),2)
+    if (price > 0){
+    sprintf("The approximate price is: $ %s", price)
+    } else {
+    glue::glue("Sorry, there is no such listing exists in ", cityname)
+    }
   })
 
 app$callback(
@@ -577,9 +583,10 @@ app$callback(
               input(id = 'cancellation_policy', property = 'value'),
               input(id = 'accommodates', property = 'value'),
               input(id = 'bedroom', property = 'value'),
-              input(id = 'bathroom', property = 'value')),
+              input(id = 'bathroom', property = 'value'),
+              input(id = "button", property = "n_clicks")),
   #this translates your list of params into function arguments
-  function(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom) {
+  function(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom,button) {
     make_plot(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom)
   })
 
@@ -636,5 +643,70 @@ app$callback(
     bathroom_plot(pricedensity_city)
   }
 )
+
+app$callback(
+  #update bathroom graph
+  output=list(id = 'bedroom', property = 'value'),
+  params = list(input(id = 'button', property  = 'n_clicks')),
+  function(button){
+    value = 1
+  }
+)
+
+app$callback(
+  #update bathroom graph
+  output=list(id = 'accommodates', property = 'value'),
+  params = list(input(id = 'button', property  = 'n_clicks')),
+  function(button){
+    value = 2
+  }
+)
+
+app$callback(
+  #update bathroom graph
+  output=list(id = 'bathroom', property = 'value'),
+  params = list(input(id = 'button', property  = 'n_clicks')),
+  function(button){
+    value = 1
+  }
+)
+
+app$callback(
+  #update bathroom graph
+  output=list(id = 'city', property = 'value'),
+  params = list(input(id = 'button', property  = 'n_clicks')),
+  function(button){
+    value = "Montreal"
+  }
+)
+
+app$callback(
+  #update bathroom graph
+  output=list(id = 'superhost', property = 'value'),
+  params = list(input(id = 'button', property  = 'n_clicks')),
+  function(button){
+    value = "TRUE"
+  }
+)
+
+app$callback(
+  #update bathroom graph
+  output=list(id = 'room_type', property = 'value'),
+  params = list(input(id = 'button', property  = 'n_clicks')),
+  function(button){
+    value = "Entire home/apt"
+  }
+)
+
+app$callback(
+  #update bathroom graph
+  output=list(id = 'cancellation_policy', property = 'value'),
+  params = list(input(id = 'button', property  = 'n_clicks')),
+  function(button){
+    value = "flexible"
+  }
+)
+
+
 
 app$run_server()
