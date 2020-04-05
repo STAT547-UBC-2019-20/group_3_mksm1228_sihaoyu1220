@@ -124,7 +124,6 @@ bathroomDropdown <- dccDropdown(
   value = 1
 )
 
-
 make_plot <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entire home/apt", 
                       policy = "flexible", acc = 1, bedroom = 1, bathroom = 1){
   # gets the label matching the column value
@@ -136,17 +135,32 @@ make_plot <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entir
   bedroom_label <- bedroomKey$label[bedroomKey$value==bedroom]
   bathroom_label <- bedroomKey$label[bathroomKey$value==bathroom]
   # make plot
-    p <- metadata %>%
+   data <- metadata %>%
       filter(!is.na(price)) %>% 
       filter(city==cityname, host_is_superhost==superhost, room_type == roomtype,
              cancellation_policy==policy, new_acc == acc, new_bed == bedroom,
-             new_bath==bathroom) %>% 
-      ggplot(aes(x=price)) +
+             new_bath==bathroom) 
+   if (nrow(data)>=1){
+   p  <- data %>% 
+     ggplot(aes(x=price)) +
       geom_histogram()+
       theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
       xlim(20, 250)
-  
-  ggplotly(p,  width = 1000, height = 700, tooltip =FALSE)
+   }else{
+     text = paste("No such listing :(")
+     p<-ggplot() + 
+       annotate("text", x = 4, y = 25, size=8, label = text) + 
+       theme_bw() +
+       theme(panel.grid.major=element_blank(),
+             panel.grid.minor=element_blank(),axis.title.x=element_blank(),
+             axis.text.x=element_blank(),
+             axis.ticks.x=element_blank(),axis.title.y=element_blank(),
+             axis.text.y =element_blank(),
+             axis.ticks.y=element_blank(),panel.grid=element_blank(), 
+             panel.background=element_rect(fill = "transparent",colour = NA),
+             panel.border=element_blank())
+   }
+   ggplotly(p,  width = 1000, height = 700, tooltip =FALSE)
 }
 
 get_value <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entire home/apt", 
@@ -251,6 +265,7 @@ div_sidebar <- htmlDiv(
        bathroomDropdown,
        htmlBr(),
        htmlDiv(id='my-div'),
+       htmlBr(),
        htmlButton('Reset Button', id='button')
   ),
   style = list('background-color' = '#BBCFF1',
