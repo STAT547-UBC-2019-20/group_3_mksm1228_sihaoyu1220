@@ -127,7 +127,6 @@ bathroomDropdown <- dccDropdown(
 
 make_plot <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entire home/apt", 
                       policy = "flexible", acc = 1, bedroom = 1, bathroom = 1){
-
   # gets the label matching the column value
   city_label <- cityKey$label[cityKey$value==cityname]
   superhost_label <- superhostKey$label[superhostKey$value==superhost]
@@ -152,7 +151,6 @@ make_plot <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entir
 
 get_value <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entire home/apt", 
                       policy = "flexible", acc = 1, bedroom = 1, bathroom = 1){
-  
   # gets the label matching the column value
   city_label <- cityKey$label[cityKey$value==cityname]
   superhost_label <- superhostKey$label[superhostKey$value==superhost]
@@ -167,7 +165,49 @@ get_value <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entir
     filter(city==cityname, host_is_superhost==superhost, room_type == roomtype,
            cancellation_policy==policy, new_acc == acc, new_bed == bedroom,
            new_bath==bathroom)
-  value<-mean(dat$price)
+  value <- mean(dat$price)
+  if (is.na(value)){
+  # cityprice <- -14.695
+  # if (cityname == "New Brunswick"){
+  #   cityprice <- 0
+  # } else if (cityname == "Quebec"){
+  #   cityprice <- -3.655
+  # } else if (cityname == "Ottawa"){
+  #   cityprice <- -6.31
+  # } else if (cityname == "Toronto"){
+  #   cityprice <- 18.179
+  # } else if (cityname == "Vancouver"){
+  #   cityprice <- 35.634
+  # } else if (cityname == "Victoria"){
+  #   cityprice <- 19.07
+  # }
+  # 
+  # superhostprice <- 2.604
+  # if (superhost == "FALSE"){
+  #   superhostprice <- 0
+  # }
+  # 
+  # roomtypeprice <- 0
+  # if (roomtype == "Hotel room"){
+  #   roomtypeprice <- 8.142
+  # } else if (roomtype == "Private room"){
+  #   roomtypeprice <- -45.299
+  # }else if (roomtype == "Shared room"){
+  #   roomtypeprice <- -64.408
+  # }
+  # 
+  # policyprice <- 0
+  # if (policy == "moderate"){
+  #   policytypeprice <- -2.398
+  # } else if (policy == "strict"){
+  #   policytypeprice <- 4.076
+  # } else if (policy == "super strict"){
+  #   policytypeprice <- 33.611
+  # }
+  # 
+  # value<-round(cityprice+superhostprice+roomtypeprice+policyprice+acc*6.997+bathroom*10.316+bedroom*8.956,2)
+    value <- 0
+  }
   return(value)
 }
 
@@ -458,8 +498,9 @@ content1 <- htmlDiv(
 
 
 content2 <-  htmlDiv(
-  list(
-    div_sidebar,
+  list( htmlDiv(list(
+    htmlButton('Reset Button', id='button'),
+    div_sidebar)),
     graph
   ), style = list('display' = 'flex',
                   'justify-content'='center')
