@@ -30,7 +30,7 @@ main <- function(path, filename) {
   names(list_of_data) <- sub("_raw.csv", "", files)
 
   output <- list_of_data %>% 
-    map(function(x) x %>% select(id, host_id, host_is_superhost, city, property_type, room_type, accommodates, bathrooms, bedrooms, beds, cancellation_policy, price, latitude, longitude)) %>% 
+    map(function(x) x %>% select(id, host_id, host_is_superhost, city, property_type, room_type, accommodates, bathrooms, bedrooms, beds, cancellation_policy, price, latitude, longitude, neighbourhood_cleansed)) %>% 
     map(function(x) x %>% mutate(city = as.character(names(which.max(table(x$city))))))
   output$`new-brunswick`$city <- "New Brunswick"
 

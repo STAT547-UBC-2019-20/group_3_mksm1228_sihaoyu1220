@@ -17,6 +17,7 @@ suppressPackageStartupMessages(library(plotly))
 suppressPackageStartupMessages(library(here))
 suppressPackageStartupMessages(library(tidyverse))
 library(shiny)
+library(RColorBrewer)
 
 app <- Dash$new()
 
@@ -147,7 +148,7 @@ make_plot <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entir
       theme(panel.background = element_rect(fill = "white", colour = "grey50"))+
       xlim(20, 250)
    }else{
-     text = paste("No such listing :(")
+     text = paste("No such listing in ", cityname, " :(")
      p<-ggplot() + 
        annotate("text", x = 4, y = 25, size=8, label = text) + 
        theme_bw() +
@@ -468,23 +469,41 @@ map_tab <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entire 
            cancellation_policy==policy, new_acc == acc, new_bed == bedroom,
            new_bath==bathroom)
   
-  
+  if (nrow(metadata)>0){
   map_data <- metadata %>%
     plot_ly(
       lat = ~latitude,
       lon = ~longitude,
       color = ~price,
       type = 'scattermapbox',
-      size = 10
-    )
+      size = 10, width = 1000, height = 700,
+      colors = 'RdYlBu',
+      alpha = 1,
+      text = ~paste('</br> Price: $', price,
+                    '</br> Neighbourhood: ', neighbourhood_cleansed), hoverinfo = "text")
   
   
   map_data <- map_data %>%
     layout(title = paste0(city_label, ' Airbnb Listings'),
            mapbox = list(
-             style = 'open-street-map',
+             style = 'carto-positron',
              zoom = 10.5,
              center = list(lon = ~median(longitude), lat = ~median(latitude))))
+  } else {
+    text = paste("No such listing in ", cityname, " :(")
+    p<-ggplot() + 
+      annotate("text", x = 4, y = 25, size=8, label = text) + 
+      theme_bw() +
+      theme(panel.grid.major=element_blank(),
+            panel.grid.minor=element_blank(),axis.title.x=element_blank(),
+            axis.text.x=element_blank(),
+            axis.ticks.x=element_blank(),axis.title.y=element_blank(),
+            axis.text.y =element_blank(),
+            axis.ticks.y=element_blank(),panel.grid=element_blank(), 
+            panel.background=element_rect(fill = "transparent",colour = NA),
+            panel.border=element_blank())
+    map_data <- ggplotly(p, width = 1000, height = 700, tooltip =FALSE)
+  }
   map_data
 }
 
