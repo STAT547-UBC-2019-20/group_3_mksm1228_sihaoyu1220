@@ -16,8 +16,8 @@ suppressPackageStartupMessages(library(ggplot2))
 suppressPackageStartupMessages(library(plotly))
 suppressPackageStartupMessages(library(here))
 suppressPackageStartupMessages(library(tidyverse))
-library(shiny)
-library(RColorBrewer)
+suppressPackageStartupMessages(library(shiny))
+suppressPackageStartupMessages(library(RColorBrewer))
 
 app <- Dash$new()
 
@@ -816,4 +816,5 @@ app$callback(
 
 
 
-app$run_server()
+#app$run_server()
+app$run_server(host = "0.0.0.0", port = Sys.getenv('PORT', 8050))
