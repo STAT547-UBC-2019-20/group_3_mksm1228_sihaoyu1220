@@ -524,7 +524,6 @@ map_tab <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entire 
             panel.border=element_blank())
     map_data <- ggplotly(p, tooltip =FALSE)
   }
-  map_data
 }
 
 map_plot = dccGraph(id = 'map', figure = map_tab(),style= list('width'='75%'))
