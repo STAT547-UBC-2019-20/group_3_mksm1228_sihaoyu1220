@@ -12,9 +12,11 @@ options(repos=r)
 install.packages('remotes')
 
 remotes::install_github('plotly/dashR', upgrade=TRUE)
+remotes::install_version("shiny", upgrade=TRUE)
+
 install.packages('tidyverse')
 install.packages('plotly')
 install.packages('here')
-install.packages('shiny')
+#install.packages('shiny')
 install.packages('RColorBrewer')
 
