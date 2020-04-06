@@ -1,0 +1,9 @@
+{
+  "name": "Deploying Dash App of Predictive Modelling of Canadian Airbnb Listings",
+  "description": "Predictive Modelling of Canadian Airbnb Listings.",
+  "keywords": [
+    "heroku",
+    "R deployment",
+    "Dash R"
+],
+}
