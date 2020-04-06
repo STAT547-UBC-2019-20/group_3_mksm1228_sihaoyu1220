@@ -479,7 +479,8 @@ map_tab <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entire 
       size = 10, width = 1000, height = 700,
       colors = 'RdYlBu',
       alpha = 1,
-      text = ~paste('</br> Price: $', price), hoverinfo = "text")
+      text = ~paste('</br> Price: $', price,
+                    '</br> Neighbourhood: ', neighbourhood_cleansed), hoverinfo = "text")
   
   
   map_data <- map_data %>%
