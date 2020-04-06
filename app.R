@@ -310,7 +310,7 @@ superhost_plot <- function(cityname = "Vancouver"){
               p  <- ggplotly(p)
                   
 
-              p %>%
+              p <- p %>%
                   layout(legend = list(x = .6, y = .9),
                          title = "Superhost"
                          )
@@ -329,7 +329,7 @@ cancellation_plot <- function(cityname = "Vancouver"){
                       theme(legend.title = element_blank())
   
                 p <- ggplotly(p)
-                p %>%
+                p <- p %>%
                         layout(legend = list(
                                x = .9, y = .9),
                                title = "Cancellation Policy")
@@ -347,7 +347,7 @@ room_plot <- function(cityname = "Vancouver"){
                 scale_color_discrete("Room Type")+
                 theme(legend.title = element_blank())
       p <- ggplotly(p) 
-      p %>%
+      p <- p %>%
               layout(legend = list(
               x = .5, y = .9),
               title = "Room Type")
@@ -369,7 +369,7 @@ accommodate_plot <- function(cityname = "Vancouver"){
                       scale_color_discrete(name = "Accommodates")+
                       theme(legend.title = element_blank())
               p <- ggplotly(p)
-              p %>%
+              p <- p %>%
                     layout(legend = list(
                       x = .6, y = .9),
                       title = "Accommodates")
@@ -390,7 +390,7 @@ bathroom_plot <- function(cityname = "Vancouver"){
                    scale_color_discrete("Bathrooms")+
                    theme(legend.title = element_blank())
           p <- ggplotly(p)
-          p %>%
+          p <- p %>%
                  layout(legend = list(
                     x = .6, y = .9),
                     title = "Bathrooms"
@@ -413,7 +413,7 @@ bedroom_plot <- function(cityname = "Vancouver"){
                   theme(legend.title = element_blank())
                   
           p <- ggplotly(p) 
-          p %>%
+          p <- p %>%
                 layout(legend = list(
                   x = .6, y = .9),
                   title = "Bedrooms")
