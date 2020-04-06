@@ -161,7 +161,7 @@ make_plot <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entir
              panel.background=element_rect(fill = "transparent",colour = NA),
              panel.border=element_blank())
    }
-   ggplotly(p,  width = 1000, height = 700, tooltip =FALSE)
+   ggplotly(p, tooltip =FALSE)
 }
 
 get_value <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entire home/apt", 
@@ -228,7 +228,8 @@ get_value <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entir
 
 graph <- dccGraph(
   id = 'graph',
-  figure=make_plot() # gets initial data using argument defaults
+  figure=make_plot(),
+  style = list(width='75%')# gets initial data using argument defaults
 )
 
 div_header <- htmlDiv(list(
@@ -267,7 +268,16 @@ div_sidebar <- htmlDiv(
        htmlBr(),
        htmlDiv(id='my-div'),
        htmlBr(),
-       htmlButton('Reset Button', id='button')
+       htmlButton('Reset Button', id='button'),
+       htmlBr(),
+       htmlBr(),
+       htmlBr(),
+       htmlBr(),
+       htmlBr(),
+       htmlBr(),
+       htmlBr(),
+       htmlBr(),
+       htmlBr()
   ),
   style = list('background-color' = '#BBCFF1',
                'padding' = 10,
@@ -476,20 +486,29 @@ map_tab <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entire 
       lat = ~latitude,
       lon = ~longitude,
       color = ~price,
-      type = 'scattermapbox',
-      size = 10, width = 1000, height = 700,
-      colors = 'RdYlBu',
+      size = 10, 
+      colors = "RdYlBu",
       alpha = 1,
       text = ~paste('</br> Price: $', price,
-                    '</br> Neighbourhood: ', neighbourhood_cleansed), hoverinfo = "text")
+                     '</br> Neighbourhood: ', neighbourhood_cleansed),
+      hoverinfo = "text",
+      type = 'scattermapbox')
   
-  
+  if (cityname == "New Brunswick"){
   map_data <- map_data %>%
     layout(title = paste0(city_label, ' Airbnb Listings'),
            mapbox = list(
              style = 'carto-positron',
              zoom = 7.5,
              center = list(lon = ~median(longitude), lat = ~median(latitude))))
+  }else{
+    map_data <- map_data %>%
+      layout(title = paste0(city_label, ' Airbnb Listings'),
+             mapbox = list(
+               style = 'carto-positron',
+               zoom = 10.5,
+               center = list(lon = ~median(longitude), lat = ~median(latitude))))
+  }
   } else {
     text = paste("No such listing in ", cityname, " :(")
     p<-ggplot() + 
@@ -503,12 +522,12 @@ map_tab <- function(cityname="Montreal", superhost = "TRUE", roomtype = "Entire 
             axis.ticks.y=element_blank(),panel.grid=element_blank(), 
             panel.background=element_rect(fill = "transparent",colour = NA),
             panel.border=element_blank())
-    map_data <- ggplotly(p, width = 1000, height = 700, tooltip =FALSE)
+    map_data <- ggplotly(p, tooltip =FALSE)
   }
   map_data
 }
 
-map_plot = dccGraph(id = 'map', figure = map_tab())
+map_plot = dccGraph(id = 'map', figure = map_tab(),style= list('width'='75%'))
 ################################Tabs################################################
 
 tabs_styles = list(
@@ -808,9 +827,10 @@ app$callback(
               input(id = 'cancellation_policy', property = 'value'),
               input(id = 'accommodates', property = 'value'),
               input(id = 'bedroom', property = 'value'),
-              input(id = 'bathroom', property = 'value')),
+              input(id = 'bathroom', property = 'value'),
+              input(id = 'button', property = 'n_clicks')),
   #this translates your list of params into function arguments
-  function(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom) {
+  function(cityname, superhost, roomtype,cancellation_policy,acc, bedroom, bathroom, button) {
     map_tab(cityname, superhost, roomtype, cancellation_policy,acc, bedroom, bathroom)
   })
 
