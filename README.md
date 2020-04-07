@@ -3,7 +3,8 @@
 This is a group project by Team Project 3 members, @mksm1228 and @sihaoyu1220, for the 2019-2020 STAT547M session. 
 
 **Please click the link below for the Heroku app**!
-https://group3-airbnb2.herokuapp.com/
+
+- https://group3-airbnb2.herokuapp.com/
 
 ## Dataset
 
